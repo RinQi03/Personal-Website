@@ -1,0 +1,10 @@
+@import "tailwindcss" prefix(tw);
+
+@theme {
+--breakpoint-*:initial;
+--breakpoint-sm:480px;
+--breakpoint-md: 768px;
+--breakpoint-lg: 976px;
+--color-twitter-blue:#1DA1F2;
+--color-orange-500:#ffa500;
+}
