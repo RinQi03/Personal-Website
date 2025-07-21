@@ -1,166 +1,68 @@
 import React from 'react'
+import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
+import '../css/RhsPanel.css'
 
 // React component version
 const RhsPanel = () => {
   return (
-    <div className="rhs-panel">
+    <div className="rhs-panel-3d">
       <div className="nav-container">
-        <div className="nav-item">
-          <div className="nav-inner">
-            <span>About</span>
-          </div>
+        <div className="line-container">
+            <div className="experience-container part-container">
+                <div className="title-container">
+                    <div className="title-line tw:font-geo tw:pt">Experience</div>
+                    <div className="title-line tw:font-noto tw:text-xl">实习经历</div>
+                </div>
+                <img src="/an_sanity.png" alt="Experience Icon" className="experience-icon part-icon" />
+                <svg viewBox="0 0 220 100" className="accent-rect">
+                    <rect width="500" height="30" fill="#e46a13"/>
+                 </svg>
+            </div>
         </div>
-        <div className="nav-item">
-          <div className="nav-inner">
-            <span>Projects</span>
-          </div>
+        <div className="line-container">
+            <div className="projects-container part-container">
+            <div className="title-container">
+                    <div className="title-line tw:font-geo tw:pt">Projects</div>
+                    <div className="title-line tw:font-noto tw:text-xl">项目经历</div>
+                </div>
+                <img src="/an_projects.png" alt="Experience Icon" className="projects-icon part-icon" />
+            </div>
+            <div className="about-container part-container">
+                <div className="title-container">
+                    <div className="title-line tw:font-geo tw:pt">About</div>
+                    <div className="title-line tw:font-noto tw:text-xl">关于我</div>
+                </div>
+                <img src="/an_about.png" alt="Experience Icon" className="about-icon part-icon" />
+            </div>
         </div>
-        <div className="nav-item">
-          <div className="nav-inner">
-            <span>Experience</span>
-          </div>
-        </div>
-        <div className="nav-item">
-          <div className="nav-inner">
-            <span>Contact</span>
-          </div>
+        <div className="line-container">
+            <div className="life-container part-container">
+                <div className="title-container">
+                    <div className="title-line tw:font-geo tw:pt">Life</div>
+                    <div className="title-line tw:font-noto tw:text-xl">生活日常</div>
+                </div>
+                <img src="/an_life.png" alt="Experience Icon" className="life-icon part-icon" />
+            </div>
+            <div className="contact-container part-container">
+                <div className="title-container">
+                    <div className="title-line tw:font-geo tw:pt">Contact</div>
+                    <div className="title-line tw:font-noto tw:text-xl">联系方式</div>
+                </div>
+            </div>
         </div>
       </div>
-      
-      <style jsx>{`
-        .rhs-panel {
-          position: fixed;
-          top: 50%;
-          right: 50px;
-          transform: translateY(-50%);
-          z-index: 1000;
-          pointer-events: none;
-        }
-        
-        .nav-container {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
-        
-        .nav-item {
-          width: 120px;
-          height: 40px;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          pointer-events: auto;
-        }
-        
-        .nav-item:hover {
-          background: rgba(255, 255, 255, 0.2);
-          transform: scale(1.05);
-        }
-        
-        .nav-inner {
-          width: 80%;
-          height: 80%;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          color: white;
-          font-weight: 500;
-        }
-      `}</style>
     </div>
   )
 }
 
-// DOM element version for CSS3D
+// DOM element version using reactToDom utility
 export const createRhsPanelDom = () => {
-  const panelDiv = document.createElement('div')
-  panelDiv.className = 'rhs-panel-3d'
-  panelDiv.innerHTML = `
-    <div class="nav-container">
-      <div class="nav-item">
-        <div class="nav-inner">
-          <span>About</span>
-        </div>
-      </div>
-      <div class="nav-item">
-        <div class="nav-inner">
-          <span>Projects</span>
-        </div>
-      </div>
-      <div class="nav-item">
-        <div class="nav-inner">
-          <span>Experience</span>
-        </div>
-      </div>
-      <div class="nav-item">
-        <div class="nav-inner">
-          <span>Contact</span>
-        </div>
-      </div>
-    </div>
-  `
-  
-  // Add styles
-  const style = document.createElement('style')
-  style.textContent = `
-    .rhs-panel-3d {
-      width: 200px;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .rhs-panel-3d .nav-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    
-    .rhs-panel-3d .nav-item {
-      width: 120px;
-      height: 40px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .rhs-panel-3d .nav-item:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.05);
-    }
-    
-    .rhs-panel-3d .nav-inner {
-      width: 80%;
-      height: 80%;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: white;
-      font-weight: 500;
-    }
-  `
-  document.head.appendChild(style)
-  
-  return panelDiv
+  return reactToDom(RhsPanel)
+}
+
+// Async version that properly handles styled-jsx
+export const createRhsPanelDomAsync = async () => {
+  return await reactToDomWithStyles(RhsPanel)
 }
 
 export default RhsPanel 

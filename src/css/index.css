@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Geo:ital@0;1&family=Noto+Serif+SC:wght@200..900&family=ZCOOL+XiaoWei&display=swap');
+
 @import "tailwindcss" prefix(tw);
+
 
 @theme {
 --breakpoint-*:initial;
@@ -7,4 +10,21 @@
 --breakpoint-lg: 976px;
 --color-twitter-blue:#1DA1F2;
 --color-orange-500:#ffa500;
+
+--color-day-text: #1d1802;
+--color-day-background: #eeeeee;
+--color-day-primary: #c6c6c6;
+--color-day-secondary: #575757;
+--color-day-accent: #e46a13;
+
+--color-night-text: #f0edf8;
+--color-night-background: #030203;
+--color-night-primary: #1c1c1c;
+--color-night-secondary: #404040;
+--color-night-accent: #ff811a;
+
+--font-geo: "Geo", sans-serif;
+--font-noto: "Noto Serif SC", serif;
+--font-zcool: "ZCOOL XiaoWei", serif;
+
 }

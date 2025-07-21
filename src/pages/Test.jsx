@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls'
-import RhsPanel, { createRhsPanelDom } from '../../components/RhsPanel'
+import RhsPanel, { createRhsPanelDom } from '../components/RhsPanel'
 
 //大的container里面有很多小的
 
@@ -47,101 +47,8 @@ class CameraUI {
     return this.container
   }
 
-  // Add a UI element that follows the camera
+
   addUIElement(config) {
-    const {
-      text = "test text",
-      bgcolor = 'white',
-      width = '100px',
-      height = '50px',
-      fontColor = 'black',
-      fontSize = '16px',
-      offsetX = 0,
-      offsetY = 0,
-      offsetZ = -200,
-      rotationX = 0,
-      rotationY = 0,
-      rotationZ = 0,
-      responsive = true,  // Enable responsive positioning
-      glassEffect = false  // Enable glass morphism effect
-    } = config
-
-    // const element = this.createDiv(text, bgcolor, width, height, fontColor, fontSize, glassEffect)
-
-    const element = document.createElement('div')
-    element.style.width = width
-    element.style.height = height
-    element.style.background = bgcolor
-    element.style.color = fontColor
-    element.style.display = 'flex'
-    element.style.alignItems = 'center'
-    element.style.justifyContent = 'center'
-    element.style.fontSize = fontSize
-    element.style.borderRadius = '8px'
-    element.style.border = '1px solid rgba(255, 255, 255, 0.2)'
-    
-    // Create nested div
-    const nestedDiv = document.createElement('div')
-    nestedDiv.innerHTML = "text"
-    nestedDiv.style.width = '50%'
-    nestedDiv.style.height = '50%'
-    nestedDiv.style.background = 'rgba(255, 255, 255, 0.1)'
-    nestedDiv.style.borderRadius = '4px'
-    nestedDiv.style.display = 'flex'
-    nestedDiv.style.alignItems = 'center'
-    nestedDiv.style.justifyContent = 'center'
-    nestedDiv.style.fontSize = '10px'
-    nestedDiv.style.color = fontColor
-    
-    // Add nested div to main element
-    element.appendChild(nestedDiv)
-
-    // Create nested div
-    const nestedDiv1 = document.createElement('div')
-    nestedDiv1.innerHTML = "text1"
-    nestedDiv1.style.width = '50%'
-    nestedDiv1.style.height = '50%'
-    nestedDiv1.style.background = 'rgba(255, 255, 255, 0.1)'
-    nestedDiv1.style.borderRadius = '4px'
-    nestedDiv1.style.display = 'flex'
-    nestedDiv1.style.alignItems = 'center'
-    nestedDiv1.style.justifyContent = 'center'
-    nestedDiv1.style.fontSize = '10px'
-    nestedDiv1.style.color = fontColor
-
-
-    element.appendChild(nestedDiv1)
-
-
-    const cssObject = new CSS3DObject(element)
-    
-    // Calculate responsive offset based on screen width
-    let adjustedOffsetX = offsetX
-    if (responsive) {
-      const screenRatio = this.screenWidth / 1920  // Base width of 1920px
-      adjustedOffsetX = offsetX * screenRatio
-    }
-    
-    // Set initial position and rotation
-    cssObject.position.set(adjustedOffsetX, offsetY, offsetZ)
-    cssObject.rotation.set(rotationX, rotationY, rotationZ)
-    
-    // Always add to scene (more reliable)
-    this.scene.add(cssObject)
-    
-    // Store the element with its configuration
-    this.uiElements.push({
-      object: cssObject,
-      offset: { x: offsetX, y: offsetY, z: offsetZ },
-      rotation: { x: rotationX, y: rotationY, z: rotationZ },
-      responsive: responsive
-    })
-
-    return cssObject
-  }
-
-
-  addUIElementTrue(config) {
     const {
       offsetX = 0,
       offsetY = 0,
@@ -285,8 +192,13 @@ const App = () => {
       targetRotationY -= deltaX * sensitivity
       targetRotationX -= deltaY * sensitivity  // 看向四个角
       
-      // Limit vertical rotation
-      targetRotationX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, targetRotationX))
+      // Limit vertical rotation to 30 degrees (π/6 radians)
+      const maxVerticalAngle = Math.PI / 30 
+      targetRotationX = Math.max(-maxVerticalAngle, Math.min(maxVerticalAngle, targetRotationX))
+      
+      // Limit horizontal rotation to 30 degrees (π/6 radians)
+      const maxHorizontalAngle = Math.PI / 30  
+      targetRotationY = Math.max(-maxHorizontalAngle, Math.min(maxHorizontalAngle, targetRotationY))
     }
     
     // Keyboard handlers
@@ -338,9 +250,9 @@ const App = () => {
 
 
  
-        //Add background div
+    //Add background div
     const imageObject = new CSS3DObject(backgroundDiv())
-    imageObject.position.set(0, 0, -300)
+    imageObject.position.set(0, 0, -900)
     scene.add(imageObject)
     
     // Create CameraUI instance
@@ -348,83 +260,21 @@ const App = () => {
     
     // Add UI elements
     cameraUI.addUIElement({
-      text: 'Experience',
-      bgcolor: 'rgba(0, 0, 0, 0.3)',
-      width: '600px',
-      height: '400px',
-      fontColor: 'white',
-      fontSize: '12px',
-      // offsetX: 170,
-      // offsetY: 50,
-      // offsetZ: -200,
-      // rotationX: 0,
-      // rotationY: -Math.PI/4,
-      // rotationZ: 0,
-      offsetX: 0,
+      offsetX: 600,
       offsetY: 0,
       offsetZ: -900,
-      rotationX: 0,
-      rotationY: 0,
-      rotationZ: 0,
-      glassEffect: false
+      rotationX: Math.PI/30,
+      rotationY: -Math.PI/6,
+      rotationZ: Math.PI/50,
+      // offsetX: 0,
+      // offsetY: 0,
+      // offsetZ: -900,
+      // rotationX: 0,
+      // rotationY: 0,
+      // rotationZ: 0,
+      // glassEffect: false
     })
     
-    console.log('Added Experience UI element with nested div')
-
-    cameraUI.addUIElementTrue({
-      offsetX: 0,
-      offsetY: 0,
-      offsetZ: -100,
-      rotationX: 0,
-      rotationY: 0,
-      rotationZ: 0,
-      glassEffect: false
-    })
-    // cameraUI.addUIElement({
-    //     text: 'About',
-    //     bgcolor: 'transparent',
-    //     width: '60px',
-    //     height: '40px',
-    //     fontColor: 'black',
-    //     fontSize: '12px',
-    //     offsetX: 170,
-    //     offsetY: 7,
-    //     offsetZ: -200,
-    //     rotationX: 0,
-    //     rotationY: -Math.PI/4,
-    //     rotationZ: 0,
-    //     glassEffect: true
-    // })
-
-    // cameraUI.addUIElement({
-    //     text: 'Projects',
-    //     bgcolor: 'transparent',
-    //     width: '60px',
-    //     height: '40px',
-    //     fontColor: 'black',
-    //     fontSize: '12px',
-    //     offsetX: 117,
-    //     offsetY: 7,
-    //     offsetZ: -249,
-    //     rotationX: 0,
-    //     rotationY: -Math.PI/4,
-    //     rotationZ: 0,
-    //     glassEffect: true
-    // })
-
-    // // Add more UI elements easily
-    // cameraUI.addUIElement({
-    //   text: 'Contact',
-    //   bgcolor: 'transparent',
-    //   width: '60px',
-    //   height: '40px',
-    //   fontColor: 'white',
-    //   fontSize: '12px',
-    //   offsetX: 64,
-    //   offsetY: 7,
-    //   offsetZ: -200,
-    //   glassEffect: true
-    // })
 
 
     // Background div (black)
