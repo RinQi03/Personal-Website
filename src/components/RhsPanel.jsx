@@ -1,5 +1,5 @@
 import React from 'react'
-import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
+import { reactToDom, reactToDomWithStyles} from '../utils/reactToDom'
 import '../css/RhsPanel.css'
 
 // React component version

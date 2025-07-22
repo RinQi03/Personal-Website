@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import RhodeIslandSVG from '/main_Rhode_Island.svg'
 import gsap from 'gsap'
+import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 
 // Particle 构造函数
 class Particle {
@@ -234,25 +235,35 @@ const readSVGData = async (svgPath) => {
 
 const Particles = () => {
   const [particles, setParticles] = useState([])
+  const [loading, setLoading] = useState(true)
   const containerRef = useRef(null)
 
     useEffect(() => {
     const loadSVGData = async () => {
-      // 读取SVG文件
-    //   const points = await readSVGData('/main_Rhode_Island.svg')
-    const points = await readSVGData('/sm_ptc.svg')
+      try {
+        // 读取SVG文件
+        //   const points = await readSVGData('/main_Rhode_Island.svg')
+        const points = await readSVGData('/sm_ptc.svg')
 
-      
-      if (points.length > 0) {
-        // 为了性能，每1个点取1个
-        const sampledPoints = points.filter((_, index) => index%5=== 0)
         
-        // 创建粒子数据
-        const particleData = sampledPoints.map((point, index) => 
-          new Particle(point.x, point.y, index, Math.random() * 2)
-        )
-        
-        setParticles(particleData)
+        if (points.length > 0) {
+          // 为了性能，每1个点取1个
+          const sampledPoints = points.filter((_, index) => index%5=== 0)
+          
+          // 创建粒子数据
+          const particleData = sampledPoints.map((point, index) => 
+            new Particle(point.x, point.y, index, Math.random() * 2)
+          )
+          
+          setParticles(particleData)
+          console.log(`Loaded ${particleData.length} particles`)
+        } else {
+          console.log('No points found in SVG')
+        }
+      } catch (error) {
+        console.error('Error loading SVG data:', error)
+      } finally {
+        setLoading(false)
       }
     }
     
@@ -276,26 +287,55 @@ const Particles = () => {
   }
 
   return (
-    <div ref={containerRef} className="particles-container">
-      {/* Original SVG */}
-      {/* <img 
-        src={RhodeIslandSVG} 
-        alt="Rhode Island" 
-        style={{ 
-          position: 'absolute', 
-          top: "100px", 
-          left: "400px", 
-          filter: "invert(1)",
-          width: "400px",
-          height: "auto"
-        }} 
-      /> */}
+    <div ref={containerRef} className="particles-container" style={{ 
+      width: '400px', 
+      height: '400px', 
+      // background: 'rgba(255, 0, 0, 0.1)', 
+      // border: '2px solid red',
+      position: 'relative',
+      justifyContent: 'center',
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      alignSelf: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
+    }}>
+      {/* {loading && (
+        <div style={{ 
+          color: 'white', 
+          fontSize: '16px',
+          zIndex: 10
+        }}>
+          Loading particles...
+        </div>
+      )} */}
       
+      {/* {!loading && particles.length === 0 && (
+        <div style={{ 
+          color: 'white', 
+          fontSize: '16px',
+          zIndex: 10
+        }}>
+          No particles loaded ({particles.length})
+        </div>
+      )}
+      
+      {!loading && particles.length > 0 && (
+        <div style={{ 
+          color: 'white', 
+          fontSize: '12px',
+          zIndex: 10
+        }}>
+          Particles: {particles.length}
+        </div>
+      )}
+       */}
       {/* Particle overlay */}
       <svg 
         width="100%" 
         height="100%" 
-        style={{ position: 'absolute', top: "100px", left: "400px", filter: "invert(1)" }}
+        style={{ filter: "invert(0.5)" }} // invert(1) is blue； invert(0) is orange; invert(0.5) is grey
         onMouseMove={handleMouseMove}
       >
         {particles.map((particle) => (
@@ -306,7 +346,7 @@ const Particles = () => {
             }}
             cx={particle.x}
             cy={particle.y}
-            r="1"
+            r="1.5"
             fill={particle.isHovered ? "#ff0000" : "#e46a13"}
             opacity="0.7"
             style={{
@@ -320,21 +360,17 @@ const Particles = () => {
           />
         ))}
       </svg>
-      
-      {/* <style jsx>{`
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.8;
-            transform: scale(1.5);
-          }
-        }
-      `}</style> */}
     </div>
   )
 }
+
+export const createParticlesDom = () => {
+  return reactToDom(Particles)
+}
+
+export const createParticlesDomAsync = async () => {
+  return await reactToDomWithStyles(Particles)
+}
+
 
 export default Particles

@@ -4,6 +4,7 @@ import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRe
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls'
 import RhsPanel, { createRhsPanelDom } from '../components/RhsPanel'
+import Particles, { createParticlesDom } from '../components/Particles'
 
 //大的container里面有很多小的
 
@@ -48,7 +49,7 @@ class CameraUI {
   }
 
 
-  addUIElement(config) {
+  addUIElement(element, config) {
     const {
       offsetX = 0,
       offsetY = 0,
@@ -61,7 +62,7 @@ class CameraUI {
     } = config
 
     // Use the imported function from RhsPanel.jsx
-    const element = createRhsPanelDom()
+    // const element = createRhsPanelDom()
     const cssObject = new CSS3DObject(element)
     
     // Calculate responsive offset based on screen width
@@ -192,13 +193,13 @@ const App = () => {
       targetRotationY -= deltaX * sensitivity
       targetRotationX -= deltaY * sensitivity  // 看向四个角
       
-      // Limit vertical rotation to 30 degrees (π/6 radians)
-      const maxVerticalAngle = Math.PI / 30 
-      targetRotationX = Math.max(-maxVerticalAngle, Math.min(maxVerticalAngle, targetRotationX))
+      // // Limit vertical rotation to 30 degrees (π/6 radians)
+      // const maxVerticalAngle = Math.PI / 30 
+      // targetRotationX = Math.max(-maxVerticalAngle, Math.min(maxVerticalAngle, targetRotationX))
       
-      // Limit horizontal rotation to 30 degrees (π/6 radians)
-      const maxHorizontalAngle = Math.PI / 30  
-      targetRotationY = Math.max(-maxHorizontalAngle, Math.min(maxHorizontalAngle, targetRotationY))
+      // // Limit horizontal rotation to 30 degrees (π/6 radians)
+      // const maxHorizontalAngle = Math.PI / 30  
+      // targetRotationY = Math.max(-maxHorizontalAngle, Math.min(maxHorizontalAngle, targetRotationY))
     }
     
     // Keyboard handlers
@@ -250,16 +251,23 @@ const App = () => {
 
 
  
-    //Add background div
+    // Add background div
     const imageObject = new CSS3DObject(backgroundDiv())
     imageObject.position.set(0, 0, -900)
     scene.add(imageObject)
+
+    // const particles = new CSS3DObject(createParticlesDom())
+    // particles.position.set(0, 0, 200);
+    // scene.add(particles)
     
     // Create CameraUI instance
     const cameraUI = new CameraUI(scene, camera)
+
+    // const element = createRhsPanelDom()
+    const rhsPanel = createRhsPanelDom() // 创建一个div
     
     // Add UI elements
-    cameraUI.addUIElement({
+    cameraUI.addUIElement(rhsPanel,{
       offsetX: 600,
       offsetY: 0,
       offsetZ: -900,
@@ -274,6 +282,12 @@ const App = () => {
       // rotationZ: 0,
       // glassEffect: false
     })
+
+    const particles = createParticlesDom()
+    const particlesObject = new CSS3DObject(particles)
+    particlesObject.position.set(0, 0, 100)
+    scene.add(particlesObject)
+    
     
 
 
