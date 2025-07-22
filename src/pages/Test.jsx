@@ -4,6 +4,7 @@ import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRe
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls'
 import RhsPanel, { createRhsPanelDom } from '../components/RhsPanel'
+import Particles, { createParticlesDom } from '../components/Particles'
 
 //大的container里面有很多小的
 
@@ -140,7 +141,6 @@ const backgroundDiv = () => {
 
 
 
-
 const App = () => {
   const mountRef = useRef(null)
 
@@ -254,6 +254,12 @@ const App = () => {
     const imageObject = new CSS3DObject(backgroundDiv())
     imageObject.position.set(0, 0, -900)
     scene.add(imageObject)
+
+    // Add particles
+    const particlesDom = createParticlesDom()
+    const particles = new CSS3DObject(particlesDom)
+    particles.position.set(0, 0, 0)
+    scene.add(particles)
     
     // Create CameraUI instance
     const cameraUI = new CameraUI(scene, camera)

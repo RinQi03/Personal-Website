@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import RhodeIslandSVG from '/main_Rhode_Island.svg'
 import gsap from 'gsap'
+import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 
 // Particle 构造函数
 class Particle {
@@ -167,6 +168,71 @@ const parseSVGPath = (pathData) => {
   return points
 }
 
+// 读取PNG文件并检测黑色像素点
+const readPNGData = async (pngPath) => {
+  try {
+    const response = await fetch(pngPath)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PNG: ${response.status}`)
+    }
+    
+    const blob = await response.blob()
+    const imageUrl = URL.createObjectURL(blob)
+    
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        
+        canvas.width = img.width
+        canvas.height = img.height
+        
+        ctx.drawImage(img, 0, 0)
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const data = imageData.data
+        
+        const blackPoints = []
+        const threshold = 50 // 黑色阈值，RGB值都小于50认为是黑色
+        
+        for (let y = 0; y < canvas.height; y++) {
+          for (let x = 0; x < canvas.width; x++) {
+            const index = (y * canvas.width + x) * 4
+            const r = data[index]
+            const g = data[index + 1]
+            const b = data[index + 2]
+            const a = data[index + 3]
+            
+            // 检测黑色像素（RGB值都小于阈值且不透明）
+            if (r < threshold && g < threshold && b < threshold && a > 128) {
+              blackPoints.push({ x, y })
+            }
+          }
+        }
+        
+        console.log(`Found ${blackPoints.length} black pixels in PNG`)
+        console.log(`Image dimensions: ${canvas.width}x${canvas.height}`)
+        
+        URL.revokeObjectURL(imageUrl)
+        resolve(blackPoints)
+      }
+      
+      img.onerror = () => {
+        URL.revokeObjectURL(imageUrl)
+        reject(new Error('Failed to load PNG image'))
+      }
+      
+      img.src = imageUrl
+    })
+  } catch (error) {
+    console.error('Error reading PNG file:', error)
+    return []
+  }
+}
+
 // 读取SVG文件并提取路径数据
 const readSVGData = async (svgPath) => {
   try {
@@ -235,28 +301,50 @@ const readSVGData = async (svgPath) => {
 const Particles = () => {
   const [particles, setParticles] = useState([])
   const containerRef = useRef(null)
+  
+  console.log('Particles component rendering, particles count:', particles.length)
 
     useEffect(() => {
-    const loadSVGData = async () => {
-      // 读取SVG文件
-    //   const points = await readSVGData('/main_Rhode_Island.svg')
-    const points = await readSVGData('/sm_ptc.svg')
-
+    const loadData = async () => {
+      // 可以选择读取SVG或PNG
+      let points = []
       
-      if (points.length > 0) {
-        // 为了性能，每1个点取1个
-        const sampledPoints = points.filter((_, index) => index%15=== 0)
-        
-        // 创建粒子数据
-        const particleData = sampledPoints.map((point, index) => 
-          new Particle(point.x, point.y, index, Math.random() * 2)
-        )
-        
-        setParticles(particleData)
-      }
+      // 读取PNG文件（检测黑色像素）
+      points = await readPNGData('/an_about.png')
+      
+      // 或者读取SVG文件
+      // points = await readSVGData('/sm_ptc.svg')
+      
+              if (points.length > 0) {
+          // 为了性能，每15个点取1个
+          const sampledPoints = points.filter((_, index) => index % 5 === 0)
+          
+          // 创建粒子数据
+          const particleData = sampledPoints.map((point, index) => 
+            new Particle(point.x, point.y, index, Math.random() * 2)
+          )
+          
+          setParticles(particleData)
+          console.log('Set particles from PNG data:', particleData.length)
+        } else {
+          console.log('No points from PNG, creating fallback particles')
+          // Create fallback particles
+          const fallbackParticles = []
+          for (let i = 0; i < 50; i++) {
+            fallbackParticles.push(
+              new Particle(
+                Math.random() * 400, 
+                Math.random() * 400, 
+                i, 
+                Math.random() * 2
+              )
+            )
+          }
+          setParticles(fallbackParticles)
+        }
     }
     
-    loadSVGData()
+    loadData()
   }, [])
 
   // 鼠标移动处理函数
@@ -275,8 +363,10 @@ const Particles = () => {
     )
   }
 
+  console.log('Particles component returning JSX with', particles.length, 'particles')
+  
   return (
-    <div ref={containerRef} className="particles-container">
+    <div ref={containerRef} className="particles-container" style={{ width: '400px', height: '400px'}}>
       {/* Original SVG */}
       {/* <img 
         src={RhodeIslandSVG} 
@@ -295,7 +385,7 @@ const Particles = () => {
       <svg 
         width="100%" 
         height="100%" 
-        style={{ position: 'absolute', top: "100px", left: "400px", filter: "invert(1)" }}
+        style={{filter: "invert(1)" }}
         onMouseMove={handleMouseMove}
       >
         {particles.map((particle) => (
@@ -337,4 +427,20 @@ const Particles = () => {
   )
 }
 
+// DOM element version using reactToDom utility
+export const createParticlesDom = () => {
+  console.log('Creating particles DOM element...')
+  const domElement = reactToDom(Particles)
+  console.log('Particles DOM element created:', domElement)
+  return domElement
+}
+
+// Async version that properly handles styled-jsx
+export const createParticlesDomAsync = async () => {
+  console.log('Creating particles DOM element async...')
+  const domElement = await reactToDomWithStyles(Particles)
+  console.log('Particles DOM element created async:', domElement)
+  return domElement
+}
+  
 export default Particles
