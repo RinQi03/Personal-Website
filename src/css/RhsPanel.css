@@ -1,6 +1,6 @@
 .rhs-panel-3d {
-  width: 40vw;
-  height: 70vh;
+  width: 30vw;
+  height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +91,7 @@
 }
 
 .title-container {
-    font-size: 50px;
+    font-size: max(30px, 5vh);
     font-weight: bold;
     margin-left: 5%;
     padding: 10px;

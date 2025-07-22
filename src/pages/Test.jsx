@@ -251,10 +251,10 @@ const App = () => {
 
 
  
-    // Add background div
-    const imageObject = new CSS3DObject(backgroundDiv())
-    imageObject.position.set(0, 0, -900)
-    scene.add(imageObject)
+    // // Add background div
+    // const imageObject = new CSS3DObject(backgroundDiv())
+    // imageObject.position.set(0, 0, -900)
+    // scene.add(imageObject)
 
     // const particles = new CSS3DObject(createParticlesDom())
     // particles.position.set(0, 0, 200);
@@ -268,13 +268,13 @@ const App = () => {
     
     // Add UI elements
     cameraUI.addUIElement(rhsPanel,{
-      offsetX: 600,
+      offsetX: 500,
       offsetY: 0,
-      offsetZ: -900,
+      offsetZ: -700,
       rotationX: Math.PI/30,
       rotationY: -Math.PI/6,
       rotationZ: Math.PI/50,
-      // offsetX: 0,
+      // offsetX: 07
       // offsetY: 0,
       // offsetZ: -900,
       // rotationX: 0,
@@ -285,7 +285,7 @@ const App = () => {
 
     const particles = createParticlesDom()
     const particlesObject = new CSS3DObject(particles)
-    particlesObject.position.set(0, 0, 100)
+    particlesObject.position.set(0, 0, 150)
     scene.add(particlesObject)
     
     
