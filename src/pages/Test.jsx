@@ -251,10 +251,10 @@ const App = () => {
 
 
  
-    // // Add background div
-    // const imageObject = new CSS3DObject(backgroundDiv())
-    // imageObject.position.set(0, 0, -900)
-    // scene.add(imageObject)
+    // Add background div
+    const imageObject = new CSS3DObject(backgroundDiv())
+    imageObject.position.set(0, 0, -900)
+    scene.add(imageObject)
 
     // const particles = new CSS3DObject(createParticlesDom())
     // particles.position.set(0, 0, 200);

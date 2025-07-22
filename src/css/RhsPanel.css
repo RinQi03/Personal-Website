@@ -1,6 +1,6 @@
 .rhs-panel-3d {
   width: 30vw;
-  height: 50vh;
+  height: 48vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,7 +10,7 @@
 .nav-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 3%;
   width: 95%;
   height: 95%;
 }
@@ -20,6 +20,7 @@
     height: 30%;
     border-radius: 4px;
     display: flex;
+    padding: 5px;
 }
 
 .part-container{
@@ -51,49 +52,73 @@
     border-color: rgba(255, 255, 255, 0.3);
   }
 
+
+.line-container:nth-child(1){
+  height:40%;
+}
+
 .experience-container {
-  width: 80%;
+  width: 90%;
   height: 100%;
   position: relative;
-  left: 15%;
+  left: 7%;
 }
 
 .projects-container {
-  width: 45%;
+  width: 53%;
   height: 100%;
   /* background: rgb(196, 198, 198); */
   position: relative;
 }
 
 .about-container {
-  width: 40%;
+  width: 34%;
   height: 100%;
   /* background: rgb(196, 198, 198); */
   position: relative;
-  left: 20px;
+  left: max(10px, 3%);
 }
 
 .life-container {
-  width: 50%;
+  width: 60%;
   height: 100%;
   /* background: rgb(196, 198, 198); */
   position: relative;
-  left: 5%;
+  left: 12%;
 }
 
 .contact-container {
-  width: 32%;
-  height: 100%;
-  overflow: hidden;
-  /* background: rgb(196, 198, 198); */
-  position: relative;
-  left: 8%;
+    color: rgb(232, 232, 232);
+    width: 16%;
+    height: 80%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    /* background: rgb(196, 198, 198); */
+    position: relative;
+    left: 12%;
+    top: 10%;
+    background: rgba(0, 0, 0, 0.60);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      /* 0 8px 32px 0 rgba(0, 0, 0, 0.4), */
+      0 4px 16px 0 rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    /* Glass effect using multiple layers - no backdrop-filter */
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.contact-container .title-container{
+    margin-left: 0;
+    padding-left: 6px;
 }
 
 .title-container {
     font-size: max(30px, 5vh);
     font-weight: bold;
     margin-left: 5%;
+    margin-top: 5px;
     padding: 10px;
     position: relative;
     z-index: 2;
@@ -105,7 +130,7 @@
 }
 
 .title-line {
-    line-height: 1;
+    line-height: 0.9;
     margin: 0;
 }
 
@@ -118,32 +143,42 @@
 .experience-icon {
     position: relative;
     top: 20%;
-    left: 10%;
+    left: 5%;
 }
 .projects-icon {
     position: relative;
     top: 20%;
-    right: 18%;
+    right: 5%;
 }
 .about-icon {
     position: relative;
     top: 15%;
     height: 80%;
-    right: 10%;
+    right: 21%;
 }
- .life-icon {
+.life-icon {
      position: relative;
      height: 78%;
      top: 10%;
      left: 15%;
  }
  
- .accent-rect {
-    width:100%;
-    position: relative;
-    bottom: 40%;
-    left: -10%;
+.accent-rect {
+    /* width:100%; */
+    position: absolute;
+    /* top: 13px;
+    left: 50%; */
     color: var(--color-day-accent); 
     color: #e46a13;
     z-index: 1;
+ }
+
+ #experience-accent-rect{
+    top: 13px;
+    left: 50%; 
+ }
+
+ #projects-accent-rect{
+    /* top: 13px;
+    left: 50%;  */
  }
