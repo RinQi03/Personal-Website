@@ -299,7 +299,6 @@ const Particles = () => {
       flexDirection: 'column',
       alignSelf: 'center',
       alignContent: 'center',
-      alignItems: 'center',
     }}>
       {/* {loading && (
         <div style={{ 
