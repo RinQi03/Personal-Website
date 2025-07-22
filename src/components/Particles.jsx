@@ -245,7 +245,7 @@ const Particles = () => {
       
       if (points.length > 0) {
         // 为了性能，每1个点取1个
-        const sampledPoints = points.filter((_, index) => index%15=== 0)
+        const sampledPoints = points.filter((_, index) => index%5=== 0)
         
         // 创建粒子数据
         const particleData = sampledPoints.map((point, index) => 
@@ -261,7 +261,7 @@ const Particles = () => {
 
   // 鼠标移动处理函数
   const handleMouseMove = (event) => {
-    const mouse_radius = 15;
+    const mouse_radius = 30;
     const svg = event.currentTarget
     const rect = svg.getBoundingClientRect()
     const mouseX = event.clientX - rect.left

@@ -23,22 +23,22 @@
 }
 
 .part-container{
-    display: flex;
-    background: linear-gradient(
-        135deg, 
-        rgba(255, 255, 255, 0.3) 0%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.05) 100%
-      );
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 
-        0 8px 32px 0 rgba(0, 0, 0, 0.4),
-        0 4px 16px 0 rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-      /* Glass effect using multiple layers - no backdrop-filter */
-      overflow: hidden;
-      transition: all 0.3s ease;
+  display: flex;
+  background: linear-gradient(
+      135deg, 
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 8px 32px 0 rgba(0, 0, 0, 0.4),
+      0 4px 16px 0 rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    /* Glass effect using multiple layers - no backdrop-filter */
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .part-container:hover {
@@ -58,7 +58,6 @@
   left: 15%;
 }
 
-
 .projects-container {
   width: 45%;
   height: 100%;
@@ -75,19 +74,20 @@
 }
 
 .life-container {
-  width: 53%;
+  width: 50%;
   height: 100%;
   /* background: rgb(196, 198, 198); */
   position: relative;
-  left: 7%;
+  left: 5%;
 }
 
 .contact-container {
-  background: transparent;
+  width: 32%;
+  height: 100%;
+  overflow: hidden;
+  /* background: rgb(196, 198, 198); */
   position: relative;
-  left: max(10.5%, 50px);
-  padding-right: 10px;
-  /* top: max(40%, 50px); */
+  left: 8%;
 }
 
 .title-container {
