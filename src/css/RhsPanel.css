@@ -147,18 +147,19 @@
 }
 .projects-icon {
     position: relative;
-    top: 20%;
-    right: 5%;
+    top: 7%;
+    right: 0;
+    height: 95%;
 }
 .about-icon {
     position: relative;
-    top: 15%;
-    height: 80%;
-    right: 21%;
+    top: 5%;
+    height: 90%;
+    right: 10%;
 }
 .life-icon {
      position: relative;
-     height: 78%;
+     height: 85%;
      top: 10%;
      left: 15%;
  }

@@ -193,13 +193,13 @@ const App = () => {
       targetRotationY -= deltaX * sensitivity
       targetRotationX -= deltaY * sensitivity  // 看向四个角
       
-      // // Limit vertical rotation to 30 degrees (π/6 radians)
-      // const maxVerticalAngle = Math.PI / 30 
-      // targetRotationX = Math.max(-maxVerticalAngle, Math.min(maxVerticalAngle, targetRotationX))
+      // Limit vertical rotation to 30 degrees (π/6 radians)
+      const maxVerticalAngle = Math.PI / 60 
+      targetRotationX = Math.max(-maxVerticalAngle, Math.min(maxVerticalAngle, targetRotationX))
       
-      // // Limit horizontal rotation to 30 degrees (π/6 radians)
-      // const maxHorizontalAngle = Math.PI / 30  
-      // targetRotationY = Math.max(-maxHorizontalAngle, Math.min(maxHorizontalAngle, targetRotationY))
+      // Limit horizontal rotation to 30 degrees (π/6 radians)
+      const maxHorizontalAngle = Math.PI / 60 
+      targetRotationY = Math.max(-maxHorizontalAngle, Math.min(maxHorizontalAngle, targetRotationY))
     }
     
     // Keyboard handlers
