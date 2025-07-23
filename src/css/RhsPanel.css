@@ -54,7 +54,7 @@
 
 
 .line-container:nth-child(1){
-  height:40%;
+  height:44%;
 }
 
 .experience-container {
@@ -93,18 +93,15 @@
     height: 80%;
     aspect-ratio: 1/1;
     overflow: hidden;
-    /* background: rgb(196, 198, 198); */
     position: relative;
     left: 12%;
     top: 10%;
-    background: rgba(0, 0, 0, 0.60);
+    background: rgb(0,0,0,0.6) !important;
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
-      /* 0 8px 32px 0 rgba(0, 0, 0, 0.4), */
       0 4px 16px 0 rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.2),
       inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-    /* Glass effect using multiple layers - no backdrop-filter */
     overflow: hidden;
     transition: all 0.3s ease;
 }

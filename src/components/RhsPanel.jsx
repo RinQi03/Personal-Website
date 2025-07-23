@@ -6,7 +6,6 @@ import '../css/RhsPanel.css'
 const RhsPanel = () => {
   return (
     <div className="rhs-panel-3d">
-        
       <div className="nav-container">
         <div className="line-container">
             <div className="experience-container part-container">
