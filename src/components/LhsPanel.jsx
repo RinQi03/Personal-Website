@@ -4,7 +4,7 @@ import '../css/LhsPanel.css'
 
 const LhsPanel = () => {
     return (
-        <div className="lhs-panel-3d particles-container">
+        <div className="lhs-panel-3d part-container">
             <div className="lhs-panel-container">
                 <div className='info-container'>
                     <div className='photo-container'>
@@ -28,8 +28,8 @@ const LhsPanel = () => {
                         </div> */}
                     </div>
                 </div>
-                <div className='notice-container tw:pt-1'>
-                    <div className='tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>Can be easily captured with good food</div>
+                <div className='notice-container tw:py-1 tw:bg-red-900 tw:w-full tw:align-middle tw:justify-center tw:flex'>
+                    <div className='tw:font-geo tw:text-sm tw:leading-none tw:tracking-tighter tw:text-white'>Can be easily captured with good food</div>
                 </div>
             </div>
         </div>
