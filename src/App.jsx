@@ -1,13 +1,13 @@
-import React from "react"; 
+import React from "react";
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import { Home, About, Projects, Contact, Test } from "./pages";
+import { Home, About, Projects, Contact, Test, Experience, Life } from "./pages";
 
 // Component to conditionally render navbar
 const AppContent = () => {
     const location = useLocation();
     const isHomePage = location.pathname === "/";
-    
+
     return (
         <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
             {!isHomePage && <Navbar />}
@@ -18,6 +18,8 @@ const AppContent = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/projects" element={<Projects />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/experience" element={<Experience />} />
+                    <Route path="/life" element={<Life />} />
                 </Routes>
             </main>
         </div>
