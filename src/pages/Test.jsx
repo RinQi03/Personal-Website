@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls'
 import RhsPanel, { createRhsPanelDom } from '../components/RhsPanel'
 import Particles, { createParticlesDom } from '../components/Particles'
+import LhsPanel, { createLhsPanelDom } from '../components/LhsPanel'
 
 //大的container里面有很多小的
 
@@ -256,16 +257,23 @@ const App = () => {
     imageObject.position.set(0, 0, -900)
     scene.add(imageObject)
 
-    // const particles = new CSS3DObject(createParticlesDom())
-    // particles.position.set(0, 0, 200);
-    // scene.add(particles)
     
     // Create CameraUI instance
     const cameraUI = new CameraUI(scene, camera)
 
+    // LHS Panel
+    const lhsPanel = createLhsPanelDom()
+    cameraUI.addUIElement(lhsPanel,{
+      offsetX: -430,
+      offsetY: -180,
+      offsetZ: -700,
+      rotationX: 0,
+      rotationY: Math.PI/30,
+      rotationZ: 0,
+    })
+    
     // const element = createRhsPanelDom()
     const rhsPanel = createRhsPanelDom() // 创建一个div
-    
     // Add UI elements
     cameraUI.addUIElement(rhsPanel,{
       offsetX: 500,
