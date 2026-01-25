@@ -1,5 +1,5 @@
 import React from 'react'
-import { reactToDom, reactToDomWithStyles} from '../utils/reactToDom'
+import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 import '../css/LhsPanel.css'
 
 const LhsPanel = () => {
@@ -16,7 +16,7 @@ const LhsPanel = () => {
                                 <div className='title tw:font-geo tw:text-3xl tw:leading-none tw:tracking-tighter'>Rin</div>
                                 <div className='subtitle tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>47283</div>
                             </div>
-                            
+
                             <div className='info-line tw:mt-12'>
                                 <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Product Manager</div>
                                 <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Software Developer</div>
@@ -28,7 +28,7 @@ const LhsPanel = () => {
                         </div> */}
                     </div>
                 </div>
-                <div className='notice-container tw:py-1 tw:bg-red-900 tw:w-full tw:align-middle tw:justify-center tw:flex'>
+                <div className='notice-container tw:py-1 tw:bg-red-800  tw:w-full tw:align-middle tw:justify-center tw:flex'>
                     <div className='tw:font-geo tw:text-sm tw:leading-none tw:tracking-tighter tw:text-white'>Can be easily captured with good food</div>
                 </div>
             </div>
@@ -39,11 +39,11 @@ const LhsPanel = () => {
 // DOM element version using reactToDom utility
 export const createLhsPanelDom = () => {
     return reactToDom(LhsPanel)
-  }
-  
-  // Async version that properly handles styled-jsx
-  export const createLhsPanelDomAsync = async () => {
+}
+
+// Async version that properly handles styled-jsx
+export const createLhsPanelDomAsync = async () => {
     return await reactToDomWithStyles(LhsPanel)
-  }
-  
-  export default LhsPanel 
+}
+
+export default LhsPanel 

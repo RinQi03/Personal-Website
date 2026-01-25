@@ -58,34 +58,44 @@ class CameraUI {
       rotationX = 0,
       rotationY = 0,
       rotationZ = 0,
-      responsive = true,  // Enable responsive positioning
+      responsive = true,  // Enable responsive positioning (can be boolean or object like {x: true, y: false, z: true})
+      responsiveX = null,  // Override responsive for X axis
+      responsiveY = null,  // Override responsive for Y axis
+      responsiveZ = null,  // Override responsive for Z axis
+      baseWidth = 1660,    // Base screen width for responsive calculations
       glassEffect = false  // Enable glass morphism effect
     } = config
 
     // Use the imported function from RhsPanel.jsx
     // const element = createRhsPanelDom()
     const cssObject = new CSS3DObject(element)
-    
-    // Calculate responsive offset based on screen width
-    let adjustedOffsetX = offsetX
-    if (responsive) {
-      const screenRatio = this.screenWidth / 1920  // Base width of 1920px
-      adjustedOffsetX = offsetX * screenRatio
-    }
-    
+
+    // Calculate responsive offsets based on screen width
+    const screenRatio = this.screenWidth / baseWidth
+
+    // Determine which axes should be responsive
+    let responsiveXAxis = responsiveX !== null ? responsiveX : (typeof responsive === 'object' ? responsive.x !== false : responsive)
+    let responsiveYAxis = responsiveY !== null ? responsiveY : (typeof responsive === 'object' ? responsive.y !== false : responsive)
+    let responsiveZAxis = responsiveZ !== null ? responsiveZ : (typeof responsive === 'object' ? responsive.z !== false : responsive)
+
+    const adjustedOffsetX = responsiveXAxis ? offsetX * screenRatio : offsetX
+    const adjustedOffsetY = responsiveYAxis ? offsetY * screenRatio : offsetY
+    const adjustedOffsetZ = responsiveZAxis ? offsetZ * screenRatio : offsetZ
+
     // Set initial position and rotation
-    cssObject.position.set(adjustedOffsetX, offsetY, offsetZ)
+    cssObject.position.set(adjustedOffsetX, adjustedOffsetY, adjustedOffsetZ)
     cssObject.rotation.set(rotationX, rotationY, rotationZ)
-    
+
     // Always add to scene (more reliable)
     this.scene.add(cssObject)
-    
+
     // Store the element with its configuration
     this.uiElements.push({
       object: cssObject,
       offset: { x: offsetX, y: offsetY, z: offsetZ },
       rotation: { x: rotationX, y: rotationY, z: rotationZ },
-      responsive: responsive
+      responsive: { x: responsiveXAxis, y: responsiveYAxis, z: responsiveZAxis },
+      baseWidth: baseWidth
     })
 
     return cssObject
@@ -94,21 +104,21 @@ class CameraUI {
   // Update all UI elements to follow camera
   update() {
     this.uiElements.forEach(uiElement => {
-      const { object, offset, rotation, responsive } = uiElement
-      
-      // Calculate responsive offset based on current screen width
-      let adjustedOffsetX = offset.x
-      if (responsive) {
-        const currentScreenWidth = window.innerWidth
-        const screenRatio = currentScreenWidth / 1920
-        adjustedOffsetX = offset.x * screenRatio
-      }
-      
+      const { object, offset, rotation, responsive, baseWidth = 1920 } = uiElement
+
+      // Calculate responsive offsets based on current screen width
+      const currentScreenWidth = window.innerWidth
+      const screenRatio = currentScreenWidth / baseWidth
+
+      const adjustedOffsetX = responsive.x ? offset.x * screenRatio : offset.x
+      const adjustedOffsetY = responsive.y ? offset.y * screenRatio : offset.y
+      const adjustedOffsetZ = responsive.z ? offset.z * screenRatio : offset.z
+
       // Calculate position relative to camera
-      const cameraOffset = new THREE.Vector3(adjustedOffsetX, offset.y, offset.z)
+      const cameraOffset = new THREE.Vector3(adjustedOffsetX, adjustedOffsetY, adjustedOffsetZ)
       cameraOffset.applyQuaternion(this.camera.quaternion)
       object.position.copy(this.camera.position).add(cameraOffset)
-      
+
       // Apply rotation
       object.rotation.set(rotation.x, rotation.y, rotation.z)
       object.rotation.x += this.camera.rotation.x
@@ -133,7 +143,7 @@ const backgroundDiv = () => {
   imageElement.style.backgroundPosition = 'center'
   imageElement.style.backgroundRepeat = 'no-repeat'
   imageElement.style.borderRadius = '10px'
-  imageElement.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)' 
+  imageElement.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)'
   return imageElement
 }
 
@@ -151,7 +161,7 @@ const App = () => {
     const scene = new THREE.Scene()
 
     // Camera
-    const camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 20000 );
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 20000);
     camera.position.x = 0
     camera.position.y = 0
     camera.position.z = 1000
@@ -165,77 +175,77 @@ const App = () => {
 
     // Custom First Person Controls
     let controls = {
-      update: () => {} // Placeholder
+      update: () => { } // Placeholder
     }
-    
+
     // Mouse and keyboard state
     let mouseX = 0
     let mouseY = 0
     let isMouseDown = false
     let keys = {}
-    
+
     // Camera rotation
     let rotationX = 0
     let rotationY = 0
     let targetRotationX = 0
     let targetRotationY = 0
-    
+
     // Mouse move handler - automatic following
     const handleMouseMove = (event) => {
       // Calculate mouse position relative to center of screen
       const centerX = window.innerWidth / 2
       const centerY = window.innerHeight / 2
-      
+
       const deltaX = event.clientX - centerX
       const deltaY = event.clientY - centerY
-      
+
       // Convert to rotation (sensitivity can be adjusted)
       const sensitivity = 0.00001  // Reduced from 0.001 to 0.0001
       targetRotationY -= deltaX * sensitivity
       targetRotationX -= deltaY * sensitivity  // 看向四个角
-      
+
       // Limit vertical rotation to 30 degrees (π/6 radians)
-      const maxVerticalAngle = Math.PI / 60 
+      const maxVerticalAngle = Math.PI / 60
       targetRotationX = Math.max(-maxVerticalAngle, Math.min(maxVerticalAngle, targetRotationX))
-      
+
       // Limit horizontal rotation to 30 degrees (π/6 radians)
-      const maxHorizontalAngle = Math.PI / 60 
+      const maxHorizontalAngle = Math.PI / 60
       targetRotationY = Math.max(-maxHorizontalAngle, Math.min(maxHorizontalAngle, targetRotationY))
     }
-    
+
     // Keyboard handlers
     const handleKeyDown = (event) => {
       keys[event.code] = true
     }
-    
+
     const handleKeyUp = (event) => {
       keys[event.code] = false
     }
-    
-        // Update function for controls
+
+    // Update function for controls
     controls.update = () => {
       // Smooth interpolation for camera rotation
       const lerpFactor = 0.05  // Adjust this value (0.01 to 0.2) for different smoothness
       rotationX += (targetRotationX - rotationX) * lerpFactor
       rotationY += (targetRotationY - rotationY) * lerpFactor
-      
+
       // Apply rotation to camera
       camera.rotation.x = rotationX
       camera.rotation.y = rotationY
-      
+
       // Handle keyboard movement
       const moveSpeed = 10
       const direction = new THREE.Vector3()
-      
+
       // Apply movement in camera's local space
       direction.applyQuaternion(camera.quaternion)
       direction.multiplyScalar(moveSpeed)
-      
+
       camera.position.add(direction)
-      
+
       // Update all UI elements to follow camera
       cameraUI.update()
-      
+
       // Debug: Log UI elements count
       if (Math.random() < 0.016) {
         console.log('UI elements count:', cameraUI.uiElements.length)
@@ -243,60 +253,64 @@ const App = () => {
       }
 
     }
-    
+
     // Add event listeners
     mountRef.current.addEventListener('mousemove', handleMouseMove)
     mountRef.current.addEventListener('keydown', handleKeyDown)
     mountRef.current.addEventListener('keyup', handleKeyUp)
-     
 
 
- 
+
+
     // Add background div
     const imageObject = new CSS3DObject(backgroundDiv())
     imageObject.position.set(0, 0, -900)
     scene.add(imageObject)
 
-    
+
     // Create CameraUI instance
     const cameraUI = new CameraUI(scene, camera)
 
     // LHS Panel
     const lhsPanel = createLhsPanelDom()
-    cameraUI.addUIElement(lhsPanel,{
+    cameraUI.addUIElement(lhsPanel, {
       offsetX: -430,
       offsetY: -180,
       offsetZ: -700,
       rotationX: 0,
-      rotationY: Math.PI/30,
+      rotationY: Math.PI / 30,
       rotationZ: 0,
     })
-    
+
     // const element = createRhsPanelDom()
     const rhsPanel = createRhsPanelDom() // 创建一个div
     // Add UI elements
-    cameraUI.addUIElement(rhsPanel,{
-      offsetX: 500,
+    cameraUI.addUIElement(rhsPanel, {
+      offsetX: 400,
       offsetY: 0,
       offsetZ: -700,
-      rotationX: Math.PI/30,
-      rotationY: -Math.PI/6,
-      rotationZ: Math.PI/50,
-      // offsetX: 07
-      // offsetY: 0,
-      // offsetZ: -900,
-      // rotationX: 0,
-      // rotationY: 0,
-      // rotationZ: 0,
-      // glassEffect: false
+      rotationX: Math.PI / 30,
+      rotationY: -Math.PI / 6,
+      rotationZ: Math.PI / 50,
+      // Responsive options:
+      // - responsive: true (default) - all axes scale with screen width
+      // - responsive: {x: true, y: false, z: true} - control each axis individually
+      // - responsiveX: true/false - override X axis responsiveness
+      // - responsiveY: true/false - override Y axis responsiveness
+      // - responsiveZ: true/false - override Z axis responsiveness
+      // - baseWidth: 1920 (default) - base screen width for calculations
+      responsive: true,  // All offsets will scale with screen width
+      // responsive: {x: true, y: false, z: true},  // Only X and Z scale, Y stays fixed
+      // responsiveX: true,  // Override: only X scales
+      // baseWidth: 1920,  // Custom base width (default: 1920px)
     })
 
     const particles = createParticlesDom()
     const particlesObject = new CSS3DObject(particles)
     particlesObject.position.set(0, 0, 150)
     scene.add(particlesObject)
-    
-    
+
+
 
 
     // Background div (black)
@@ -304,40 +318,40 @@ const App = () => {
 
     // Render loop
     const animate = () => {
-        requestAnimationFrame(animate)
-        
-    // Only update controls if they were initialized successfully
-    if (controls) {
-    controls.update() // Required for FirstPersonControls to work
-    
-    // Debug: Log camera position every 60 frames (about once per second)
-    if (Math.random() < 0.016) {
-        // console.log('Camera position:', camera.position.x.toFixed(2), camera.position.y.toFixed(2), camera.position.z.toFixed(2))
-        // console.log('Controls state - movementSpeed:', controls.movementSpeed, 'lookSpeed:', controls.lookSpeed)
-    }
-    }
-        
-    cssRenderer.render(scene, camera)
+      requestAnimationFrame(animate)
+
+      // Only update controls if they were initialized successfully
+      if (controls) {
+        controls.update() // Required for FirstPersonControls to work
+
+        // Debug: Log camera position every 60 frames (about once per second)
+        if (Math.random() < 0.016) {
+          // console.log('Camera position:', camera.position.x.toFixed(2), camera.position.y.toFixed(2), camera.position.z.toFixed(2))
+          // console.log('Controls state - movementSpeed:', controls.movementSpeed, 'lookSpeed:', controls.lookSpeed)
+        }
+      }
+
+      cssRenderer.render(scene, camera)
     }
 
     animate()
 
-             // Handle window resize
-     const handleResize = () => {
-       camera.aspect = window.innerWidth / window.innerHeight
-       camera.updateProjectionMatrix()
-       cssRenderer.setSize(window.innerWidth, window.innerHeight)
-       cameraUI.onResize()  // Update CameraUI with new screen dimensions
-     }
+    // Handle window resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
+      cssRenderer.setSize(window.innerWidth, window.innerHeight)
+      cameraUI.onResize()  // Update CameraUI with new screen dimensions
+    }
     window.addEventListener('resize', handleResize)
 
-     // Cleanup
+    // Cleanup
     return () => {
-        window.removeEventListener('resize', handleResize)
-        mountRef.current.removeEventListener('mousemove', handleMouseMove)
-        mountRef.current.removeEventListener('keydown', handleKeyDown)
-        mountRef.current.removeEventListener('keyup', handleKeyUp)
-        mountRef.current.removeChild(cssRenderer.domElement)
+      window.removeEventListener('resize', handleResize)
+      mountRef.current.removeEventListener('mousemove', handleMouseMove)
+      mountRef.current.removeEventListener('keydown', handleKeyDown)
+      mountRef.current.removeEventListener('keyup', handleKeyUp)
+      mountRef.current.removeChild(cssRenderer.domElement)
     }
   }, [])
 

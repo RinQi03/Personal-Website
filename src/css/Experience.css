@@ -1,0 +1,420 @@
+/* src/components/ExperienceSection.css */
+
+/* 明日方舟风格基础变量 */
+/* :root {
+    --ak-bg-dark: #1a1a1a;
+    --ak-bg-medium: #2a2a2a;
+    --ak-text-light: #e0e0e0;
+    --ak-text-dark: #888888;
+    --ak-orange: #f6b253;
+    --ak-line-gray: #444444;
+    --ak-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --ak-font-sans: 'Roboto', 'Arial', sans-serif;
+} */
+
+body {
+    /* background-color: var(--ak-bg-dark);
+    color: var(--ak-text-light);
+    font-family: var(--ak-font-sans);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    /* 防止不必要的横向滚动条在页面上显示 */
+    /* --ak-bg-dark: #1a1a1a;
+    --ak-bg-medium: #2a2a2a;
+    --ak-text-light: #e0e0e0;
+    --ak-text-dark: #888888;
+    --ak-orange: #f6b253;
+    --ak-line-gray: #444444;
+    --ak-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --ak-font-sans: 'Roboto', 'Arial', sans-serif; */
+
+}
+
+/* 整体经验部分容器 */
+.experience-section {
+    position: relative;
+    display: flex;
+    /* 使用 flexbox 来布局固定标题和滚动内容 */
+    /* min-height 由 JavaScript 动态设置，确保横向滚动完成后不会有额外的垂直滚动 */
+    background-image: url('/home_bg.png');
+    background-size: 150%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    border-bottom: 2px solid var(--color-day-primary);
+    /* 底部线条 */
+    /* overflow: hidden; */
+    overflow-y: hidden;
+    /* 防止横向滚动条出现，并隐藏垂直溢出 */
+    height: 100vh;
+    /* 确保背景始终是视口高度 */
+    max-height: 100vh;
+    /* 限制最大高度为视口高度 */
+}
+
+/* 背景模糊效果 */
+.experience-section::before {
+    content: '';
+    position: fixed;
+    /* 使用 fixed 定位，确保背景固定在视口 */
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    /* 固定为视口高度 */
+    background-image: url('/home_bg.png');
+    background-size: 250%;
+    background-position-x: calc(20% - var(--bg-offset, 0px));
+    background-position-y: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    filter: blur(2px);
+    z-index: -1;
+    overflow-y: hidden;
+    /* 隐藏垂直溢出 */
+}
+
+/* 固定标题部分 */
+.section-title-fixed {
+    position: sticky;
+    /* 使标题在滚动时固定 */
+    top: 0;
+    left: 0;
+    /* width: 250px; */
+    /* 固定宽度 */
+    /* min-width: 250px; */
+    min-width: fit-content;
+
+    height: 100vh;
+    padding: 80px 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    /* background-color: var(--ak-bg-medium); */
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-right: 2px solid var(--color-day-primary);
+    /* z-index: 10; */
+    /* 确保标题在上面 */
+}
+
+.part-container {
+    display: flex;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.4),
+        0 4px 16px 0 rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    /* Glass effect using multiple layers - no backdrop-filter */
+    /* overflow: hidden; */
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 20;
+}
+
+.section-number {
+    font-family: var(--ak-font-mono);
+    color: var(--color-day-secondary);
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.section-title-fixed h2 {
+    font-size: 2.5em;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.section-title-fixed .subtitle {
+    font-family: var(--font-geo);
+    color: var(--color-day-secondary);
+    font-size: em;
+    margin-top: 15px;
+    line-height: 1.5;
+    width: 100%;
+}
+
+
+.title-line {
+    line-height: 0.9;
+    font-weight: bold;
+    letter-spacing: -2px;
+}
+
+/* 横向滚动内容的容器 */
+.horizontal-scroll-wrapper {
+    display: flex;
+    /* 使内容项横向排列 */
+    flex-direction: row;
+    align-items: center;
+    /* 垂直居中时间轴节点 */
+    padding: 0 300px;
+    /* 左右内边距，确保第一个和最后一个元素有空间 */
+    height: 100vh;
+    /* 确保与固定标题高度一致 */
+    width: fit-content;
+    /* 让容器宽度适应内容 */
+    will-change: transform;
+    /* 优化性能 */
+}
+
+/* 经验项 */
+.experience-item {
+    flex-shrink: 0;
+    /* 防止项目收缩 */
+    min-width: 570px;
+    width: fit-content;
+    max-width: 650px;
+    /* 每个经验项的宽度 */
+    margin-right: 100px;
+    /* 经验项之间的间距 */
+    padding: 40px;
+    /* background-color: var(--color-day-background); */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.7) 0%,
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.4),
+        0 4px 16px 0 rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    border-left: 5px solid var(--color-day-accent);
+    /* 左侧橙色装饰条 */
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    /* 用于内部元素的定位 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* 动画过渡 */
+}
+
+.experience-item:hover {
+    transform: translateY(-5px);
+    /* 悬停时稍微抬起 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* 年份和时间轴的线 */
+.year-line {
+    position: absolute;
+    top: -60px;
+    /* 将年份信息放到卡片上方 */
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* 年份靠左 */
+}
+
+.year-dot {
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-day-accent);
+    border-radius: 50%;
+    border: 2px solid var(--color-day-background);
+    box-shadow: 0 0 0 3px var(--color-day-secondary);
+    /* 模拟光晕效果 */
+    z-index: 2;
+    /* 确保点在时间轴线上方 */
+    margin-left: -6px;
+    /* 使点与时间轴线对齐 */
+}
+
+.year-text {
+    font-family: var(--font-geo);
+    font-size: 1.4em;
+    font-weight: bold;
+    color: var(--color-day-accent);
+    margin-left: 15px;
+    white-space: nowrap;
+    /* 防止年份换行 */
+    letter-spacing: 1px;
+}
+
+/* 水平时间轴连接线 */
+.horizontal-scroll-wrapper::before {
+    content: '';
+    position: absolute;
+    top: calc(50% - 1px);
+    /* 居中显示，作为时间轴主线 */
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-day-primary);
+    z-index: 0;
+    /* 确保线在卡片下方 */
+}
+
+/* 经验详情 */
+.experience-details h3 {
+    font-family: var(--font-geo);
+    font-size: 1.6em;
+    color: var(--color-day-text);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.experience-details .company {
+    font-family: var(--font-geo);
+    font-size: 1.1em;
+    color: var(--color-day-text);
+    align-content: bottom;
+}
+
+.experience-details .company span {
+    align-content: text-bottom;
+    vertical-align: text-bottom;
+}
+
+.experience-details .time-location {
+    font-family: var(--font-geo);
+    font-size: 0.95em;
+    color: var(--color-day-secondary);
+    margin-bottom: 20px;
+}
+
+.experience-details .description {
+    font-family: var(--font-geo);
+    font-size: 0.95em;
+    color: var(--color-day-text);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* 技术标签 */
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    /* 标签之间的间距 */
+    margin-top: 15px;
+}
+
+.tech-tag {
+    background-color: rgba(246, 178, 83, 0.2);
+    /* 橙色半透明背景 */
+    color: var(--ak-orange);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: var(--ak-font-mono);
+    font-size: 0.85em;
+    border: 1px solid rgba(246, 178, 83, 0.4);
+    white-space: nowrap;
+}
+
+
+/* 确保最后一个元素完全可见的占位符 */
+.end-spacer {
+    flex-shrink: 0;
+    width: 200px;
+    /* 宽度可以根据需要调整 */
+    height: 1px;
+    /* 占位符不需要高度 */
+}
+
+/* 媒体查询 - 响应式设计 */
+@media (max-width: 1024px) {
+    .section-title-fixed {
+        width: 200px;
+        min-width: 200px;
+        padding: 60px 20px;
+    }
+
+    .section-title-fixed h2 {
+        font-size: 2.2em;
+    }
+
+    .experience-item {
+        width: 400px;
+        margin-right: 80px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* 在小屏幕上，可以考虑将横向滚动改为垂直滚动 */
+    /* 或者简化布局，让标题变为普通顶部标题 */
+    .experience-section {
+        flex-direction: column;
+        /* 垂直排列 */
+        min-height: auto;
+    }
+
+    .section-title-fixed {
+        position: static;
+        /* 取消固定 */
+        width: 100%;
+        height: auto;
+        padding: 40px 20px;
+        border-right: none;
+        border-bottom: 2px solid var(--ak-line-gray);
+        align-items: center;
+        text-align: center;
+    }
+
+    .section-title-fixed h2 {
+        font-size: 2em;
+    }
+
+    .horizontal-scroll-wrapper {
+        flex-direction: column;
+        /* 垂直排列经验项 */
+        padding: 40px 20px;
+    }
+
+    .experience-item {
+        width: 90%;
+        /* 占据大部分宽度 */
+        margin-right: 0;
+        margin-bottom: 40px;
+        /* 垂直间距 */
+        top: auto;
+        /* 移除原来的定位 */
+        left: auto;
+        right: auto;
+        transform: none !important;
+        /* 取消所有平移，如果之前有的话 */
+    }
+
+    .year-line {
+        position: static;
+        /* 取消绝对定位 */
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .year-dot {
+        display: none;
+        /* 垂直模式下可以隐藏点 */
+    }
+
+    .year-text {
+        margin-left: 0;
+    }
+
+    .horizontal-scroll-wrapper::before {
+        display: none;
+        /* 垂直模式下隐藏横向时间轴线 */
+    }
+
+    .end-spacer {
+        display: none;
+        /* 垂直布局下不需要 */
+    }
+}

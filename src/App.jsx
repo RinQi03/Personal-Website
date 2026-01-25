@@ -9,9 +9,9 @@ const AppContent = () => {
     const isHomePage = location.pathname === "/";
 
     return (
-        <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100vw', minHeight: '100vh', overflow: isHomePage ? 'hidden' : 'auto' }}>
             {!isHomePage && <Navbar />}
-            <main className="tw:bg-slate-300/20 tw:overflow-x-hidden tw:w-full tw:h-full" style={{ position: 'absolute', top: 0, left: 0 }}>
+            <main className="tw:bg-slate-300/20 tw:overflow-x-hidden tw:w-full" style={{ position: isHomePage ? 'absolute' : 'relative', top: isHomePage ? 0 : 'auto', left: isHomePage ? 0 : 'auto', minHeight: isHomePage ? '100vh' : 'auto' }}>
                 <Routes>
                     <Route path="/" element={<Test />} />
                     <Route path="/home" element={<Home />} />

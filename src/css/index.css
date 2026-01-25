@@ -4,27 +4,54 @@
 
 
 @theme {
---breakpoint-*:initial;
---breakpoint-sm:480px;
---breakpoint-md: 768px;
---breakpoint-lg: 976px;
---color-twitter-blue:#1DA1F2;
---color-orange-500:#ffa500;
+    --breakpoint-*: initial;
+    --breakpoint-sm: 480px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 976px;
+    --color-twitter-blue: #1DA1F2;
+    --color-orange-500: #ffa500;
 
---color-day-text: #1d1802;
---color-day-background: #eeeeee;
---color-day-primary: #c6c6c6;
---color-day-secondary: #575757;
---color-day-accent: #e46a13;
+    /* 黑色 */
+    --color-day-text: #1c1303;
+    /* 白色 */
+    --color-day-background: #eeeeee;
+    /* 灰色 */
+    --color-day-primary: #c6c6c6;
+    /* 深灰色 */
+    --color-day-secondary: #575757;
+    /* 橙色 */
+    --color-day-accent: #e46a13;
 
---color-night-text: #f0edf8;
---color-night-background: #030203;
---color-night-primary: #1c1c1c;
---color-night-secondary: #404040;
---color-night-accent: #ff811a;
+    /* --color-night-text: #f0edf8;
+    --color-night-background: #030203;
+    --color-night-primary: #1c1c1c;
+    --color-night-secondary: #404040;
+    --color-night-accent: #ff811a; */
 
---font-geo: "Geo", sans-serif;
---font-noto: "Noto Serif SC", serif;
---font-zcool: "ZCOOL XiaoWei", serif;
+    --font-geo: "Geo", sans-serif;
+    --font-noto: "Noto Serif SC", serif;
+    --font-zcool: "ZCOOL XiaoWei", serif;
 
+}
+
+/* 在 :root 中定义 CSS 变量，确保可以在所有 CSS 文件中使用 */
+:root {
+    --color-day-text: #1c1303;
+    --color-day-background: #eeeeee;
+    --color-day-primary: #c6c6c6;
+    --color-day-secondary: #575757;
+    --color-day-accent: #e46a13;
+}
+
+/* 隐藏滚动条但保持滚动功能 */
+* {
+    /* Firefox */
+    scrollbar-width: none;
+    /* IE and Edge */
+    -ms-overflow-style: none;
+}
+
+/* Webkit browsers (Chrome, Safari, Opera) */
+*::-webkit-scrollbar {
+    display: none;
 }
