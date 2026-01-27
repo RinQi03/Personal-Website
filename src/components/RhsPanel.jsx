@@ -1,6 +1,10 @@
 import React from 'react'
 import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 import '../css/RhsPanel.css'
+import an_sanity from '../assets/an_sanity.png'
+import an_projects from '../assets/an_projects.png'
+import an_about from '../assets/an_about.png'
+import an_life from '../assets/an_life.png'
 
 // React component version
 const RhsPanel = () => {
@@ -21,7 +25,7 @@ const RhsPanel = () => {
                                 <span className="tw:font-geo tw:text-base tw:leading-4 tw:px-1.5 tw:py-1 tw:font-light tw:tracking-tighter">NYU Senior</span>
                             </div>
                         </div>
-                        <img src="/an_sanity.png" alt="Experience Icon" className="experience-icon part-icon" />
+                        <img src={an_sanity} alt="Experience Icon" className="experience-icon part-icon" />
                     </a>
 
 
@@ -35,14 +39,14 @@ const RhsPanel = () => {
                             <div className="title-line tw:font-geo tw:text-3xl">Projects</div>
                             <div className="title-line tw:font-noto tw:text-base">项目经历</div>
                         </div>
-                        <img src="/an_projects.png" alt="Experience Icon" className="projects-icon part-icon" />
+                        <img src={an_projects} alt="Experience Icon" className="projects-icon part-icon" />
                     </a>
                     <a className="about-container part-container" href="/about">
                         <div className="title-container">
                             <div className="title-line tw:font-geo tw:text-2xl">About</div>
                             <div className="title-line tw:font-noto tw:text-sm">关于我</div>
                         </div>
-                        <img src="/an_about.png" alt="Experience Icon" className="about-icon part-icon" />
+                        <img src={an_about} alt="Experience Icon" className="about-icon part-icon" />
                     </a>
                 </div>
                 <div className="line-container" id="life-contact-container">
@@ -51,7 +55,7 @@ const RhsPanel = () => {
                             <div className="title-line tw:font-geo tw:text-3xl">Life</div>
                             <div className="title-line tw:font-noto tw:text-base">生活日常</div>
                         </div>
-                        <img src="/an_life.png" alt="Experience Icon" className="life-icon part-icon" />
+                        <img src={an_life} alt="Experience Icon" className="life-icon part-icon" />
                     </a>
                     <a className="contact-container part-container" href="/contact">
                         <div className="title-container">
