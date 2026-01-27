@@ -29,7 +29,7 @@ const LhsPanel = () => {
                     </div>
                 </div>
                 <div className='notice-container tw:py-1 tw:bg-red-800  tw:w-full tw:align-middle tw:justify-center tw:flex'>
-                    <div className='tw:font-geo tw:text-sm tw:leading-none tw:tracking-tighter tw:text-white'>Can be easily captured with good food</div>
+                    <div className='tw:font-noto tw:text-sm tw:leading-none tw:tracking-tighter tw:text-white'>Can be easily captured with good food</div>
                 </div>
             </div>
         </div>

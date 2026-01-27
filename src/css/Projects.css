@@ -1,21 +1,9 @@
-/* src/components/ExperienceSection.css */
+/* src/components/ProjectsSection.css */
 
-/* 明日方舟风格基础变量 */
-/* :root {
-    --ak-bg-dark: #1a1a1a;
-    --ak-bg-medium: #2a2a2a;
-    --ak-text-light: #e0e0e0;
-    --ak-text-dark: #888888;
-    --ak-orange: #f6b253;
-    --ak-line-gray: #444444;
-    --ak-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-    --ak-font-sans: 'Roboto', 'Arial', sans-serif;
-} */
+/* Projects 页面样式 */
 
-/* Experience 页面样式 */
-
-/* 整体经验部分容器 */
-.experience-section {
+/* 整体项目部分容器 */
+.projects-section {
     position: relative;
     display: flex;
     /* 使用 flexbox 来布局固定标题和滚动内容 */
@@ -37,7 +25,7 @@
 }
 
 /* 背景模糊效果 */
-.experience-section::before {
+.projects-section::before {
     content: '';
     position: fixed;
     /* 使用 fixed 定位，确保背景固定在视口 */
@@ -60,7 +48,7 @@
 }
 
 /* 固定标题部分 */
-.section-title-fixed {
+.projects-section .section-title-fixed {
     position: sticky;
     /* 使标题在滚动时固定 */
     top: 0;
@@ -84,25 +72,6 @@
     z-index: 10;
     /* 确保标题在上面 */
 }
-
-/* .part-container {
-    display: flex;
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.3) 0%,
-            rgba(255, 255, 255, 0.15) 50%,
-            rgba(255, 255, 255, 0.05) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow:
-        0 8px 32px 0 rgba(0, 0, 0, 0.4),
-        0 4px 16px 0 rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-    Glass effect using multiple layers - no backdrop-filter
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 20;
-} */
 
 .section-number {
     font-family: var(--ak-font-mono);
@@ -128,6 +97,9 @@
     width: 100%;
 }
 
+.project-details .title-line {
+    line-height: 1.2;
+}
 
 .title-line {
     line-height: 0.9;
@@ -136,7 +108,7 @@
 }
 
 /* 横向滚动内容的容器 */
-.horizontal-scroll-wrapper {
+.projects-section .horizontal-scroll-wrapper {
     display: flex;
     /* 使内容项横向排列 */
     flex-direction: row;
@@ -152,16 +124,16 @@
     /* 优化性能 */
 }
 
-/* 经验项 - 容器 */
-.experience-item {
+/* 项目项 - 容器 */
+.project-item {
     flex-shrink: 0;
     /* 防止项目收缩 */
     min-width: 550px;
     width: fit-content;
-    max-width: 650px;
-    /* 每个经验项的宽度 */
+    max-width: 550px;
+    /* 每个项目项的宽度 */
     margin-right: 100px;
-    /* 经验项之间的间距 */
+    /* 项目项之间的间距 */
     padding: 0px 20px;
     position: relative;
     /* 用于内部元素的定位 */
@@ -174,11 +146,10 @@
 }
 
 /* 内容层 - 最底层，包含所有实际内容 */
-.experience-item .content-layer {
+.project-item .content-layer {
     position: relative;
     max-width: 99%;
     z-index: 1;
-    color: var(--color-day-text-secondary);
     /* 内容在最底层 */
     background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.6) 0%,
@@ -203,7 +174,7 @@
 }
 
 /* 上装饰面板 - 覆盖上半部分 */
-.experience-item .panel-top {
+.project-item .panel-top {
     position: absolute;
     /* width: 120%; */
     bottom: 50%;
@@ -239,7 +210,7 @@
 }
 
 /* 下装饰面板 - 覆盖下半部分 */
-.experience-item .panel-bottom {
+.project-item .panel-bottom {
     position: absolute;
     top: 50%;
     /* bottom: 0; */
@@ -274,34 +245,25 @@
     /* 不阻挡鼠标事件 */
 }
 
-.experience-details-content p {
-    font-family: var(--font-inter);
-    font-weight: 300;
-    font-size: 0.85em;
-    color: var(--color-day-text-secondary) !important;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
 /* Hover 效果 - 机械装甲展开 */
-.experience-item:hover .panel-top {
+.project-item:hover .panel-top {
     transform: translateY(calc(-1 * var(--panel-offset, 50%)));
     /* 向上平移，距离基于 content-layer 高度 */
     /* year-line 会随着 panel-top 一起移动，因为它在 panel-top 内部 */
 }
 
-.experience-item:hover .panel-bottom {
+.project-item:hover .panel-bottom {
     transform: translateY(var(--panel-offset, 50%));
     /* 向下平移，距离基于 content-layer 高度 */
 }
 
 /* Hover 时显示 content-layer */
-.experience-item:hover .content-layer {
+.project-item:hover .content-layer {
     opacity: 1;
     /* hover 时可见 */
 }
 
-.experience-item:hover {
+.project-item:hover {
     transform: translateY(-5px);
     /* 悬停时稍微抬起 */
     /* box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); */
@@ -348,7 +310,7 @@
 }
 
 /* 水平时间轴连接线 */
-.horizontal-scroll-wrapper::before {
+.projects-section .horizontal-scroll-wrapper::before {
     content: '';
     position: absolute;
     top: calc(50% - 1px);
@@ -361,40 +323,37 @@
     /* 确保线在卡片下方 */
 }
 
-/* 经验详情 */
-.experience-details h3 {
+/* 项目详情 */
+.project-details h3 {
     font-family: var(--font-inter);
     font-size: 1.6em;
     color: var(--color-day-text);
     margin-bottom: 10px;
-    letter-spacing: 0.05px;
+    letter-spacing: 1px;
 }
 
-.experience-details .company {
+.project-details .company {
     font-family: var(--font-inter);
     font-size: 1.1em;
-    font-weight: 400;
     color: var(--color-day-text);
     align-content: bottom;
 }
 
-.experience-details .company span {
+.project-details .company span {
     align-content: text-bottom;
     vertical-align: text-bottom;
 }
 
-.experience-details .time-location {
+.project-details .time-location {
     font-family: var(--font-inter);
     font-size: 1em;
-    font-weight: 300;
     color: var(--color-day-secondary);
     margin-bottom: 20px;
 }
 
-.experience-details .description {
+.project-details .description {
     font-family: var(--font-inter);
     font-size: 0.95em;
-    font-weight: 300;
     color: var(--color-day-text);
     line-height: 1.6;
     margin-bottom: 20px;
@@ -410,14 +369,14 @@
 }
 
 .tech-tag {
-    background-color: rgba(249, 151, 13, 0.2);
+    background-color: rgba(246, 178, 83, 0.2);
     /* 橙色半透明背景 */
-    color: var(--color-day-accent);
+    color: var(--ak-orange);
     padding: 6px 12px;
     border-radius: 4px;
     font-family: var(--ak-font-mono);
-    font-size: 0.95em;
-    border: 1px solid rgba(241, 153, 30, 0.4);
+    font-size: 0.85em;
+    border: 1px solid rgba(246, 178, 83, 0.4);
     white-space: nowrap;
 }
 
@@ -433,7 +392,7 @@
 
 /* 媒体查询 - 响应式设计 */
 @media (max-width: 1024px) {
-    .section-title-fixed {
+    .projects-section .section-title-fixed {
         width: 200px;
         min-width: 200px;
         padding: 60px 20px;
@@ -443,7 +402,7 @@
         font-size: 2.2em;
     }
 
-    .experience-item {
+    .project-item {
         width: 400px;
         margin-right: 80px;
         padding: 30px;
@@ -454,13 +413,13 @@
 
     /* 在小屏幕上，可以考虑将横向滚动改为垂直滚动 */
     /* 或者简化布局，让标题变为普通顶部标题 */
-    .experience-section {
+    .projects-section {
         flex-direction: column;
         /* 垂直排列 */
         min-height: auto;
     }
 
-    .section-title-fixed {
+    .projects-section .section-title-fixed {
         position: static;
         /* 取消固定 */
         width: 100%;
@@ -476,13 +435,13 @@
         font-size: 2em;
     }
 
-    .horizontal-scroll-wrapper {
+    .projects-section .horizontal-scroll-wrapper {
         flex-direction: column;
-        /* 垂直排列经验项 */
+        /* 垂直排列项目项 */
         padding: 40px 20px;
     }
 
-    .experience-item {
+    .project-item {
         width: 90%;
         /* 占据大部分宽度 */
         margin-right: 0;
@@ -512,7 +471,7 @@
         margin-left: 0;
     }
 
-    .horizontal-scroll-wrapper::before {
+    .projects-section .horizontal-scroll-wrapper::before {
         display: none;
         /* 垂直模式下隐藏横向时间轴线 */
     }

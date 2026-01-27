@@ -17,8 +17,8 @@ const RhsPanel = () => {
                             <div className="title-line tw:font-geo tw:text-5xl">Experience</div>
                             <div className="title-line tw:font-noto tw:text-xl">实习经历</div>
                             <div className="title-line tw:font-geo tw:text-base tw:m-3 tw:pt-3 tw:flex tw:flex-row tw:gap-1">
-                                <span className="title-line tw:font-geo tw:text-lg tw:leading-4 tw:bg-day-accent tw:font-normal tw:px-1.5 tw:py-1 tw:rounded-xs tw:tracking-tighter">Current</span>
-                                <span className="title-line tw:font-geo tw:text-base tw:leading-4 tw:px-1.5 tw:py-1 tw:font-light tw:tracking-tighter">NYU Senior</span>
+                                <span className="tw:font-geo tw:text-lg tw:leading-4 tw:bg-day-accent tw:font-normal tw:px-1.5 tw:py-1 tw:rounded-xs tw:tracking-tighter">Current</span>
+                                <span className="tw:font-geo tw:text-base tw:leading-4 tw:px-1.5 tw:py-1 tw:font-light tw:tracking-tighter">NYU Senior</span>
                             </div>
                         </div>
                         <img src="/an_sanity.png" alt="Experience Icon" className="experience-icon part-icon" />

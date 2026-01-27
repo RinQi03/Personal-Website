@@ -41,6 +41,15 @@
     --color-day-primary: #c6c6c6;
     --color-day-secondary: #575757;
     --color-day-accent: #e46a13;
+    --font-geo: "Geo", sans-serif;
+    --font-noto: "Noto Serif SC", serif;
+    --font-zcool: "ZCOOL XiaoWei", serif;
+    /* 明日方舟风格变量 */
+    --ak-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --ak-orange: #f6b253;
+    --ak-line-gray: #444444;
+    --font-inter: 'Inter', sans-serif;
+    --color-day-text-secondary: #606060;
 }
 
 /* 隐藏滚动条但保持滚动功能 */

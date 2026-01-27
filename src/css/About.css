@@ -1,0 +1,299 @@
+/* 基础容器 */
+.about-page {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .test-container {
+    width: 100%;
+    height: 100vh;
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+} */
+
+/* 右侧深灰色斜切块 */
+.bg-slash {
+    position: absolute;
+    top: 0%;
+    right: 6%;
+    /* width: 40%; */
+    height: 100%;
+    /* background-color: #383838; */
+    /* clip-path: polygon(25% 0, 100% 0, 75% 100%, 0% 100%); */
+    /* clip-path: polygon(0 0, 75% 0, 100% 100%, 25% 100%); */
+    z-index: 2;
+}
+
+.bg-slash-img {
+    /* width: 100%; */
+    position: relative;
+    top: -0.5vh;
+    right: 14vw;
+    height: 105%;
+    /* object-fit: cover;
+    object-position: center; */
+    z-index: 2;
+    filter: brightness(4);
+
+}
+
+.bg-slash-bottom {
+    position: absolute;
+    top: 0.8%;
+    right: 5%;
+    /* width: 43%; */
+    height: 100%;
+    /* background-color: #c9c9c9; */
+    /* clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%); */
+    /* clip-path: polygon(0 0, 75% 0, 100% 100%, 25% 100%); */
+    z-index: 1;
+}
+
+.bg-slash-img-bottom {
+    position: relative;
+    top: -2vh;
+    right: 15.5vw;
+    height: 105%;
+    /* object-fit: cover;
+    object-position: center; */
+    z-index: 2;
+    filter: brightness(5);
+}
+
+.about-info-container {
+    /* background-color: aqua; */
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100vh;
+    padding: 0;
+}
+
+/* 左侧文字区域 */
+.text-section {
+    flex: 0 0 55%;
+    padding: 80px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* 右侧图片区域 */
+.image-section {
+    /* flex: 0 0 40%; */
+    /* width: 500px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 10vh;
+    /* transform: scale(-1, 1); */
+    height: 90vh;
+    box-sizing: border-box;
+    z-index: 5;
+    position: relative;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* 名字和下载按钮容器 */
+.name-header {
+    display: flex;
+    /* align-items: flex-end !important; */
+    /* justify-content: flex-end !important; */
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: min(20vh, 100px);
+    margin-bottom: 2rem;
+}
+
+/* 名字排版 */
+.about-name {
+    font-size: clamp(60px, 8vw, 120px);
+    /* 响应式字体 */
+    font-weight: 800;
+    color: var(--color-day-accent);
+    /* 工业橙 */
+    line-height: 0.9;
+    margin: 0;
+    letter-spacing: -4px;
+    font-family: var(--font-inter);
+}
+
+/* 简历下载标签 - 类似 tech-tag 样式 */
+.resume-download-tag {
+    background-color: rgba(246, 178, 83, 0.3);
+
+    /* 橙色半透明背景 - 增加不透明度使其更明显 */
+    color: var(--color-day-accent);
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-family: var(--ak-font-mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 2px solid rgba(246, 178, 83, 0.6);
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin: auto 0 5px;
+    /* align-self: flex-start; */
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* opacity: 0; */
+    /* 初始状态为不可见，等待动画 */
+}
+
+.download-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: inline-block;
+    filter: brightness(-0.5) invert(1);
+}
+
+.resume-download-tag:hover {
+    background-color: rgba(246, 178, 83, 0.4);
+    border-color: rgba(246, 178, 83, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 正文样式 */
+.about-text {
+    left: 5%;
+    position: relative;
+    /* max-width: 480px; */
+    /* width: fit-content; */
+    color: #555;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    width: 80%;
+    font-family: var(--font-inter);
+
+}
+
+.career-section {
+    width: 60%;
+    left: 5%;
+    position: relative;
+}
+
+
+
+.about-text p {
+    margin-bottom: 1.5rem;
+}
+
+.about-text.contact-section {
+    /* margin-top: min(10vh, 10px); */
+    margin-top: max(5vh, 100px);
+
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.highlight-text {
+    color: var(--color-day-accent);
+    font-weight: bold;
+    font-style: italic;
+}
+
+.email-link {
+    color: var(--color-day-accent);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    transition: opacity 0.3s;
+}
+
+.email-link:hover {
+    opacity: 0.7;
+}
+
+.profile-img {
+    height: 100%;
+    /* width: 100%; */
+    object-fit: cover;
+    object-position: center;
+    /* 为透明 PNG 添加投影 */
+    filter: drop-shadow(20px 20px 60px rgba(0, 0, 0, 0.3));
+    z-index: 5;
+}
+
+/* 左下角 L 型装饰 */
+.deco-corner {
+    /* margin-top: 10px; */
+    bottom: 40px;
+    height: 50px;
+    border-left: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    position: relative;
+}
+
+.inner-corner {
+    position: absolute;
+    left: -10px;
+    bottom: -10px;
+    width: 15px;
+    height: 15px;
+    border-left: 2px solid #666;
+    border-bottom: 2px solid #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .about-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .text-section {
+        flex: 1;
+        padding: 60px 60px;
+        width: 100%;
+    }
+
+    .image-section {
+        flex: 1;
+        width: 100%;
+        min-height: 500px;
+    }
+
+    .bg-slash {
+        width: 100%;
+        /* clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); */
+    }
+}
+
+@media (max-width: 768px) {
+    .text-section {
+        padding: 40px 40px;
+    }
+
+    .about-name {
+        font-size: clamp(40px, 10vw, 80px);
+    }
+
+    .about-text {
+        font-size: 1rem;
+    }
+
+    .image-section {
+        min-height: 400px;
+    }
+}

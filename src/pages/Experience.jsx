@@ -29,6 +29,10 @@ const experiences = [
         time: '2024.09 - 2025.12',
         location: 'New York, NY',
         description: 'Conducted in-person one-on-one sessions helping students learn data structures and accounting',
+        detailedDescriptions: [
+            'Facilitated weekly structured study sessions, helping ~110 students in time management and effective study;',
+            'Explained key concepts, problem-solving strategies, and coding exercises to reinforce students\' understanding; Improved their understanding by 30% +'
+        ],
         tech: ['Communication', 'Time Management', 'Active Adaption']
     },
     {
@@ -39,7 +43,12 @@ const experiences = [
         time: '2025.06 - 2025.08',
         location: 'Guangzhou, China',
         description: 'Produced AIGC research reports with 90%+ positive feedback and managed Douyin content using Hailuo and Dreamina to gain 800+ followers in 3 weeks',
-        tech: ['AIGC Platforms', 'Data Analysis', 'Content Strategy', 'Ad Copywriting']
+        detailedDescriptions: [
+            'Researched AIGC images, videos, and games platforms; produced two 6000+ word reports; listed as project introduction documents group-wise and received 90%+ positive feedback',
+            'Managed company-owned Douyin account, using Hailuo and Dreamina (AIGC platforms) to produce content; analyzed performance data to refine content, achieving 800+ followers in 3 weeks',
+            'Supported 9Game (mobile game downloading platform)\'s summer KOL campaign by crafting ad copy and reviewing promotional videos; resulted in +9.55% exposure UV and +11.56% interaction UV'
+        ],
+        tech: ['AIGC Video Platforms', 'Data Analysis', 'KOL Campaign Review']
     },
     {
         id: 3,
@@ -49,6 +58,10 @@ const experiences = [
         time: '2024.07 - 2024.08',
         location: 'Remote',
         description: 'Conducted literature reviews on climate change effects and investigated Doughnut Economics as a framework for the Tropical Belt Initiative.',
+        detailedDescriptions: [
+            'Investigated Doughnut Economics; produced an analysis of the possibilities of using Doughnut Economics as the final framework for the research done by Tropical Belt Initiative, which advocates for greater recognition and financial support',
+            'Assisted on the International Union for Conservation of Nature (IUCN) visit to Hong Kong and Sri Lanka’s representative’s visit to Beijing, China; managed detailed note taking, translating, and travel logistics'
+        ],
         tech: ['Literature Review', 'Doughnut Economics', 'Translation', 'Logistics']
     },
     {
@@ -59,6 +72,11 @@ const experiences = [
         time: '2023.05 - 2023.08',
         location: 'Shanghai, China',
         description: 'Drafted due diligence checklists for logistics and EV battery industries and performed equity research on CATL.',
+        detailedDescriptions: [
+            'Drafted pre-investment due diligence checklist on a logistic company; requested documents including business registration, patents, & financial plans from the target company for company valuation',
+            'Enhanced investment team\'s Southeast Asia due diligence through detailed documentation and meeting minutes for team use in quarterly reports',
+            'Conducted industrial research on electric vehicle battery industry and equity research on Contemporary Amperex Technology Co. Limited; gave a 1-hour report in the investment committee meeting, for which I received recognition'
+        ],
         tech: ['Equity Research', 'Due Diligence', 'Industry Analysis']
     }
 ];
@@ -74,10 +92,41 @@ const Experience = () => {
 
         if (!pinSection || !horizontalScroll) return;
 
-        let ctx = gsap.context(() => {
-            // 等待 DOM 完全渲染
-            const experienceItems = gsap.utils.toArray('.experience-item', pinSection);
+        // 等待 DOM 完全渲染
+        const experienceItems = gsap.utils.toArray('.experience-item', pinSection);
 
+        // 为每个 experience-item 设置基于 content-layer 高度的展开距离
+        const updatePanelOffsets = () => {
+            experienceItems.forEach((item) => {
+                const contentLayer = item.querySelector('.content-layer');
+                if (contentLayer) {
+                    const contentHeight = contentLayer.offsetHeight;
+                    // 设置 CSS 变量，用于控制面板展开距离
+                    item.style.setProperty('--content-height', `${contentHeight}px`);
+                    // 展开距离为内容高度的一半（因为上下各展开一半）
+                    item.style.setProperty('--panel-offset', `${contentHeight / 2}px`);
+                }
+            });
+        };
+
+        // 初始设置
+        if (experienceItems.length > 0) {
+            updatePanelOffsets();
+        }
+
+        // 监听窗口大小变化，更新展开距离
+        const resizeObserver = new ResizeObserver(() => {
+            updatePanelOffsets();
+        });
+
+        experienceItems.forEach((item) => {
+            const contentLayer = item.querySelector('.content-layer');
+            if (contentLayer) {
+                resizeObserver.observe(contentLayer);
+            }
+        });
+
+        let ctx = gsap.context(() => {
             if (experienceItems.length === 0) return;
 
             // 使用 scrollWidth 获取实际内容宽度（更准确）
@@ -116,7 +165,7 @@ const Experience = () => {
                     currentBgOffset = targetBgOffset;
                 }
 
-                pinSection.style.backgroundPositionX = `calc(20% - ${currentBgOffset}px)`;
+                pinSection.style.backgroundPositionX = `calc(40% - ${currentBgOffset}px)`;
                 pinSection.style.setProperty('--bg-offset', `${currentBgOffset}px`);
 
                 // 如果还没到达目标，继续动画
@@ -188,7 +237,10 @@ const Experience = () => {
 
         }, sectionRef);
 
-        return () => ctx.revert();
+        return () => {
+            ctx.revert();
+            resizeObserver.disconnect();
+        };
     }, []);
 
     return (
@@ -203,14 +255,30 @@ const Experience = () => {
             <div ref={scrollWrapperRef} className="horizontal-scroll-wrapper">
                 {experiences.map(exp => (
                     <div key={exp.id} className="experience-item">
-                        <div className="year-line">
-                            <span className="year-dot"></span>
-                            <span className="year-text tw:text-day-accent">{exp.year}</span>
+                        {/* 内容层 - 最底层 */}
+                        <div className="experience-details content-layer">
+                            <div className="experience-details-content">
+                                {exp.detailedDescriptions.map((point, i) => (
+                                    <p key={i} className="description">{point}</p>
+                                ))}
+                                {/* <p className="description">{exp.detailedDescription}</p> */}
+                            </div>
                         </div>
-                        <div className="experience-details">
-                            <h3 className="title-line">{exp.title}</h3>
-                            <p className="company tw:flex tw:justify-between tw:align-bottom">{exp.company} </p>
+
+                        {/* 上装饰面板 */}
+                        <div className="panel-top experience-details">
+                            <div className="year-line">
+                                <span className="year-dot"></span>
+                                <span className="year-text tw:text-day-accent ">{exp.year}</span>
+                            </div>
+                            <h3 className="title-line tw:leading-2">{exp.title}</h3>
+                            <p className="company tw:flex tw:justify-between tw:align-bottom">{exp.company}</p>
                             <p className="time-location">{exp.time} | {exp.location}</p>
+
+                        </div>
+
+                        {/* 下装饰面板 */}
+                        <div className="panel-bottom">
                             <p className="description">{exp.description}</p>
                             <div className="tech-tags">
                                 {exp.tech.map((t, i) => (
