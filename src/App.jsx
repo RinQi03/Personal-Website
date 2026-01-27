@@ -1,5 +1,6 @@
 import React from "react";
-import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
+import { HashRouter as Router, Routes, useLocation } from "react-router-dom";
+// import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from "./components/Navbar";
 import { Home, About, Projects, Contact, Test, Experience, Life } from "./pages";
 
@@ -28,9 +29,9 @@ const AppContent = () => {
 
 const App = () => {
     return (
-        <Router basename="/personal-website">
+        <HashRouter>
             <AppContent />
-        </Router>
+        </HashRouter>
     );
 };
 
