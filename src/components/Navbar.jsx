@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
     return (
@@ -16,13 +17,13 @@ const Navbar = () => {
             fontFamily: 'var(--font-geo)',
             // boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
         }}>
-            <a href="/" className="tw:text-2xl tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Rin</a>
+            <Link to="/" className="tw:text-2xl tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Rin</Link>
             <div style={{ display: 'flex', gap: '2rem' }} className="tw:text-xl">
-                <a href="/experience" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Experience</a>
-                <a href="/projects" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Projects</a>
-                <a href="/about" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>About</a>
-                <a href="/life" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Life</a>
-                <a href="/contact" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Contact</a>
+                <Link to="/experience" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Experience</Link>
+                <Link to="/projects" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Projects</Link>
+                <Link to="/about" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>About</Link>
+                <Link to="/life" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Life</Link>
+                <Link to="/contact" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Contact</Link>
             </div>
         </header>
     )
