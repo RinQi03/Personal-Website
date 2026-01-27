@@ -25,6 +25,12 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: List dist contents
+        run: |
+          echo "Dist folder contents:"
+          ls -la dist/
+          echo "Assets folder contents:"
+          ls -la dist/assets/ || echo "No assets folder"
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
