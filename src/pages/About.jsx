@@ -47,14 +47,21 @@ const About = () => {
                 ease: "back.out(1.7)"
             });
 
-            // 3. 正文段落渐显
-            gsap.from(".about-text p", {
-                opacity: 0,
-                x: -30,
-                duration: 0.8,
-                stagger: 0.2,
-                delay: 0.8
-            });
+            // 3. 正文段落渐显 - 整个 div（包括 part-container）一起出现
+            gsap.fromTo(".about-text-container",
+                {
+                    opacity: 0,
+                    x: -30
+                },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    delay: 0.8,
+                    clearProps: "x" // 动画完成后清除 x transform，让 CSS hover 效果可以正常工作
+                }
+            );
 
         }, containerRef);
 
@@ -89,17 +96,22 @@ const About = () => {
                         </a>
                     </div>
 
-                    <div className="about-text name-section">
-                        <p>
-                            Hi, I'm Rin Qi, <br />
-                            a senior majoring in <strong>Computer Science and Economics</strong>
-                            <br /> at New York University.
-                        </p>
+                    <div className="about-text-container">
+                        <div className="about-text name-section part-container">
+                            <p>
+                                Hi, I'm Rin Qi, <br />
+                                a senior majoring in <br />
+                                <strong>Computer Science and Economics</strong>
+                                <br /> at New York University.
+                            </p>
+                        </div>
                     </div>
-                    <div className="about-text career-section">
-                        <p>
-                            I am a <span className="highlight-text">product manager</span> who aims to build technical products that solve real-world problems.
-                        </p>
+                    <div className="about-text-container">
+                        <div className="about-text career-section part-container">
+                            <p>
+                                I am a <span className="highlight-text">product manager</span> who aims to build technical products that solve real-world problems.
+                            </p>
+                        </div>
                     </div>
                     <div className="about-text contact-section">
                         <p>
