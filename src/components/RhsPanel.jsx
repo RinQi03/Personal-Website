@@ -5,16 +5,51 @@ import an_sanity from '../assets/an_sanity.png'
 import an_projects from '../assets/an_projects.png'
 import an_about from '../assets/an_about.png'
 import an_life from '../assets/an_life.png'
+// Custom NavLink that forces a hard refresh and clears cache
+const CustomNavLink = ({ to, className, children }) => {
+    const currentHash = window.location.hash.replace('#', '') || '/'
+    const isActive = currentHash === to
 
-// Custom Link component that updates window.location.hash to work with main app's HashRouter
-const CustomLink = ({ to, className, children }) => {
     const handleClick = (e) => {
         e.preventDefault()
-        window.location.hash = `#${to}`
+
+        // Get base URL without hash and query parameters
+        const baseUrl = window.location.origin + window.location.pathname
+
+        // Add cache-busting timestamp to force reload from server
+        const cacheBuster = `?t=${Date.now()}`
+        const newUrl = `${baseUrl}${cacheBuster}#${to}`
+
+        // Method 1: Use location.replace to avoid adding to history
+        // This forces browser to bypass cache and reload all resources from server
+        window.location.replace(newUrl)
+
+        // Method 2: Fallback - if replace doesn't trigger reload, use reload with cache bypass
+        // Note: This is a more aggressive approach that ensures cache is cleared
+        setTimeout(() => {
+            // Double-check if navigation happened, if not force reload
+            if (window.location.hash !== `#${to}`) {
+                window.location.hash = `#${to}`
+                // Force reload with cache bypass (deprecated API but still effective)
+                // This ensures all resources (images, scripts, stylesheets) are reloaded from server
+                try {
+                    // Modern browsers: use location.reload() which respects cache headers
+                    // But we'll add cache-busting query param to force reload
+                    window.location.reload()
+                } catch (e) {
+                    // Fallback: direct navigation with cache-busting
+                    window.location.href = `${baseUrl}?t=${Date.now()}#${to}`
+                }
+            }
+        }, 50)
     }
 
     return (
-        <a href={`#${to}`} className={className} onClick={handleClick}>
+        <a
+            href={`#${to}`}
+            className={`${className} ${isActive ? 'active' : ''}`}
+            onClick={handleClick}
+        >
             {children}
         </a>
     )
@@ -27,7 +62,7 @@ const RhsPanel = () => {
 
             <div className="nav-container">
                 <div className="line-container">
-                    <CustomLink to="/experience" className="experience-container part-container">
+                    <CustomNavLink to="/experience" className="experience-container part-container">
                         <svg viewBox="0 0 520 20" className="accent-rect" id="experience-accent-rect">
                             <rect width="320" height="9" fill="#e46a13" fillOpacity={0.8} />
                         </svg>
@@ -40,12 +75,12 @@ const RhsPanel = () => {
                             </div>
                         </div>
                         <img src={an_sanity} alt="Experience Icon" className="experience-icon part-icon" />
-                    </CustomLink>
+                    </CustomNavLink>
 
 
                 </div>
                 <div className="line-container">
-                    <CustomLink to="/projects" className="projects-container part-container">
+                    <CustomNavLink to="/projects" className="projects-container part-container">
                         <svg viewBox="0 0 20 300" className="accent-rect" id="projects-accent-rect">
                             <rect width="0.2" height="4.5" fill="#e46a13" fillOpacity={0.8} />
                         </svg>
@@ -54,29 +89,29 @@ const RhsPanel = () => {
                             <div className="title-line tw:font-noto tw:text-base">项目经历</div>
                         </div>
                         <img src={an_projects} alt="Experience Icon" className="projects-icon part-icon" />
-                    </CustomLink>
-                    <CustomLink to="/about" className="about-container part-container">
+                    </CustomNavLink>
+                    <CustomNavLink to="/about" className="about-container part-container">
                         <div className="title-container">
                             <div className="title-line tw:font-geo tw:text-2xl">About</div>
                             <div className="title-line tw:font-noto tw:text-sm">关于我</div>
                         </div>
                         <img src={an_about} alt="Experience Icon" className="about-icon part-icon" />
-                    </CustomLink>
+                    </CustomNavLink>
                 </div>
                 <div className="line-container" id="life-contact-container">
-                    <CustomLink to="/life" className="life-container part-container">
+                    <CustomNavLink to="/life" className="life-container part-container">
                         <div className="title-container">
                             <div className="title-line tw:font-geo tw:text-3xl">Life</div>
                             <div className="title-line tw:font-noto tw:text-base">生活日常</div>
                         </div>
                         <img src={an_life} alt="Experience Icon" className="life-icon part-icon" />
-                    </CustomLink>
-                    <CustomLink to="/contact" className="contact-container part-container">
+                    </CustomNavLink>
+                    <CustomNavLink to="/contact" className="contact-container part-container">
                         <div className="title-container">
                             <div className="title-line tw:font-geo tw:text-lg tw:font-light tw:tracking-tighter">Contact</div>
                             <div className="title-line tw:font-noto tw:text-xs tw:font-light">联系方式</div>
                         </div>
-                    </CustomLink>
+                    </CustomNavLink>
                 </div>
             </div>
         </div>

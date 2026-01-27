@@ -19,11 +19,11 @@ const Navbar = () => {
         }}>
             <Link to="/" className="tw:text-2xl tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Rin</Link>
             <div style={{ display: 'flex', gap: '2rem' }} className="tw:text-xl">
-                <Link to="/experience" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Experience</Link>
-                <Link to="/projects" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Projects</Link>
-                <Link to="/about" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>About</Link>
-                <Link to="/life" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Life</Link>
-                <Link to="/contact" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Contact</Link>
+                <NavLink to="/experience" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Experience</NavLink>
+                <NavLink to="/projects" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Projects</NavLink>
+                <NavLink to="/about" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>About</NavLink>
+                <NavLink to="/life" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Life</NavLink>
+                <NavLink to="/contact" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Contact</NavLink>
             </div>
         </header>
     )
