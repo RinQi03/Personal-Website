@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import RhodeIslandSVG from '../assets/main_Rhode_Island.svg '
+// import RhodeIslandSVG from '../assets/main_Rhode_Island.svg '
 import sm_ptc from '../assets/sm_ptc.svg'
 import gsap from 'gsap'
 import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
