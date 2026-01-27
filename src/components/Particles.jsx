@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import RhodeIslandSVG from '/main_Rhode_Island.svg'
+import RhodeIslandSVG from '../assets/main_Rhode_Island.svg '
+import sm_ptc from '../assets/sm_ptc.svg'
 import gsap from 'gsap'
 import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 
@@ -15,34 +16,34 @@ class Particle {
     this.isHovered = false
     this.element = null // 存储对应的DOM元素引用
   }
-  
+
   // 设置DOM元素引用
   setElement(element) {
     this.element = element
   }
-  
+
   // 重置到原始位置
   resetPosition() {
     this.x = this.original_x
     this.y = this.original_y
   }
-  
+
   // 更新悬停状态和位置
   updateHover(mouseX, mouseY, mouseRadius) {
     const dx = this.x - mouseX
     const dy = this.y - mouseY
     const distance = Math.sqrt(dx * dx + dy * dy)
-    
+
     this.isHovered = distance < mouseRadius
-    
+
     if (this.isHovered) {
       // 将粒子推到鼠标半径边缘
       const targetX = mouseX + (dx / distance) * mouseRadius
       const targetY = mouseY + (dy / distance) * mouseRadius
-      
+
       this.x = targetX
       this.y = targetY
-      
+
       // 使用GSAP动画DOM元素
       if (this.element) {
         gsap.to(this.element, {
@@ -75,14 +76,14 @@ class Particle {
 const parseSVGPath = (pathData) => {
   const points = []
   const commands = pathData.match(/[MLHVCSQTAZ][^MLHVCSQTAZ]*/g) || []
-  
+
   let currentX = 0
   let currentY = 0
-  
+
   commands.forEach(command => {
     const type = command[0]
     const coords = command.slice(1).trim().split(/[\s,]+/).filter(Boolean).map(Number)
-    
+
     switch (type) {
       case 'M': // Move to (absolute)
         for (let i = 0; i < coords.length; i += 2) {
@@ -164,7 +165,7 @@ const parseSVGPath = (pathData) => {
         break
     }
   })
-  
+
   return points
 }
 
@@ -175,32 +176,32 @@ const readSVGData = async (svgPath) => {
     if (!response.ok) {
       throw new Error(`Failed to fetch SVG: ${response.status}`)
     }
-    
+
     const svgText = await response.text()
-    
+
     // 解析SVG XML
     const parser = new DOMParser()
     const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
-    
+
     // 查找所有path元素
     const paths = svgDoc.querySelectorAll('path')
     console.log(`Found ${paths.length} path elements in SVG`)
-    
+
     // 也检查其他可能包含路径的元素
     const polygons = svgDoc.querySelectorAll('polygon')
     const polylines = svgDoc.querySelectorAll('polyline')
     const rects = svgDoc.querySelectorAll('rect')
     const circles = svgDoc.querySelectorAll('circle')
     const ellipses = svgDoc.querySelectorAll('ellipse')
-    
+
     console.log(`Found ${polygons.length} polygon elements`)
     console.log(`Found ${polylines.length} polyline elements`)
     console.log(`Found ${rects.length} rect elements`)
     console.log(`Found ${circles.length} circle elements`)
     console.log(`Found ${ellipses.length} ellipse elements`)
-    
+
     const allPoints = []
-    
+
     paths.forEach((path, index) => {
       const d = path.getAttribute('d')
       if (d) {
@@ -211,9 +212,9 @@ const readSVGData = async (svgPath) => {
         console.log(`Path ${index}: No 'd' attribute found`)
       }
     })
-    
+
     console.log(`Total points extracted: ${allPoints.length}`)
-    
+
     // 检查坐标范围
     if (allPoints.length > 0) {
       const xCoords = allPoints.map(p => p.x)
@@ -222,10 +223,10 @@ const readSVGData = async (svgPath) => {
       const maxX = Math.max(...xCoords)
       const minY = Math.min(...yCoords)
       const maxY = Math.max(...yCoords)
-      
+
       console.log(`Coordinate range: X(${minX} to ${maxX}), Y(${minY} to ${maxY})`)
     }
-    
+
     return allPoints
   } catch (error) {
     console.error('Error reading SVG file:', error)
@@ -238,23 +239,23 @@ const Particles = () => {
   const [loading, setLoading] = useState(true)
   const containerRef = useRef(null)
 
-    useEffect(() => {
+  useEffect(() => {
     const loadSVGData = async () => {
       try {
         // 读取SVG文件
         //   const points = await readSVGData('/main_Rhode_Island.svg')
-        const points = await readSVGData('/sm_ptc.svg')
+        const points = await readSVGData(sm_ptc)
 
-        
+
         if (points.length > 0) {
           // 为了性能，每1个点取1个
-          const sampledPoints = points.filter((_, index) => index%5=== 0)
-          
+          const sampledPoints = points.filter((_, index) => index % 5 === 0)
+
           // 创建粒子数据
-          const particleData = sampledPoints.map((point, index) => 
+          const particleData = sampledPoints.map((point, index) =>
             new Particle(point.x, point.y, index, Math.random() * 2)
           )
-          
+
           setParticles(particleData)
           console.log(`Loaded ${particleData.length} particles`)
         } else {
@@ -266,7 +267,7 @@ const Particles = () => {
         setLoading(false)
       }
     }
-    
+
     loadSVGData()
   }, [])
 
@@ -277,8 +278,8 @@ const Particles = () => {
     const rect = svg.getBoundingClientRect()
     const mouseX = event.clientX - rect.left
     const mouseY = event.clientY - rect.top
-    
-    setParticles(prevParticles => 
+
+    setParticles(prevParticles =>
       prevParticles.map(particle => {
         particle.updateHover(mouseX, mouseY, mouse_radius)
         return particle
@@ -287,9 +288,9 @@ const Particles = () => {
   }
 
   return (
-    <div ref={containerRef} className="particles-container" style={{ 
-      width: '400px', 
-      height: '400px', 
+    <div ref={containerRef} className="particles-container" style={{
+      width: '400px',
+      height: '400px',
       // background: 'rgba(255, 0, 0, 0.1)', 
       // border: '2px solid red',
       position: 'relative',
@@ -309,7 +310,7 @@ const Particles = () => {
           Loading particles...
         </div>
       )} */}
-      
+
       {/* {!loading && particles.length === 0 && (
         <div style={{ 
           color: 'white', 
@@ -331,9 +332,9 @@ const Particles = () => {
       )}
        */}
       {/* Particle overlay */}
-      <svg 
-        width="100%" 
-        height="100%" 
+      <svg
+        width="100%"
+        height="100%"
         style={{ filter: "invert(0.5)" }} // invert(1) is blue； invert(0) is orange; invert(0.5) is grey
         onMouseMove={handleMouseMove}
       >
