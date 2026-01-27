@@ -3,7 +3,7 @@ import React from "react";
 const Life = () => {
     return (
         <div>
-            <h1>Life</h1>
+            <h1>Life Page Coming Soon</h1>
         </div>
     )
 }

@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import '../css/About.css';
+import about_profile_side_border_only from '../assets/about_profile_side_border_only.svg'
+import about_profile from '../assets/About_Profile.png'
+import download from '../assets/download.png'
 
 const About = () => {
     const containerRef = useRef(null);
@@ -191,7 +194,7 @@ const About = () => {
                             download="Rin Qi AI PM Resume.pdf"
                             className="resume-download-tag"
                         >
-                            <img src="/download.png" alt="Download" className="download-icon" />
+                            <img src={download} alt="Download" className="download-icon" />
                             Resume
                         </a>
                     </div>
@@ -223,12 +226,12 @@ const About = () => {
 
                 {/* 右侧图片区 */}
                 <div className="image-section">
-                    <img ref={profileImgRef} src="/About_Profile.png" alt="Rin Qi" className="profile-img" />
+                    <img ref={profileImgRef} src={about_profile} alt="Rin Qi" className="profile-img" />
                     <div className="bg-slash">
-                        <img ref={bgSlashImgRef} src="/about_profile_side_border_only.svg" alt="SVG Image" className="bg-slash-img" />
+                        <img ref={bgSlashImgRef} src={about_profile_side_border_only} alt="SVG Image" className="bg-slash-img" />
                     </div>
                     <div className="bg-slash-bottom">
-                        <img ref={bgSlashImgBottomRef} src="/about_profile_side_border_only.svg" alt="SVG Image" className="bg-slash-img-bottom" />
+                        <img ref={bgSlashImgBottomRef} src={about_profile_side_border_only} alt="SVG Image" className="bg-slash-img-bottom" />
 
                     </div>
                 </div>
