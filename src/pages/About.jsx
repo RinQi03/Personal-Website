@@ -4,6 +4,9 @@ import '../css/About.css';
 
 const About = () => {
     const containerRef = useRef(null);
+    const profileImgRef = useRef(null);
+    const bgSlashImgRef = useRef(null);
+    const bgSlashImgBottomRef = useRef(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -58,6 +61,110 @@ const About = () => {
 
         }, containerRef);
 
+        // 图片鼠标跟随效果
+        const profileImg = profileImgRef.current;
+        if (profileImg) {
+            let targetX = 0;
+            let targetY = 0;
+            const maxMove = 50; // 最大移动距离（像素）
+            let rafId = null;
+
+            const handleMouseMove = (e) => {
+                const rect = profileImg.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                // 计算鼠标相对于图片中心的位置（-1 到 1）
+                const mouseX = (e.clientX - centerX) / (rect.width / 2);
+                const mouseY = (e.clientY - centerY) / (rect.height / 2);
+
+                // 计算目标位置
+                targetX = mouseX * maxMove;
+                targetY = mouseY * maxMove;
+
+                // 使用 GSAP 平滑移动到目标位置
+                if (!rafId) {
+                    rafId = requestAnimationFrame(() => {
+                        // profile-img 立即跟随
+                        gsap.to(profileImg, {
+                            x: targetX,
+                            y: targetY,
+                            duration: 0.5,
+                            ease: "power2.out"
+                        });
+
+                        // bg-slash-img 延迟跟随（较小的移动距离）
+                        if (bgSlashImgRef.current) {
+                            gsap.to(bgSlashImgRef.current, {
+                                x: targetX * 0.6,
+                                y: targetY * 0.6,
+                                duration: 0.7,
+                                delay: 0.1,
+                                ease: "power2.out"
+                            });
+                        }
+
+                        // bg-slash-img-bottom 延迟跟随（更小的移动距离，更多延迟）
+                        if (bgSlashImgBottomRef.current) {
+                            gsap.to(bgSlashImgBottomRef.current, {
+                                x: targetX * 0.4,
+                                y: targetY * 0.4,
+                                duration: 0.8,
+                                delay: 0.2,
+                                ease: "power2.out"
+                            });
+                        }
+
+                        rafId = null;
+                    });
+                }
+            };
+
+            const handleMouseLeave = () => {
+                targetX = 0;
+                targetY = 0;
+                gsap.to(profileImg, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+
+                // bg-slash-img 也回到原位置
+                if (bgSlashImgRef.current) {
+                    gsap.to(bgSlashImgRef.current, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.7,
+                        delay: 0.1,
+                        ease: "power2.out"
+                    });
+                }
+
+                // bg-slash-img-bottom 也回到原位置
+                if (bgSlashImgBottomRef.current) {
+                    gsap.to(bgSlashImgBottomRef.current, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.8,
+                        delay: 0.2,
+                        ease: "power2.out"
+                    });
+                }
+            };
+
+            profileImg.addEventListener('mousemove', handleMouseMove);
+            profileImg.addEventListener('mouseleave', handleMouseLeave);
+
+            return () => {
+                profileImg.removeEventListener('mousemove', handleMouseMove);
+                profileImg.removeEventListener('mouseleave', handleMouseLeave);
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                }
+            };
+        }
+
         return () => ctx.revert(); // 清理动画
     }, []);
 
@@ -98,7 +205,7 @@ const About = () => {
                     </div>
                     <div className="about-text career-section">
                         <p>
-                            I am a <span className="highlight-text">product manager</span> who aims to build technical products that solve real-world problems.
+                            I am a <span className="highlight-text" data-text="product manager"> product manager </span> who aims to build technical products that solve real-world problems.
                         </p>
                     </div>
                     <div className="about-text contact-section">
@@ -116,12 +223,12 @@ const About = () => {
 
                 {/* 右侧图片区 */}
                 <div className="image-section">
-                    <img src="/About_Profile.png" alt="Rin Qi" className="profile-img" />
+                    <img ref={profileImgRef} src="/About_Profile.png" alt="Rin Qi" className="profile-img" />
                     <div className="bg-slash">
-                        <img src="/about_profile_side_border_only.svg" alt="SVG Image" className="bg-slash-img" />
+                        <img ref={bgSlashImgRef} src="/about_profile_side_border_only.svg" alt="SVG Image" className="bg-slash-img" />
                     </div>
                     <div className="bg-slash-bottom">
-                        <img src="/about_profile_side_border_only.svg" alt="SVG Image" className="bg-slash-img-bottom" />
+                        <img ref={bgSlashImgBottomRef} src="/about_profile_side_border_only.svg" alt="SVG Image" className="bg-slash-img-bottom" />
 
                     </div>
                 </div>
