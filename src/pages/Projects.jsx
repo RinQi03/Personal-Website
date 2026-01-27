@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../css/Projects.css'; // 引入样式
+import small_bg from '../assets/sm_bg.jpg'; // 导入背景图片
 
 // 注册 GSAP 插件
 gsap.registerPlugin(ScrollTrigger);
@@ -231,7 +232,7 @@ const Projects = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="projects-section ak-style">
+        <section ref={sectionRef} className="projects-section ak-style" style={{ '--small-bg-url': `url(${small_bg})` }}>
             <div className="section-title-fixed part-container">
                 <span className="section-number">// 03</span>
                 <h2><span className="tw:font-geo tw:text-5xl tw:text-day-accent title-line">Projects</span> <br />

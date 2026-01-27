@@ -5,8 +5,13 @@ import an_projects from '../assets/an_projects.png'
 
 const LhsPanel = () => {
     return (
-        <div className="lhs-panel-3d part-container">
-            <div className="lhs-panel-container">
+        <div className="lhs-panel-3d">
+            <div className="lhs-panel-3d-mobile">
+                <h1>Welcome to</h1>
+                <h1 className="tw:font-geo tw:text-3xl tw:leading-none tw:tracking-tighter">Rin's Portfolio</h1>
+            </div>
+
+            <div className="lhs-panel-container part-container">
                 <div className='info-container'>
                     <div className='photo-container'>
                         <img src={an_projects} alt="photo" className='photo-img' />

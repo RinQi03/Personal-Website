@@ -8,7 +8,7 @@
     display: flex;
     /* 使用 flexbox 来布局固定标题和滚动内容 */
     /* min-height 由 JavaScript 动态设置，确保横向滚动完成后不会有额外的垂直滚动 */
-    background-image: url('/home_bg.png');
+    /* background-image: url('/home_bg.png'); */
     background-size: 150%;
     background-position: center;
     background-repeat: no-repeat;
@@ -35,7 +35,7 @@
     width: 100vw;
     height: 100vh;
     /* 固定为视口高度 */
-    background-image: url('/home_bg.png');
+    background-image: var(--small-bg-url, url('/sm_bg.jpg'));
     background-size: 250%;
     background-position-x: calc(40% - var(--bg-offset, 0px));
     background-position-y: center;

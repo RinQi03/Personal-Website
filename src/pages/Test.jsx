@@ -6,7 +6,7 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
 import RhsPanel, { createRhsPanelDom } from '../components/RhsPanel'
 import Particles, { createParticlesDom } from '../components/Particles'
 import LhsPanel, { createLhsPanelDom } from '../components/LhsPanel'
-import home_bg from '../assets/home_bg.png'
+import home_bg from '../assets/home_bg.webp'
 import { mx_bilerp_0 } from 'three/src/nodes/materialx/lib/mx_noise.js'
 
 //大的container里面有很多小的
@@ -76,7 +76,11 @@ class CameraUI {
       invertOffsetZ = null,   // Override invert for Z axis
       responsiveFactorX = 0.25,  // Factor for X axis responsive adjustment (offset change per pixel difference)
       responsiveFactorY = 0.1,   // Factor for Y axis responsive adjustment
-      responsiveFactorZ = 0.1     // Factor for Z axis responsive adjustment
+      responsiveFactorZ = 0.1,     // Factor for Z axis responsive adjustment
+      mobileBreakpoint = 431,  // Screen width breakpoint for mobile adjustments
+      mobileOffsetX = null,  // Override offsetX when screen width < mobileBreakpoint
+      mobileOffsetY = null,  // Override offsetY when screen width < mobileBreakpoint
+      mobileOffsetZ = null   // Override offsetZ when screen width < mobileBreakpoint
     } = config
 
     // Use the imported function from RhsPanel.jsx
@@ -85,7 +89,14 @@ class CameraUI {
 
     // Calculate responsive offsets based on screen width using the same logic as updateResponsiveOffsets
     const currentScreenWidth = this.screenWidth
-    const screenDiff = currentScreenWidth - baseWidth
+    const isMobile = currentScreenWidth < mobileBreakpoint
+
+    // Use mobile offsets if screen is below breakpoint and mobile offsets are provided
+    const effectiveOffsetX = (isMobile && mobileOffsetX !== null) ? mobileOffsetX : offsetX
+    const effectiveOffsetY = (isMobile && mobileOffsetY !== null) ? mobileOffsetY : offsetY
+    const effectiveOffsetZ = (isMobile && mobileOffsetZ !== null) ? mobileOffsetZ : offsetZ
+
+    const screenDiff = (currentScreenWidth - baseWidth) * 1.1
 
     // Determine which axes should be responsive
     let responsiveXAxis = responsiveX !== null ? responsiveX : (typeof responsive === 'object' ? responsive.x !== false : responsive)
@@ -98,9 +109,9 @@ class CameraUI {
     let invertZ = invertOffsetZ !== null ? invertOffsetZ : invertOffset
 
     // Use custom responsive factors for each axis (same as updateResponsiveOffsets)
-    let adjustedOffsetX = responsiveXAxis ? offsetX + responsiveFactorX * screenDiff : offsetX
-    let adjustedOffsetY = responsiveYAxis ? offsetY + responsiveFactorY * screenDiff : offsetY
-    let adjustedOffsetZ = responsiveZAxis ? offsetZ + responsiveFactorZ * screenDiff : offsetZ
+    let adjustedOffsetX = responsiveXAxis ? effectiveOffsetX + responsiveFactorX * screenDiff : effectiveOffsetX
+    let adjustedOffsetY = responsiveYAxis ? effectiveOffsetY + responsiveFactorY * screenDiff : effectiveOffsetY
+    let adjustedOffsetZ = responsiveZAxis ? effectiveOffsetZ + responsiveFactorZ * screenDiff : effectiveOffsetZ
 
     // Apply inversion if needed
     if (invertX) adjustedOffsetX *= -1
@@ -124,7 +135,9 @@ class CameraUI {
       baseWidth: baseWidth,
       invertOffset: { x: invertX, y: invertY, z: invertZ },
       adjustedOffset: { x: adjustedOffsetX, y: adjustedOffsetY, z: adjustedOffsetZ },
-      responsiveFactor: { x: responsiveFactorX, y: responsiveFactorY, z: responsiveFactorZ }
+      responsiveFactor: { x: responsiveFactorX, y: responsiveFactorY, z: responsiveFactorZ },
+      mobileBreakpoint: mobileBreakpoint,
+      mobileOffset: { x: mobileOffsetX, y: mobileOffsetY, z: mobileOffsetZ }
     })
 
     return cssObject
@@ -166,18 +179,26 @@ class CameraUI {
         responsive,
         baseWidth = 1660,
         invertOffset = { x: false, y: false, z: false },
-        responsiveFactor = { x: 0.25, y: 0.1, z: 0.1 }
+        responsiveFactor = { x: 0.25, y: 0.1, z: 0.1 },
+        mobileBreakpoint = 431,
+        mobileOffset = { x: null, y: null, z: null }
       } = uiElement
 
       // Calculate responsive offsets based on current screen width
       const currentScreenWidth = window.innerWidth
+      const isMobile = currentScreenWidth < mobileBreakpoint
       const screenRatio = currentScreenWidth / baseWidth
       const screenDiff = currentScreenWidth - baseWidth
 
+      // Use mobile offsets if screen is below breakpoint and mobile offsets are provided
+      const effectiveOffsetX = (isMobile && mobileOffset.x !== null) ? mobileOffset.x : offset.x
+      const effectiveOffsetY = (isMobile && mobileOffset.y !== null) ? mobileOffset.y : offset.y
+      const effectiveOffsetZ = (isMobile && mobileOffset.z !== null) ? mobileOffset.z : offset.z
+
       // Use custom responsive factors for each axis
-      let adjustedOffsetX = responsive.x ? offset.x + responsiveFactor.x * screenDiff : offset.x
-      let adjustedOffsetY = responsive.y ? offset.y + responsiveFactor.y * screenDiff : offset.y
-      let adjustedOffsetZ = responsive.z ? offset.z + responsiveFactor.z * screenDiff : offset.z
+      let adjustedOffsetX = responsive.x ? effectiveOffsetX + responsiveFactor.x * screenDiff : effectiveOffsetX
+      let adjustedOffsetY = responsive.y ? effectiveOffsetY + responsiveFactor.y * screenDiff : effectiveOffsetY
+      let adjustedOffsetZ = responsive.z ? effectiveOffsetZ + responsiveFactor.z * screenDiff : effectiveOffsetZ
       // Apply inversion if needed
       if (invertOffset.x) adjustedOffsetX *= -1
       if (invertOffset.y) adjustedOffsetY *= -1
@@ -190,9 +211,11 @@ class CameraUI {
       if (Math.abs(this.screenWidth - previousScreenWidth) > 10 && (responsive.x || responsive.y || responsive.z)) {
         console.log(`[CameraUI] Element ${index} responsive update:`, {
           screenWidth: `${previousScreenWidth}px → ${this.screenWidth}px`,
+          isMobile: isMobile,
           baseWidth: baseWidth,
           screenRatio: screenRatio.toFixed(3),
           originalOffset: { x: offset.x, y: offset.y, z: offset.z },
+          effectiveOffset: { x: effectiveOffsetX, y: effectiveOffsetY, z: effectiveOffsetZ },
           adjustedOffset: { x: adjustedOffsetX.toFixed(2), y: adjustedOffsetY.toFixed(2), z: adjustedOffsetZ.toFixed(2) },
           responsive: responsive
         })
@@ -358,6 +381,10 @@ const App = () => {
       responsiveFactorX: -0.25,  // Negative factor: moves left when screen gets wider
       responsiveFactorY: 0.1,
       responsiveFactorZ: 0.1,
+      mobileBreakpoint: 431,  // Apply mobile offsets when width < 426px
+      mobileOffsetX: -400,  // Adjust X position for mobile (move closer to center)
+      mobileOffsetY: 320,  // Keep Y position same
+      mobileOffsetZ: -700,  // Keep Z position same
     })
 
     // const element = createRhsPanelDom()

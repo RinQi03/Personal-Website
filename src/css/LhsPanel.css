@@ -61,9 +61,46 @@
     transition: all 0.3s ease;
 }
 
+.lhs-panel-3d-mobile {
+    display: none;
+}
+
+.lhs-panel-3d-mobile :nth-child(1) {
+    font-family: var(--font-inter);
+    font-weight: 300;
+    line-height: 1.4;
+    display: none;
+}
+
+.lhs-panel-3d-mobile :nth-child(2) {
+    font-size: max(20px, 8vh);
+    color: var(--color-day-accent);
+    line-height: 0.8;
+    font-weight: 800;
+}
+
 @media (max-width: 1024px) {
+    .lhs-panel-3d-mobile {
+        display: none;
+    }
+
     .lhs-panel-3d {
         width: 35vw;
         height: 20vh;
     }
+}
+
+@media (max-width: 431px) {
+    .lhs-panel-container {
+        display: none;
+    }
+
+    .lhs-panel-3d-mobile {
+        display: block;
+    }
+
+    .lhs-panel-3d .part-container {
+        display: none;
+    }
+
 }
