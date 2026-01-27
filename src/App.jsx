@@ -12,7 +12,12 @@ const AppContent = () => {
     return (
         <div style={{ position: 'relative', width: '100vw', minHeight: '100vh', overflow: isHomePage ? 'hidden' : 'auto' }}>
             {!isHomePage && <Navbar />}
-            <main className="tw:bg-slate-300/20 tw:overflow-x-hidden tw:w-full" style={{ position: isHomePage ? 'absolute' : 'relative', top: isHomePage ? 0 : 'auto', left: isHomePage ? 0 : 'auto', minHeight: isHomePage ? '100vh' : 'auto' }}>
+            <main
+                key={location.pathname}
+                className="tw:bg-slate-300/20 tw:overflow-x-hidden tw:w-full"
+                style={{ position: isHomePage ? 'absolute' : 'relative', top: isHomePage ? 0 : 'auto', left: isHomePage ? 0 : 'auto', minHeight: isHomePage ? '100vh' : 'auto' }}
+                id="main-content"
+            >
                 <Routes>
                     <Route path="/" element={<Test />} />
                     <Route path="/home" element={<Home />} />
