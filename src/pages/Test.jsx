@@ -6,6 +6,7 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
 import RhsPanel, { createRhsPanelDom } from '../components/RhsPanel'
 import Particles, { createParticlesDom } from '../components/Particles'
 import LhsPanel, { createLhsPanelDom } from '../components/LhsPanel'
+import home_bg from '../assets/home_bg.png'
 
 //大的container里面有很多小的
 
@@ -138,7 +139,7 @@ const backgroundDiv = () => {
   const imageElement = document.createElement('div')
   imageElement.style.width = '4000px'
   imageElement.style.height = '2000px'
-  imageElement.style.backgroundImage = 'url(../assets/home_bg.png)'
+  imageElement.style.backgroundImage = `url(${home_bg})`
   imageElement.style.backgroundSize = 'cover'
   imageElement.style.backgroundPosition = 'center'
   imageElement.style.backgroundRepeat = 'no-repeat'
