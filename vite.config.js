@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: '/Personal-Website/',
+  base: '/Personal-Website/', // for github pages. should remove for local development.
 })

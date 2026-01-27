@@ -1,6 +1,7 @@
 import React from 'react'
 import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 import '../css/LhsPanel.css'
+import an_projects from '../assets/an_projects.png'
 
 const LhsPanel = () => {
     return (
@@ -8,7 +9,7 @@ const LhsPanel = () => {
             <div className="lhs-panel-container">
                 <div className='info-container'>
                     <div className='photo-container'>
-                        <img src="/an_projects.png" alt="photo" className='photo-img' />
+                        <img src={an_projects} alt="photo" className='photo-img' />
                     </div>
                     <div className='inner-info-container'>
                         <div className='inner-basic-info-container tw:flex-auto tw:justify-between'>

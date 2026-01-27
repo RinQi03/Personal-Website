@@ -138,7 +138,7 @@ const backgroundDiv = () => {
   const imageElement = document.createElement('div')
   imageElement.style.width = '4000px'
   imageElement.style.height = '2000px'
-  imageElement.style.backgroundImage = 'url(/home_bg.png)'
+  imageElement.style.backgroundImage = 'url(../assets/home_bg.png)'
   imageElement.style.backgroundSize = 'cover'
   imageElement.style.backgroundPosition = 'center'
   imageElement.style.backgroundRepeat = 'no-repeat'
