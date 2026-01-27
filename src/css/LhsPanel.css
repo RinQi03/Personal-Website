@@ -60,3 +60,10 @@
     /* overflow: hidden; */
     transition: all 0.3s ease;
 }
+
+@media (max-width: 1024px) {
+    .lhs-panel-3d {
+        width: 35vw;
+        height: 20vh;
+    }
+}

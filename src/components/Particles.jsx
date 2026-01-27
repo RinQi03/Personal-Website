@@ -237,7 +237,54 @@ const readSVGData = async (svgPath) => {
 const Particles = () => {
   const [particles, setParticles] = useState([])
   const [loading, setLoading] = useState(true)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const containerRef = useRef(null)
+
+  // Calculate color based on window width (memoized to update when windowWidth changes)
+  const particleColor = React.useMemo(() => {
+    // Change color based on window width
+    let color
+    if (windowWidth <= 425) {
+      color = "#e8e8e8" // Different color for mobile
+    } else if (windowWidth <= 768) {
+      color = "#e8e8e8" // Different color for tablet
+    } else if (windowWidth <= 1024) {
+      color = "#cccccc" // Original orange for small desktop
+    } else {
+      color = "#969696" // Original orange for large screens
+    }
+
+    let radius = 1.5
+    if (windowWidth <= 425) {
+      radius = 3
+    } else if (windowWidth <= 768) {
+      radius = 2.5
+    } else if (windowWidth <= 1024) {
+      radius = 2
+    } else {
+      radius = 1.5
+    }
+    console.log(`[Particles] Window width: ${windowWidth}px, Color: ${color}`)
+
+    return { color, radius }
+  }, [windowWidth])
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const newWidth = window.innerWidth
+      if (newWidth !== windowWidth) {
+        setWindowWidth(newWidth)
+        // Log color change after state update
+        setTimeout(() => {
+          console.log(`[Particles] Window resized: ${windowWidth}px → ${newWidth}px`)
+        }, 0)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [windowWidth])
 
   useEffect(() => {
     const loadSVGData = async () => {
@@ -335,10 +382,12 @@ const Particles = () => {
       <svg
         width="100%"
         height="100%"
-        style={{ filter: "invert(0.5)" }} // invert(1) is blue； invert(0) is orange; invert(0.5) is grey
+        style={{ filter: "none" }} // Removed invert filter to show actual colors
         onMouseMove={handleMouseMove}
       >
         {particles.map((particle) => (
+
+
           <circle
             key={particle.id}
             ref={(el) => {
@@ -346,8 +395,8 @@ const Particles = () => {
             }}
             cx={particle.x}
             cy={particle.y}
-            r="1.5"
-            fill={particle.isHovered ? "#ff0000" : "#e46a13"}
+            r={particleColor.radius}
+            fill={particle.isHovered ? "#ff0000" : particleColor.color}
             opacity="0.7"
             style={{
               animationName: particle.isHovered ? "none" : "pulse",

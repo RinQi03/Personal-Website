@@ -18,7 +18,7 @@ const LhsPanel = () => {
                                 <div className='subtitle tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>47283</div>
                             </div>
 
-                            <div className='info-line tw:mt-12'>
+                            <div className='info-line tw:mt-auto'>
                                 <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Product Manager</div>
                                 <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Software Developer</div>
                                 <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Entrepreneur Enthusiast</div>

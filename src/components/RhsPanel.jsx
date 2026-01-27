@@ -67,7 +67,7 @@ const RhsPanel = () => {
                             <rect width="320" height="9" fill="#e46a13" fillOpacity={0.8} />
                         </svg>
                         <div className="title-container">
-                            <div className="title-line tw:font-geo tw:text-5xl">Experience</div>
+                            <div className="title-line english-title tw:font-geo tw:text-5xl" id="experience-english-title">Experience</div>
                             <div className="title-line tw:font-noto tw:text-xl">实习经历</div>
                             <div className="title-line tw:font-geo tw:text-base tw:m-3 tw:pt-3 tw:flex tw:flex-row tw:gap-1">
                                 <span className="tw:font-geo tw:text-lg tw:leading-4 tw:bg-day-accent tw:font-normal tw:px-1.5 tw:py-1 tw:rounded-xs tw:tracking-tighter">Current</span>
@@ -81,18 +81,18 @@ const RhsPanel = () => {
                 </div>
                 <div className="line-container">
                     <CustomNavLink to="/projects" className="projects-container part-container">
-                        <svg viewBox="0 0 20 300" className="accent-rect" id="projects-accent-rect">
+                        {/* <svg viewBox="0 0 20 300" className="accent-rect" id="projects-accent-rect">
                             <rect width="0.2" height="4.5" fill="#e46a13" fillOpacity={0.8} />
-                        </svg>
+                        </svg> */}
                         <div className="title-container">
-                            <div className="title-line tw:font-geo tw:text-3xl">Projects</div>
+                            <div className="title-line english-title tw:font-geo tw:text-3xl" id="projects-english-title">Projects</div>
                             <div className="title-line tw:font-noto tw:text-base">项目经历</div>
                         </div>
                         <img src={an_projects} alt="Experience Icon" className="projects-icon part-icon" />
                     </CustomNavLink>
                     <CustomNavLink to="/about" className="about-container part-container">
                         <div className="title-container">
-                            <div className="title-line tw:font-geo tw:text-2xl">About</div>
+                            <div className="title-line english-title tw:font-geo tw:text-2xl" id="about-english-title">About</div>
                             <div className="title-line tw:font-noto tw:text-sm">关于我</div>
                         </div>
                         <img src={an_about} alt="Experience Icon" className="about-icon part-icon" />
@@ -101,7 +101,7 @@ const RhsPanel = () => {
                 <div className="line-container" id="life-contact-container">
                     <CustomNavLink to="/life" className="life-container part-container">
                         <div className="title-container">
-                            <div className="title-line tw:font-geo tw:text-3xl">Life</div>
+                            <div className="title-line english-title tw:font-geo tw:text-3xl" id="life-english-title">Life</div>
                             <div className="title-line tw:font-noto tw:text-base">生活日常</div>
                         </div>
                         <img src={an_life} alt="Experience Icon" className="life-icon part-icon" />

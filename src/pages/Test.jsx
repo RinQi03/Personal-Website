@@ -7,8 +7,13 @@ import RhsPanel, { createRhsPanelDom } from '../components/RhsPanel'
 import Particles, { createParticlesDom } from '../components/Particles'
 import LhsPanel, { createLhsPanelDom } from '../components/LhsPanel'
 import home_bg from '../assets/home_bg.png'
+import { mx_bilerp_0 } from 'three/src/nodes/materialx/lib/mx_noise.js'
 
 //大的container里面有很多小的
+
+const originalOffsetX = 400
+const originalOffsetY = 0
+const originalOffsetZ = -700
 
 // Camera-following UI component constructor
 class CameraUI {
@@ -64,27 +69,47 @@ class CameraUI {
       responsiveY = null,  // Override responsive for Y axis
       responsiveZ = null,  // Override responsive for Z axis
       baseWidth = 1660,    // Base screen width for responsive calculations
-      glassEffect = false  // Enable glass morphism effect
+      glassEffect = false,  // Enable glass morphism effect
+      invertOffset = false,  // Invert all offset directions (multiply by -1)
+      invertOffsetX = null,  // Override invert for X axis
+      invertOffsetY = null,  // Override invert for Y axis
+      invertOffsetZ = null,   // Override invert for Z axis
+      responsiveFactorX = 0.25,  // Factor for X axis responsive adjustment (offset change per pixel difference)
+      responsiveFactorY = 0.1,   // Factor for Y axis responsive adjustment
+      responsiveFactorZ = 0.1     // Factor for Z axis responsive adjustment
     } = config
 
     // Use the imported function from RhsPanel.jsx
     // const element = createRhsPanelDom()
     const cssObject = new CSS3DObject(element)
 
-    // Calculate responsive offsets based on screen width
-    const screenRatio = this.screenWidth / baseWidth
+    // Calculate responsive offsets based on screen width using the same logic as updateResponsiveOffsets
+    const currentScreenWidth = this.screenWidth
+    const screenDiff = currentScreenWidth - baseWidth
 
     // Determine which axes should be responsive
     let responsiveXAxis = responsiveX !== null ? responsiveX : (typeof responsive === 'object' ? responsive.x !== false : responsive)
     let responsiveYAxis = responsiveY !== null ? responsiveY : (typeof responsive === 'object' ? responsive.y !== false : responsive)
     let responsiveZAxis = responsiveZ !== null ? responsiveZ : (typeof responsive === 'object' ? responsive.z !== false : responsive)
 
-    const adjustedOffsetX = responsiveXAxis ? offsetX * screenRatio : offsetX
-    const adjustedOffsetY = responsiveYAxis ? offsetY * screenRatio : offsetY
-    const adjustedOffsetZ = responsiveZAxis ? offsetZ * screenRatio : offsetZ
+    // Determine which axes should be inverted
+    let invertX = invertOffsetX !== null ? invertOffsetX : invertOffset
+    let invertY = invertOffsetY !== null ? invertOffsetY : invertOffset
+    let invertZ = invertOffsetZ !== null ? invertOffsetZ : invertOffset
+
+    // Use custom responsive factors for each axis (same as updateResponsiveOffsets)
+    let adjustedOffsetX = responsiveXAxis ? offsetX + responsiveFactorX * screenDiff : offsetX
+    let adjustedOffsetY = responsiveYAxis ? offsetY + responsiveFactorY * screenDiff : offsetY
+    let adjustedOffsetZ = responsiveZAxis ? offsetZ + responsiveFactorZ * screenDiff : offsetZ
+
+    // Apply inversion if needed
+    if (invertX) adjustedOffsetX *= -1
+    if (invertY) adjustedOffsetY *= -1
+    if (invertZ) adjustedOffsetZ *= -1
 
     // Set initial position and rotation
     cssObject.position.set(adjustedOffsetX, adjustedOffsetY, adjustedOffsetZ)
+    // cssObject.position.set(offsetX, offsetY, offsetZ)
     cssObject.rotation.set(rotationX, rotationY, rotationZ)
 
     // Always add to scene (more reliable)
@@ -96,34 +121,82 @@ class CameraUI {
       offset: { x: offsetX, y: offsetY, z: offsetZ },
       rotation: { x: rotationX, y: rotationY, z: rotationZ },
       responsive: { x: responsiveXAxis, y: responsiveYAxis, z: responsiveZAxis },
-      baseWidth: baseWidth
+      baseWidth: baseWidth,
+      invertOffset: { x: invertX, y: invertY, z: invertZ },
+      adjustedOffset: { x: adjustedOffsetX, y: adjustedOffsetY, z: adjustedOffsetZ },
+      responsiveFactor: { x: responsiveFactorX, y: responsiveFactorY, z: responsiveFactorZ }
     })
 
     return cssObject
   }
 
-  // Update all UI elements to follow camera
+  // Update all UI elements to follow camera (without recalculating responsive offsets)
   update() {
-    this.uiElements.forEach(uiElement => {
-      const { object, offset, rotation, responsive, baseWidth = 1920 } = uiElement
+    this.uiElements.forEach((uiElement) => {
+      const { object, rotation, adjustedOffset } = uiElement
 
-      // Calculate responsive offsets based on current screen width
-      const currentScreenWidth = window.innerWidth
-      const screenRatio = currentScreenWidth / baseWidth
-
-      const adjustedOffsetX = responsive.x ? offset.x * screenRatio : offset.x
-      const adjustedOffsetY = responsive.y ? offset.y * screenRatio : offset.y
-      const adjustedOffsetZ = responsive.z ? offset.z * screenRatio : offset.z
-
-      // Calculate position relative to camera
-      const cameraOffset = new THREE.Vector3(adjustedOffsetX, adjustedOffsetY, adjustedOffsetZ)
-      cameraOffset.applyQuaternion(this.camera.quaternion)
-      object.position.copy(this.camera.position).add(cameraOffset)
+      // Use pre-calculated adjusted offset (calculated in updateResponsiveOffsets)
+      if (adjustedOffset) {
+        const cameraOffset = new THREE.Vector3(adjustedOffset.x, adjustedOffset.y, adjustedOffset.z)
+        cameraOffset.applyQuaternion(this.camera.quaternion)
+        object.position.copy(this.camera.position).add(cameraOffset)
+      }
 
       // Apply rotation
       object.rotation.set(rotation.x, rotation.y, rotation.z)
       object.rotation.x += this.camera.rotation.x
       object.rotation.y += this.camera.rotation.y
+    })
+  }
+
+  // Update responsive offsets based on current screen width (call this on resize)
+  updateResponsiveOffsets() {
+    const previousScreenWidth = this.screenWidth
+    this.screenWidth = window.innerWidth
+    this.screenHeight = window.innerHeight
+
+    // Log screen width change (only when it changes significantly)
+    if (Math.abs(this.screenWidth - previousScreenWidth) > 10) {
+      console.log(`[CameraUI] Screen width changed: ${previousScreenWidth}px → ${this.screenWidth}px`)
+    }
+
+    this.uiElements.forEach((uiElement, index) => {
+      const {
+        offset,
+        responsive,
+        baseWidth = 1660,
+        invertOffset = { x: false, y: false, z: false },
+        responsiveFactor = { x: 0.25, y: 0.1, z: 0.1 }
+      } = uiElement
+
+      // Calculate responsive offsets based on current screen width
+      const currentScreenWidth = window.innerWidth
+      const screenRatio = currentScreenWidth / baseWidth
+      const screenDiff = currentScreenWidth - baseWidth
+
+      // Use custom responsive factors for each axis
+      let adjustedOffsetX = responsive.x ? offset.x + responsiveFactor.x * screenDiff : offset.x
+      let adjustedOffsetY = responsive.y ? offset.y + responsiveFactor.y * screenDiff : offset.y
+      let adjustedOffsetZ = responsive.z ? offset.z + responsiveFactor.z * screenDiff : offset.z
+      // Apply inversion if needed
+      if (invertOffset.x) adjustedOffsetX *= -1
+      if (invertOffset.y) adjustedOffsetY *= -1
+      if (invertOffset.z) adjustedOffsetZ *= -1
+
+      // Store adjusted offset for use in update()
+      uiElement.adjustedOffset = { x: adjustedOffsetX, y: adjustedOffsetY, z: adjustedOffsetZ }
+
+      // Debug log for responsive elements when screen width changes
+      if (Math.abs(this.screenWidth - previousScreenWidth) > 10 && (responsive.x || responsive.y || responsive.z)) {
+        console.log(`[CameraUI] Element ${index} responsive update:`, {
+          screenWidth: `${previousScreenWidth}px → ${this.screenWidth}px`,
+          baseWidth: baseWidth,
+          screenRatio: screenRatio.toFixed(3),
+          originalOffset: { x: offset.x, y: offset.y, z: offset.z },
+          adjustedOffset: { x: adjustedOffsetX.toFixed(2), y: adjustedOffsetY.toFixed(2), z: adjustedOffsetZ.toFixed(2) },
+          responsive: responsive
+        })
+      }
     })
   }
 
@@ -249,8 +322,8 @@ const App = () => {
 
       // Debug: Log UI elements count
       if (Math.random() < 0.016) {
-        console.log('UI elements count:', cameraUI.uiElements.length)
-        console.log('Camera position:', camera.position.x.toFixed(2), camera.position.y.toFixed(2), camera.position.z.toFixed(2))
+        // console.log('UI elements count:', cameraUI.uiElements.length)
+        // console.log('Camera position:', camera.position.x.toFixed(2), camera.position.y.toFixed(2), camera.position.z.toFixed(2))
       }
 
     }
@@ -281,15 +354,28 @@ const App = () => {
       rotationX: 0,
       rotationY: Math.PI / 30,
       rotationZ: 0,
+      responsive: true,
+      responsiveFactorX: -0.25,  // Negative factor: moves left when screen gets wider
+      responsiveFactorY: 0.1,
+      responsiveFactorZ: 0.1,
     })
 
     // const element = createRhsPanelDom()
     const rhsPanel = createRhsPanelDom() // 创建一个div
+
+    // Adjust RhsPanel size (optional - can also modify CSS)
+    const rhsPanelElement = rhsPanel.querySelector('.rhs-panel-3d') || rhsPanel
+    if (rhsPanelElement) {
+      // Set custom size (uncomment and adjust as needed)
+      // rhsPanelElement.style.width = '35vw'  // or '400px', '500px', etc.
+      // rhsPanelElement.style.height = '50vh' // or '600px', '700px', etc.
+    }
+
     // Add UI elements
     cameraUI.addUIElement(rhsPanel, {
-      offsetX: 400,
-      offsetY: 0,
-      offsetZ: -700,
+      offsetX: originalOffsetX,
+      offsetY: originalOffsetY,
+      offsetZ: originalOffsetZ,
       rotationX: Math.PI / 30,
       rotationY: -Math.PI / 6,
       rotationZ: Math.PI / 50,
@@ -308,7 +394,7 @@ const App = () => {
 
     const particles = createParticlesDom()
     const particlesObject = new CSS3DObject(particles)
-    particlesObject.position.set(0, 0, 150)
+    particlesObject.position.set(0, 0, -100)
     scene.add(particlesObject)
 
 
@@ -325,11 +411,9 @@ const App = () => {
       if (controls) {
         controls.update() // Required for FirstPersonControls to work
 
-        // Debug: Log camera position every 60 frames (about once per second)
-        if (Math.random() < 0.016) {
-          // console.log('Camera position:', camera.position.x.toFixed(2), camera.position.y.toFixed(2), camera.position.z.toFixed(2))
-          // console.log('Controls state - movementSpeed:', controls.movementSpeed, 'lookSpeed:', controls.lookSpeed)
-        }
+        // Update all UI elements to follow camera and respond to screen size changes
+        cameraUI.update()
+
       }
 
       cssRenderer.render(scene, camera)
@@ -339,10 +423,19 @@ const App = () => {
 
     // Handle window resize
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight
+      const newWidth = window.innerWidth
+      const newHeight = window.innerHeight
+      console.log(`[Resize] Window resized: ${newWidth}x${newHeight}`)
+
+      camera.aspect = newWidth / newHeight
       camera.updateProjectionMatrix()
-      cssRenderer.setSize(window.innerWidth, window.innerHeight)
-      cameraUI.onResize()  // Update CameraUI with new screen dimensions
+      cssRenderer.setSize(newWidth, newHeight)
+
+      // Update responsive offsets based on new screen size
+      cameraUI.updateResponsiveOffsets()
+
+      // Update UI element positions with new offsets
+      cameraUI.update()
     }
     window.addEventListener('resize', handleResize)
 

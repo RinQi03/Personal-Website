@@ -1,6 +1,8 @@
 .rhs-panel-3d {
   width: 30vw;
+  /* 调整宽度：可以改为 25vw, 35vw, 400px 等 */
   height: 48vh;
+  /* 调整高度：可以改为 40vh, 50vh, 600px 等 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,6 +28,7 @@
 }
 
 .part-container {
+  overflow: hidden;
   display: flex;
   background: linear-gradient(135deg,
       rgba(255, 255, 255, 0.3) 0%,
@@ -76,6 +79,8 @@
   height: 100%;
   /* background: rgb(196, 198, 198); */
   position: relative;
+  border-left: 5px solid var(--color-day-accent) !important;
+
 }
 
 .about-container {
@@ -198,4 +203,57 @@
   /* height: 600px; */
   left: -4px;
   top: -1px;
+}
+
+@media (max-width: 1024px) {
+  .rhs-panel-3d {
+    width: 45vw;
+    height: 55vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .rhs-panel-3d {
+    width: 60vw;
+    height: 55vh;
+  }
+
+  .experience-container {
+    height: 100%;
+  }
+
+}
+
+@media (max-width: 426px) {
+  .rhs-panel-3d {
+    width: 100vw;
+    /* height: 80vh; */
+  }
+
+  .english-title {
+    line-height: 0.9;
+    margin: 0;
+    font-size: max(20px, 5vh);
+  }
+
+  .english-title {
+    line-height: 0.9;
+    margin: 0;
+  }
+
+  #experience-english-title {
+    font-size: max(20px, 5vh);
+  }
+
+  #about-english-title {
+    font-size: max(20px, 4vh);
+  }
+
+  #projects-english-title {
+    font-size: max(20px, 4vh);
+  }
+
+  #life-english-title {
+    font-size: max(20px, 4vh);
+  }
 }
