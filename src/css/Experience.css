@@ -152,6 +152,26 @@
     /* 优化性能 */
 }
 
+/* 移动端：改为纵向布局
+@media (max-width: 768px) {
+    .horizontal-scroll-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px 15px;
+        padding-top: 500px !important;
+        transform: none !important;
+        width: 100%;
+        height: auto;
+        will-change: auto;
+    }
+
+    .experience-item {
+        min-width: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+} */
+
 /* 经验项 - 容器 */
 .experience-item {
     flex-shrink: 0;
@@ -307,6 +327,21 @@
     /* box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); */
 }
 
+/* 移动端：当元素在屏幕中间时自动展开 */
+@media (max-width: 768px) {
+    .experience-item.is-centered .panel-top {
+        transform: translateY(calc(-1 * var(--panel-offset, 50%)));
+    }
+
+    .experience-item.is-centered .panel-bottom {
+        transform: translateY(var(--panel-offset, 50%));
+    }
+
+    .experience-item.is-centered .content-layer {
+        opacity: 1;
+    }
+}
+
 /* 年份和时间轴的线 - 现在在 panel-top 内部 */
 .panel-top .year-line {
     position: absolute;
@@ -452,73 +487,273 @@
 
 @media (max-width: 768px) {
 
-    /* 在小屏幕上，可以考虑将横向滚动改为垂直滚动 */
-    /* 或者简化布局，让标题变为普通顶部标题 */
+    /* 在小屏幕上，将横向滚动改为垂直滚动 */
+
     .experience-section {
         flex-direction: column;
-        /* 垂直排列 */
         min-height: auto;
+        height: auto;
+        max-height: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .experience-section::before {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* 旋转后，宽度和高度互换，所以需要更大的尺寸 */
+        width: 100vh;
+        height: 100vw;
+        /* 使用更大的尺寸确保旋转后能覆盖整个视口 */
+        min-width: 100vh;
+        min-height: 100vw;
+        background-image: var(--home-bg-url, url('/home_bg.png'));
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center center;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        filter: blur(2px);
+        z-index: -1;
     }
 
     .section-title-fixed {
         position: static;
-        /* 取消固定 */
         width: 100%;
         height: auto;
-        padding: 40px 20px;
+        min-height: auto;
+        padding: 30px 20px;
+        padding-top: 60px;
         border-right: none;
-        border-bottom: 2px solid var(--ak-line-gray);
+        border-bottom: 2px solid var(--color-day-primary);
         align-items: center;
         text-align: center;
+        backdrop-filter: blur(5px);
+    }
+
+    .section-number {
+        display: none;
     }
 
     .section-title-fixed h2 {
-        font-size: 2em;
+        font-size: 1.8em;
+    }
+
+    .section-title-fixed .subtitle {
+        font-size: 0.9em;
     }
 
     .horizontal-scroll-wrapper {
+        padding-top: 200px !important;
+
         flex-direction: column;
-        /* 垂直排列经验项 */
-        padding: 40px 20px;
+        align-items: stretch;
+        padding: 20px 15px;
+        transform: none !important;
+        width: 100%;
+        height: auto;
+        will-change: auto;
     }
 
     .experience-item {
-        width: 90%;
-        /* 占据大部分宽度 */
+        width: 100%;
+        max-width: 100%;
+        min-width: auto;
         margin-right: 0;
-        margin-bottom: 40px;
-        /* 垂直间距 */
+        margin-bottom: 200px;
+        padding: 25px 20px;
         top: auto;
-        /* 移除原来的定位 */
         left: auto;
         right: auto;
         transform: none !important;
-        /* 取消所有平移，如果之前有的话 */
+        flex-shrink: 1;
+    }
+
+    .experience-item .panel-top {
+        padding: 20px;
+    }
+
+    .experience-item .panel-bottom {
+        padding: 20px;
+    }
+
+    .experience-item .content-layer {
+        padding: 20px;
     }
 
     .year-line {
         position: static;
-        /* 取消绝对定位 */
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .year-dot {
         display: none;
-        /* 垂直模式下可以隐藏点 */
     }
 
     .year-text {
         margin-left: 0;
+        font-size: 1.1em;
+    }
+
+    .experience-details h3 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+    .experience-details .company {
+        font-size: 0.95em;
+        margin-bottom: 8px;
+    }
+
+    .experience-details .time-location {
+        font-size: 0.85em;
+        margin-bottom: 15px;
+    }
+
+    .experience-details .description {
+        font-size: 0.9em;
+        line-height: 1.6;
+    }
+
+    .tech-tags {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 15px;
+    }
+
+    .tech-tag {
+        font-size: 0.75em;
+        padding: 6px 12px;
     }
 
     .horizontal-scroll-wrapper::before {
         display: none;
-        /* 垂直模式下隐藏横向时间轴线 */
     }
 
     .end-spacer {
         display: none;
-        /* 垂直布局下不需要 */
+    }
+}
+
+/* 更小的移动设备优化 */
+@media (max-width: 431px) {
+    .experience-section {
+        flex-direction: column;
+        min-height: auto;
+        height: auto;
+        max-height: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .experience-section::before {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* 旋转后，宽度和高度互换，所以需要更大的尺寸 */
+        width: 100vh;
+        height: 100vw;
+        /* 使用更大的尺寸确保旋转后能覆盖整个视口 */
+        min-width: 100vh;
+        min-height: 100vw;
+        background-image: var(--home-bg-url, url('/home_bg.png'));
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center center;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        filter: blur(2px);
+        z-index: -1;
+    }
+
+    .section-title-fixed {
+        padding: 25px 15px;
+        padding-top: 60px;
+    }
+
+    .section-title-fixed h2 {
+        font-size: 1.5em;
+    }
+
+    .section-title-fixed h2 span:nth-child(1) {
+        font-size: 3rem;
+    }
+
+    .section-title-fixed h2 span:nth-child(3) {
+        font-size: 0.7em;
+    }
+
+    .section-title-fixed .title-line {
+        font-size: 1.2em;
+    }
+
+    .section-title-fixed .subtitle {
+        font-size: 0.85em;
+        margin-top: 10px;
+    }
+
+    .section-number {
+        font-size: 0.8em;
+    }
+
+    .horizontal-scroll-wrapper {
+        padding: 15px 10px;
+    }
+
+    .experience-item {
+        padding: 20px 15px;
+        /* margin-top: 100px; */
+        margin-bottom: 200px;
+    }
+
+    .experience-item .panel-top,
+    .experience-item .panel-bottom,
+    .experience-item .content-layer {
+        padding: 15px;
+    }
+
+    .experience-details h3 {
+        font-size: 1.1em;
+        line-height: 1.3;
+    }
+
+    .experience-details .company {
+        font-size: 0.85em;
+        line-height: 1.4;
+    }
+
+    .experience-details .time-location {
+        font-size: 0.75em;
+    }
+
+    .experience-details .description {
+        font-size: 0.85em;
+        line-height: 1.5;
+    }
+
+    .year-text {
+        font-size: 1em;
+    }
+
+    .tech-tag {
+        font-size: 0.7em;
+        padding: 5px 10px;
+    }
+
+    /* 优化移动端hover效果 - 使用点击代替hover */
+    .experience-item:active .panel-top {
+        transform: translateY(calc(-100% - var(--panel-offset, 0px)));
+    }
+
+    .experience-item:active .panel-bottom {
+        transform: translateY(calc(100% + var(--panel-offset, 0px)));
+    }
+
+    .experience-item:active .content-layer {
+        opacity: 1;
     }
 }
