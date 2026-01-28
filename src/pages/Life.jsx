@@ -132,6 +132,12 @@ const Life = () => {
             clearTimeout(layoutTimeout);
             layoutTimeout = setTimeout(() => {
                 layoutMasonry();
+                // 布局完成后刷新 ScrollTrigger
+                setTimeout(() => {
+                    if (gsapContextRef.current) {
+                        ScrollTrigger.refresh();
+                    }
+                }, 50);
             }, 100);
         };
 
@@ -173,15 +179,27 @@ const Life = () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 layoutMasonry();
-                // 刷新 ScrollTrigger
-                ScrollTrigger.refresh();
+                // 布局完成后刷新 ScrollTrigger
+                setTimeout(() => {
+                    if (gsapContextRef.current) {
+                        ScrollTrigger.refresh();
+                    }
+                }, 100);
             }, 200);
         };
         window.addEventListener('resize', handleResize, { passive: true });
 
-        // GSAP 动画 - 在布局完成后应用（批量创建，减少 ScrollTrigger 数量）
-        const animationTimeout = setTimeout(() => {
-            if (!sectionRef.current) return;
+        // 监听滚动事件，确保 ScrollTrigger 正确工作
+        const handleScroll = () => {
+            if (gsapContextRef.current) {
+                ScrollTrigger.update();
+            }
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        // GSAP 动画 - 在布局完成后应用（确保在布局和图片加载完成后创建）
+        const initAnimations = () => {
+            if (!sectionRef.current || !gridRef.current) return;
 
             // 清理之前的 context
             if (gsapContextRef.current) {
@@ -190,34 +208,94 @@ const Life = () => {
 
             gsapContextRef.current = gsap.context(() => {
                 const photos = gsap.utils.toArray('.life-photo-item');
+                if (photos.length === 0) return;
+
+                // 检查照片是否已经在视口内
+                const checkIfInViewport = (element) => {
+                    const rect = element.getBoundingClientRect();
+                    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                    const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+                    return (
+                        rect.top >= 0 &&
+                        rect.left >= 0 &&
+                        rect.bottom <= windowHeight + (windowHeight * 0.15) && // 85% threshold
+                        rect.right <= windowWidth
+                    );
+                };
 
                 // 批量设置初始状态
                 gsap.set(photos, { opacity: 0, y: 30 });
 
                 // 使用批量动画，减少 ScrollTrigger 实例
                 photos.forEach((photo, index) => {
-                    gsap.to(photo, {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.6,
-                        delay: index * 0.03, // 减少延迟
-                        ease: "power2.out",
-                        scrollTrigger: {
-                            trigger: photo,
-                            start: 'top 85%',
-                            end: 'top 50%',
-                            toggleActions: 'play none none reverse',
-                            // 优化性能
-                            once: false,
-                            refreshPriority: -1,
-                        }
-                    });
+                    // 检查照片是否已经在视口内
+                    const isInViewport = checkIfInViewport(photo);
+
+                    if (isInViewport) {
+                        // 如果已经在视口内，立即显示（不需要 ScrollTrigger）
+                        gsap.to(photo, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.6,
+                            delay: index * 0.03,
+                            ease: "power2.out"
+                        });
+                    } else {
+                        // 如果不在视口内，使用 ScrollTrigger
+                        gsap.to(photo, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.6,
+                            delay: index * 0.03,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: photo,
+                                start: 'top 85%',
+                                end: 'top 50%',
+                                toggleActions: 'play none none reverse',
+                                // 优化性能
+                                once: false,
+                                refreshPriority: -1,
+                                // 确保在布局完成后正确计算位置
+                                invalidateOnRefresh: true,
+                            }
+                        });
+                    }
                 });
 
-                // 批量刷新 ScrollTrigger
-                ScrollTrigger.refresh();
+                // 批量刷新 ScrollTrigger（延迟刷新确保布局完成）
+                setTimeout(() => {
+                    ScrollTrigger.refresh();
+                    // 再次检查视口内的照片
+                    photos.forEach((photo) => {
+                        if (checkIfInViewport(photo)) {
+                            const currentOpacity = gsap.getProperty(photo, "opacity");
+                            if (currentOpacity === 0) {
+                                gsap.to(photo, {
+                                    opacity: 1,
+                                    y: 0,
+                                    duration: 0.6,
+                                    ease: "power2.out"
+                                });
+                            }
+                        }
+                    });
+                }, 100);
             }, sectionRef);
-        }, 400);
+        };
+
+        // 等待布局和图片加载完成后再创建动画
+        const animationTimeout = setTimeout(() => {
+            // 确保布局已完成
+            if (layoutMasonryRef.current) {
+                layoutMasonryRef.current();
+            }
+
+            // 等待布局完成后再初始化动画
+            setTimeout(() => {
+                initAnimations();
+            }, 200);
+        }, 600);
 
         return () => {
             clearTimeout(initialLayoutTimeout);
@@ -235,6 +313,7 @@ const Life = () => {
             }
 
             window.removeEventListener('resize', handleResize);
+            window.removeEventListener('scroll', handleScroll);
             loadedImagesRef.current.clear();
         };
     }, []); // 移除 lifePhotos 依赖，避免不必要的重新渲染
@@ -315,6 +394,47 @@ const Life = () => {
         window.addEventListener('keydown', handleEscape);
         return () => window.removeEventListener('keydown', handleEscape);
     }, [isModalOpen, handleCloseModal]);
+
+    // 确保所有照片在页面加载后都能正确显示（fallback）
+    useEffect(() => {
+        const ensurePhotosVisible = () => {
+            if (!gridRef.current || !gsapContextRef.current) return;
+
+            const photos = Array.from(gridRef.current.querySelectorAll('.life-photo-item'));
+            photos.forEach((photo) => {
+                const opacity = gsap.getProperty(photo, "opacity");
+                const rect = photo.getBoundingClientRect();
+                const isInViewport = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+
+                // 如果照片在视口内但不可见，强制显示
+                if (isInViewport && opacity === 0) {
+                    gsap.to(photo, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: "power2.out"
+                    });
+                }
+            });
+
+            // 刷新 ScrollTrigger
+            ScrollTrigger.refresh();
+        };
+
+        // 页面加载完成后检查
+        const timeout = setTimeout(ensurePhotosVisible, 1000);
+
+        // 滚动时也检查
+        const handleScrollCheck = () => {
+            ensurePhotosVisible();
+        };
+        window.addEventListener('scroll', handleScrollCheck, { passive: true });
+
+        return () => {
+            clearTimeout(timeout);
+            window.removeEventListener('scroll', handleScrollCheck);
+        };
+    }, []);
 
     return (
         <section
