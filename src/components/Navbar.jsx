@@ -22,8 +22,8 @@ const Navbar = () => {
                 <NavLink to="/experience" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Experience</NavLink>
                 <NavLink to="/projects" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Projects</NavLink>
                 <NavLink to="/about" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>About</NavLink>
-                {/* <NavLink to="/life" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Life</NavLink>
-                <NavLink to="/contact" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Contact</NavLink> */}
+                {/* <NavLink to="/life" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Life</NavLink>*/}
+                <NavLink to="/contact" className="tw:font-bold tw:text-orange-600" style={{ textDecoration: 'none' }}>Contact</NavLink>
             </div>
         </header>
     )

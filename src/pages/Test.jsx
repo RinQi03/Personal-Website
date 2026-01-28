@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react'
+import { gsap } from 'gsap'
 import * as THREE from 'three'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -11,9 +12,15 @@ import { mx_bilerp_0 } from 'three/src/nodes/materialx/lib/mx_noise.js'
 
 //大的container里面有很多小的
 
-const originalOffsetX = 400
+const originalOffsetX = 370
 const originalOffsetY = 0
 const originalOffsetZ = -700
+
+const LhsPanelOffsetX = -370
+const LhsPanelOffsetY = -180
+const LhsPanelOffsetZ = -700
+
+
 
 // Camera-following UI component constructor
 class CameraUI {
@@ -265,10 +272,169 @@ const backgroundDiv = () => {
 
 
 
-const App = () => {
-  const mountRef = useRef(null)
+// 打字机效果组件
+const TypewriterLoader = forwardRef(({ onAnimationComplete }, ref) => {
+  const [displayText, setDisplayText] = useState('')
+  const maskRef = useRef(null)
+  const fullText = 'Loading...'
+  const typingSpeed = 20 // 每个字符的延迟（毫秒）
 
   useEffect(() => {
+    let currentIndex = 0
+    const typingInterval = setInterval(() => {
+      if (currentIndex < fullText.length) {
+        setDisplayText(fullText.slice(0, currentIndex + 1))
+        currentIndex++
+      } else {
+        clearInterval(typingInterval)
+      }
+    }, typingSpeed)
+
+    return () => clearInterval(typingInterval)
+  }, [])
+
+  // 暴露开始动画的方法
+  useImperativeHandle(ref, () => ({
+    startExitAnimation: () => {
+      if (maskRef.current) {
+        const mask = maskRef.current
+
+        // 计算屏幕对角线长度，用于确定最大半径
+        const maxRadius = Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) / 2
+
+        // 初始空心大小（屏幕的 15%）
+        const initialRadius = maxRadius * 0.01
+
+        // 最终半径（覆盖整个屏幕，确保完全消失）
+        const finalRadius = maxRadius * 1.5
+
+        // 初始 mask：中心小透明区域（空心），其余黑色
+        const initialMask = `radial-gradient(circle at center, transparent ${initialRadius}px, black ${initialRadius}px)`
+
+        // 最终 mask：全部透明（遮罩完全消失）
+        const finalMask = `radial-gradient(circle at center, transparent ${finalRadius}px, black ${finalRadius}px)`
+
+        // 先设置初始状态（创建中心空心）
+        gsap.set(mask, {
+          WebkitMask: initialMask,
+          mask: initialMask
+        })
+
+        // 使用 GSAP 动画扩展空心区域
+        gsap.to(mask, {
+          WebkitMask: finalMask,
+          mask: finalMask,
+          duration: 1.2,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            if (onAnimationComplete) {
+              onAnimationComplete()
+            }
+          }
+        })
+      }
+    }
+  }))
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999,
+        pointerEvents: 'none'
+      }}
+    >
+      {/* 黑色遮罩层 */}
+      <div
+        ref={maskRef}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#000000',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          // 初始状态：全屏黑色遮罩（没有空心）
+          WebkitMask: 'none',
+          mask: 'none',
+          fontFamily: 'monospace',
+          fontSize: '24px',
+          color: '#ffffff'
+        }}
+      >
+        <div style={{ position: 'relative' }}>
+          {displayText}
+          <span style={{
+            display: 'inline-block',
+            width: '2px',
+            height: '24px',
+            backgroundColor: '#ffffff',
+            marginLeft: '4px',
+            animation: 'blink 1s infinite',
+            verticalAlign: 'middle'
+          }}></span>
+        </div>
+      </div>
+      <style>{`
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+      `}</style>
+    </div>
+  )
+})
+
+const App = () => {
+  const mountRef = useRef(null)
+  // 检查 sessionStorage 中是否已经看过动画
+  const hasSeenAnimation = sessionStorage.getItem('hasSeenHomeAnimation') === 'true'
+  const [isLoading, setIsLoading] = useState(!hasSeenAnimation) // 如果看过，直接不加载
+  const [showLoader, setShowLoader] = useState(!hasSeenAnimation) // 如果看过，直接不显示
+  const loaderRef = useRef(null)
+  const loadingStartTime = useRef(Date.now())
+  const sceneReadyRef = useRef(false)
+
+  useEffect(() => {
+    const startTime = Date.now()
+    sceneReadyRef.current = false
+
+    // 标记场景已准备好
+    const markSceneReady = () => {
+      sceneReadyRef.current = true
+
+      // 如果已经看过动画，直接跳过动画
+      if (hasSeenAnimation) {
+        setIsLoading(false)
+        setShowLoader(false)
+        return
+      }
+
+      const elapsedTime = Date.now() - startTime
+      const minLoadingTime = 2000 // 至少2秒
+
+      // 如果已经过了至少2秒，开始退出动画
+      if (elapsedTime >= minLoadingTime) {
+        if (loaderRef.current && loaderRef.current.startExitAnimation) {
+          loaderRef.current.startExitAnimation()
+        }
+      } else {
+        // 否则等待剩余时间
+        setTimeout(() => {
+          if (loaderRef.current && loaderRef.current.startExitAnimation) {
+            loaderRef.current.startExitAnimation()
+          }
+        }, minLoadingTime - elapsedTime)
+      }
+    }
+
     // Scene
     const scene = new THREE.Scene()
 
@@ -386,9 +552,9 @@ const App = () => {
     // LHS Panel
     const lhsPanel = createLhsPanelDom()
     cameraUI.addUIElement(lhsPanel, {
-      offsetX: -430,
-      offsetY: -180,
-      offsetZ: -700,
+      offsetX: LhsPanelOffsetX,
+      offsetY: LhsPanelOffsetY,
+      offsetZ: LhsPanelOffsetZ,
       rotationX: 0,
       rotationY: Math.PI / 30,
       rotationZ: 0,
@@ -441,13 +607,11 @@ const App = () => {
     particlesObject.position.set(0, 0, -100)
     scene.add(particlesObject)
 
-
-
-
     // Background div (black)
     mountRef.current.style.background = 'black'
 
     // Render loop
+    let frameCount = 0
     const animate = () => {
       requestAnimationFrame(animate)
 
@@ -457,13 +621,25 @@ const App = () => {
 
         // Update all UI elements to follow camera and respond to screen size changes
         cameraUI.update()
-
       }
 
       cssRenderer.render(scene, camera)
+
+      // 等待几帧确保场景完全渲染后再标记为准备好
+      frameCount++
+      if (frameCount >= 3 && !sceneReadyRef.current) {
+        markSceneReady()
+      }
     }
 
     animate()
+
+    // 备用：如果3秒后还没标记为准备好，强制标记
+    setTimeout(() => {
+      if (!sceneReadyRef.current) {
+        markSceneReady()
+      }
+    }, 3000)
 
     // Handle window resize
     const handleResize = () => {
@@ -493,7 +669,26 @@ const App = () => {
     }
   }, [])
 
-  return <div ref={mountRef} style={{ width: '100vw', height: '100vh', overflow: 'hidden' }} />
+  const handleAnimationComplete = () => {
+    // 标记用户已经看过动画
+    sessionStorage.setItem('hasSeenHomeAnimation', 'true')
+    setIsLoading(false)
+    setTimeout(() => {
+      setShowLoader(false)
+    }, 100)
+  }
+
+  return (
+    <>
+      {showLoader && (
+        <TypewriterLoader
+          ref={loaderRef}
+          onAnimationComplete={handleAnimationComplete}
+        />
+      )}
+      <div ref={mountRef} style={{ width: '100vw', height: '100vh', overflow: 'hidden' }} />
+    </>
+  )
 }
 
 export default App

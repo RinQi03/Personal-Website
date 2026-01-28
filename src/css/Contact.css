@@ -1,0 +1,275 @@
+/* Contact 页面样式 */
+
+/* 整体容器 */
+.contact-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 80px 20px;
+    box-sizing: border-box;
+}
+
+/* 背景模糊效果 - 与 Experience.css 相同 */
+.contact-section::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: var(--small-bg-url, url('/sm_bg.jpg'));
+    background-size: 200%;
+    background-position-x: 40%;
+    background-position-y: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    filter: blur(2px);
+    z-index: -1;
+}
+
+/* 毛玻璃悬浮卡片 - 类似 content-layer 样式 */
+.contact-card {
+    position: relative;
+    max-width: 600px;
+    width: 40%;
+    z-index: 1;
+    color: var(--color-day-text-secondary);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.6) 0%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 50px 40px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    font-family: var(--font-inter);
+}
+
+/* 标题 */
+.contact-title {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--color-day-accent);
+    margin: 0 0 40px 0;
+    text-align: center;
+    font-family: var(--font-inter);
+    letter-spacing: -1px;
+}
+
+/* 联系信息容器 */
+.contact-items {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* 单个联系项 */
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 图标容器 */
+.contact-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(246, 178, 83, 0.2);
+    border-radius: 50%;
+    color: var(--color-day-accent);
+    border: 2px solid rgba(246, 178, 83, 0.3);
+}
+
+.contact-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* 联系信息 */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.contact-label {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--color-day-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--ak-font-mono);
+}
+
+.contact-link {
+    font-size: 1.1em;
+    color: var(--color-day-text);
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+    color: var(--color-day-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 1024px) {
+    .contact-section::before {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* 旋转后，宽度和高度互换，所以需要更大的尺寸 */
+        width: 100vh;
+        height: 100vw;
+        /* 使用更大的尺寸确保旋转后能覆盖整个视口 */
+        min-width: 100vh;
+        min-height: 100vw;
+        background-image: var(--home-bg-url, url('/home_bg.png'));
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center center;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        filter: blur(2px);
+        z-index: -1;
+    }
+
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .contact-section {
+        padding: 60px 20px;
+    }
+
+    .contact-section::before {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* 旋转后，宽度和高度互换，所以需要更大的尺寸 */
+        width: 100vh;
+        height: 100vw;
+        /* 使用更大的尺寸确保旋转后能覆盖整个视口 */
+        min-width: 100vh;
+        min-height: 100vw;
+        background-image: var(--home-bg-url, url('/home_bg.png'));
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center center;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        filter: blur(2px);
+        z-index: -1;
+    }
+
+    .contact-card {
+        padding: 40px 30px;
+        max-width: 100%;
+        width: 60%;
+    }
+
+    .contact-title {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    .contact-item {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .contact-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .contact-link {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 431px) {
+    .contact-section {
+        padding: 40px 15px;
+    }
+
+    .contact-section::before {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        /* 旋转后，宽度和高度互换，所以需要更大的尺寸 */
+        width: 100vh;
+        height: 100vw;
+        /* 使用更大的尺寸确保旋转后能覆盖整个视口 */
+        min-width: 100vh;
+        min-height: 100vw;
+        background-image: var(--home-bg-url, url('/home_bg.png'));
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center center;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        filter: blur(2px);
+        z-index: -1;
+    }
+
+    .contact-card {
+        padding: 30px 20px;
+        width: 80%;
+    }
+
+    .contact-title {
+        font-size: 1.8em;
+        margin-bottom: 25px;
+    }
+
+    .contact-item {
+        /* flex-direction: column; */
+        align-items: flex-start;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .contact-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .contact-link {
+        font-size: 0.95em;
+        word-break: break-all;
+    }
+}
