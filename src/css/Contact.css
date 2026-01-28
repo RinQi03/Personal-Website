@@ -80,6 +80,9 @@
     transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 .contact-item:hover {
@@ -129,12 +132,11 @@
     text-decoration: none;
     font-weight: 400;
     transition: color 0.3s ease;
+    display: block;
 }
 
-.contact-link:hover {
+.contact-item:hover .contact-link {
     color: var(--color-day-accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
 }
 
 @media (max-width: 1024px) {
