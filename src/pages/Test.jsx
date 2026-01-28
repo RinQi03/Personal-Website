@@ -80,7 +80,10 @@ class CameraUI {
       mobileBreakpoint = 431,  // Screen width breakpoint for mobile adjustments
       mobileOffsetX = null,  // Override offsetX when screen width < mobileBreakpoint
       mobileOffsetY = null,  // Override offsetY when screen width < mobileBreakpoint
-      mobileOffsetZ = null   // Override offsetZ when screen width < mobileBreakpoint
+      mobileOffsetZ = null,   // Override offsetZ when screen width < mobileBreakpoint
+      mobileRotationX = null,  // Override rotationX when screen width < mobileBreakpoint
+      mobileRotationY = null,  // Override rotationY when screen width < mobileBreakpoint
+      mobileRotationZ = null   // Override rotationZ when screen width < mobileBreakpoint
     } = config
 
     // Use the imported function from RhsPanel.jsx
@@ -95,6 +98,11 @@ class CameraUI {
     const effectiveOffsetX = (isMobile && mobileOffsetX !== null) ? mobileOffsetX : offsetX
     const effectiveOffsetY = (isMobile && mobileOffsetY !== null) ? mobileOffsetY : offsetY
     const effectiveOffsetZ = (isMobile && mobileOffsetZ !== null) ? mobileOffsetZ : offsetZ
+
+    // Use mobile rotations if screen is below breakpoint and mobile rotations are provided
+    const effectiveRotationX = (isMobile && mobileRotationX !== null) ? mobileRotationX : rotationX
+    const effectiveRotationY = (isMobile && mobileRotationY !== null) ? mobileRotationY : rotationY
+    const effectiveRotationZ = (isMobile && mobileRotationZ !== null) ? mobileRotationZ : rotationZ
 
     const screenDiff = (currentScreenWidth - baseWidth) * 1.1
 
@@ -121,7 +129,7 @@ class CameraUI {
     // Set initial position and rotation
     cssObject.position.set(adjustedOffsetX, adjustedOffsetY, adjustedOffsetZ)
     // cssObject.position.set(offsetX, offsetY, offsetZ)
-    cssObject.rotation.set(rotationX, rotationY, rotationZ)
+    cssObject.rotation.set(effectiveRotationX, effectiveRotationY, effectiveRotationZ)
 
     // Always add to scene (more reliable)
     this.scene.add(cssObject)
@@ -137,7 +145,8 @@ class CameraUI {
       adjustedOffset: { x: adjustedOffsetX, y: adjustedOffsetY, z: adjustedOffsetZ },
       responsiveFactor: { x: responsiveFactorX, y: responsiveFactorY, z: responsiveFactorZ },
       mobileBreakpoint: mobileBreakpoint,
-      mobileOffset: { x: mobileOffsetX, y: mobileOffsetY, z: mobileOffsetZ }
+      mobileOffset: { x: mobileOffsetX, y: mobileOffsetY, z: mobileOffsetZ },
+      mobileRotation: { x: mobileRotationX, y: mobileRotationY, z: mobileRotationZ }
     })
 
     return cssObject
@@ -146,7 +155,7 @@ class CameraUI {
   // Update all UI elements to follow camera (without recalculating responsive offsets)
   update() {
     this.uiElements.forEach((uiElement) => {
-      const { object, rotation, adjustedOffset } = uiElement
+      const { object, rotation, adjustedOffset, mobileBreakpoint = 431, mobileRotation = { x: null, y: null, z: null } } = uiElement
 
       // Use pre-calculated adjusted offset (calculated in updateResponsiveOffsets)
       if (adjustedOffset) {
@@ -155,8 +164,14 @@ class CameraUI {
         object.position.copy(this.camera.position).add(cameraOffset)
       }
 
+      // Determine effective rotation based on screen width
+      const isMobile = this.screenWidth < mobileBreakpoint
+      const effectiveRotationX = (isMobile && mobileRotation.x !== null) ? mobileRotation.x : rotation.x
+      const effectiveRotationY = (isMobile && mobileRotation.y !== null) ? mobileRotation.y : rotation.y
+      const effectiveRotationZ = (isMobile && mobileRotation.z !== null) ? mobileRotation.z : rotation.z
+
       // Apply rotation
-      object.rotation.set(rotation.x, rotation.y, rotation.z)
+      object.rotation.set(effectiveRotationX, effectiveRotationY, effectiveRotationZ)
       object.rotation.x += this.camera.rotation.x
       object.rotation.y += this.camera.rotation.y
     })
@@ -406,6 +421,8 @@ const App = () => {
       rotationX: Math.PI / 30,
       rotationY: -Math.PI / 6,
       rotationZ: Math.PI / 50,
+      mobileBreakpoint: 431,  // Apply mobile rotation when width < 431px
+      mobileRotationZ: 0,  // Set rotationZ to 0 on mobile
       // Responsive options:
       // - responsive: true (default) - all axes scale with screen width
       // - responsive: {x: true, y: false, z: true} - control each axis individually

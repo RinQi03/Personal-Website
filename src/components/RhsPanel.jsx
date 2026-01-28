@@ -86,14 +86,14 @@ const RhsPanel = () => {
                         </svg> */}
                         <div className="title-container">
                             <div className="title-line english-title tw:font-geo tw:text-3xl" id="projects-english-title">Projects</div>
-                            <div className="title-line tw:font-noto tw:text-base">项目经历</div>
+                            <div className="title-line tw:font-noto tw:text-base" id="projects-chinese-title">项目经历</div>
                         </div>
                         <img src={an_projects} alt="Experience Icon" className="projects-icon part-icon" />
                     </CustomNavLink>
                     <CustomNavLink to="/about" className="about-container part-container">
                         <div className="title-container">
                             <div className="title-line english-title tw:font-geo tw:text-2xl" id="about-english-title">About</div>
-                            <div className="title-line tw:font-noto tw:text-sm">关于我</div>
+                            <div className="title-line tw:font-noto tw:text-sm" id="about-chinese-title">关于我</div>
                         </div>
                         <img src={an_about} alt="Experience Icon" className="about-icon part-icon" />
                     </CustomNavLink>
@@ -102,14 +102,14 @@ const RhsPanel = () => {
                     <CustomNavLink to="/life" className="life-container part-container">
                         <div className="title-container">
                             <div className="title-line english-title tw:font-geo tw:text-3xl" id="life-english-title">Life</div>
-                            <div className="title-line tw:font-noto tw:text-base">生活日常</div>
+                            <div className="title-line tw:font-noto tw:text-base" id="life-chinese-title">生活日常</div>
                         </div>
                         <img src={an_life} alt="Experience Icon" className="life-icon part-icon" />
                     </CustomNavLink>
                     <CustomNavLink to="/contact" className="contact-container part-container">
                         <div className="title-container">
                             <div className="title-line tw:font-geo tw:text-lg tw:font-light tw:tracking-tighter">Contact</div>
-                            <div className="title-line tw:font-noto tw:text-xs tw:font-light">联系方式</div>
+                            <div className="title-line tw:font-noto tw:text-xs tw:font-light" id="contact-chinese-title">联系方式</div>
                         </div>
                     </CustomNavLink>
                 </div>
