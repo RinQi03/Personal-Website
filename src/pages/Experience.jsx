@@ -12,7 +12,7 @@
 
 
 // src/components/ExperienceSection.jsx
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../css/Experience.css'; // 引入样式
@@ -87,6 +87,70 @@ const Experience = () => {
     const sectionRef = useRef(null);
     const triggerRef = useRef(null);
     const scrollWrapperRef = useRef(null);
+    const scrollHintRef = useRef(null);
+    const [showScrollHint, setShowScrollHint] = useState(true);
+
+    useEffect(() => {
+        // Scroll Me 提示文字的淡出动画
+        if (scrollHintRef.current && showScrollHint) {
+            // 如果页面不在顶部，不显示提示
+            if (window.scrollY > 50) {
+                setShowScrollHint(false);
+                return;
+            }
+
+            let hasScrolled = false;
+
+            const handleScroll = () => {
+                if (!hasScrolled && scrollHintRef.current) {
+                    hasScrolled = true;
+                    gsap.to(scrollHintRef.current, {
+                        opacity: 0,
+                        duration: 0.2,
+                        ease: "power2.out",
+                        onComplete: () => {
+                            setShowScrollHint(false);
+                        }
+                    });
+                }
+            };
+
+            // 监听滚动事件
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            window.addEventListener('wheel', handleScroll, { passive: true });
+            window.addEventListener('touchmove', handleScroll, { passive: true });
+
+            // 确保元素存在后再设置动画
+            const initTimeout = setTimeout(() => {
+                if (scrollHintRef.current) {
+                    // 设置初始状态
+                    gsap.set(scrollHintRef.current, {
+                        opacity: 0,
+                        y: 20
+                    });
+
+                    // 延迟后执行淡入动画
+                    setTimeout(() => {
+                        if (scrollHintRef.current && showScrollHint) {
+                            gsap.to(scrollHintRef.current, {
+                                opacity: 1,
+                                y: 0,
+                                duration: 1,
+                                ease: "power2.out"
+                            });
+                        }
+                    }, 500);
+                }
+            }, 100);
+
+            return () => {
+                clearTimeout(initTimeout);
+                window.removeEventListener('scroll', handleScroll);
+                window.removeEventListener('wheel', handleScroll);
+                window.removeEventListener('touchmove', handleScroll);
+            };
+        }
+    }, [showScrollHint]);
 
     useEffect(() => {
         const pinSection = sectionRef.current;
@@ -296,58 +360,67 @@ const Experience = () => {
     }, []);
 
     return (
-        <section
-            ref={sectionRef}
-            className="experience-section ak-style"
-            style={{ '--small-bg-url': `url(${small_bg})`, '--home-bg-url': `url(${home_bg})` }}
-        >
-            <div className="section-title-fixed part-container">
-                <span className="section-number">// 02</span>
-                <h2><span className="tw:font-geo tw:text-5xl tw:text-day-accent title-line">Experience</span> <br />
-                    <span className="tw:text-3xl tw:font-noto title-line tw:text-day-text">实习经历</span></h2>
-                <p className="subtitle tw:font-geo tw:text-md tw:text-day-secondary">My journey in career development</p>
-            </div>
+        <>
+            {/* Scroll Me 提示文字 - 放在 section 外面确保不被遮挡 */}
+            {showScrollHint && (
+                <div ref={scrollHintRef} className="scroll-hint">
+                    Scroll Me ↓
+                </div>
+            )}
+            <section
+                ref={sectionRef}
+                className="experience-section ak-style"
+                style={{ '--small-bg-url': `url(${small_bg})`, '--home-bg-url': `url(${home_bg})` }}
+            >
 
-            <div ref={scrollWrapperRef} className="horizontal-scroll-wrapper">
-                {experiences.map(exp => (
-                    <div key={exp.id} className="experience-item">
-                        {/* 内容层 - 最底层 */}
-                        <div className="experience-details content-layer">
-                            <div className="experience-details-content">
-                                {exp.detailedDescriptions.map((point, i) => (
-                                    <p key={i} className="description">{point}</p>
-                                ))}
-                                {/* <p className="description">{exp.detailedDescription}</p> */}
+                <div className="section-title-fixed part-container">
+                    <span className="section-number">// 02</span>
+                    <h2><span className="tw:font-geo tw:text-5xl tw:text-day-accent title-line">Experience</span> <br />
+                        <span className="tw:text-3xl tw:font-noto title-line tw:text-day-text">实习经历</span></h2>
+                    <p className="subtitle tw:font-geo tw:text-md tw:text-day-secondary">My journey in career development</p>
+                </div>
+
+                <div ref={scrollWrapperRef} className="horizontal-scroll-wrapper">
+                    {experiences.map(exp => (
+                        <div key={exp.id} className="experience-item">
+                            {/* 内容层 - 最底层 */}
+                            <div className="experience-details content-layer">
+                                <div className="experience-details-content">
+                                    {exp.detailedDescriptions.map((point, i) => (
+                                        <p key={i} className="description">{point}</p>
+                                    ))}
+                                    {/* <p className="description">{exp.detailedDescription}</p> */}
+                                </div>
+                            </div>
+
+                            {/* 上装饰面板 */}
+                            <div className="panel-top experience-details">
+                                <div className="year-line">
+                                    <span className="year-dot"></span>
+                                    <span className="year-text tw:text-day-accent ">{exp.year}</span>
+                                </div>
+                                <h3 className="title-line tw:leading-2">{exp.title}</h3>
+                                <p className="company tw:flex tw:justify-between tw:align-bottom">{exp.company}</p>
+                                <p className="time-location">{exp.time} | {exp.location}</p>
+
+                            </div>
+
+                            {/* 下装饰面板 */}
+                            <div className="panel-bottom">
+                                <p className="description">{exp.description}</p>
+                                <div className="tech-tags">
+                                    {exp.tech.map((t, i) => (
+                                        <span key={i} className="tech-tag">{t}</span>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-
-                        {/* 上装饰面板 */}
-                        <div className="panel-top experience-details">
-                            <div className="year-line">
-                                <span className="year-dot"></span>
-                                <span className="year-text tw:text-day-accent ">{exp.year}</span>
-                            </div>
-                            <h3 className="title-line tw:leading-2">{exp.title}</h3>
-                            <p className="company tw:flex tw:justify-between tw:align-bottom">{exp.company}</p>
-                            <p className="time-location">{exp.time} | {exp.location}</p>
-
-                        </div>
-
-                        {/* 下装饰面板 */}
-                        <div className="panel-bottom">
-                            <p className="description">{exp.description}</p>
-                            <div className="tech-tags">
-                                {exp.tech.map((t, i) => (
-                                    <span key={i} className="tech-tag">{t}</span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-                {/* 添加一个占位符，确保滚动结束时最后一个元素能完全显示 */}
-                <div className="end-spacer"></div>
-            </div>
-        </section>
+                    ))}
+                    {/* 添加一个占位符，确保滚动结束时最后一个元素能完全显示 */}
+                    <div className="end-spacer"></div>
+                </div>
+            </section>
+        </>
     );
 };
 

@@ -709,3 +709,34 @@
         opacity: 1;
     } */
 }
+
+/* Scroll Me 提示文字 */
+.scroll-hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    font-family: var(--font-geo);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-day-accent);
+    pointer-events: none;
+    opacity: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+    white-space: nowrap;
+    will-change: opacity, transform;
+}
+
+@media (max-width: 768px) {
+    .scroll-hint {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 431px) {
+    .scroll-hint {
+        font-size: 1.2rem;
+    }
+}
