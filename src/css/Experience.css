@@ -329,6 +329,29 @@
 
 /* 移动端：当元素在屏幕中间时自动展开 */
 @media (max-width: 768px) {
+
+    /* 禁用移动端的 hover 和点击交互 */
+    .experience-item {
+        pointer-events: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    /* 禁用 hover 效果 */
+    .experience-item:hover {
+        transform: none;
+    }
+
+    .experience-item:hover .panel-top,
+    .experience-item:hover .panel-bottom {
+        transform: translateY(0);
+    }
+
+    .experience-item:hover .content-layer {
+        opacity: 0;
+    }
+
+    /* 只通过 is-centered 类自动展开 */
     .experience-item.is-centered .panel-top {
         transform: translateY(calc(-1 * var(--panel-offset, 50%)));
     }
@@ -717,13 +740,13 @@
     }
 
     .experience-details h3 {
-        font-size: 1.1em;
+        font-size: 1.5em;
         line-height: 1.3;
     }
 
     .experience-details .company {
         font-size: 0.85em;
-        line-height: 1.4;
+        line-height: 1;
     }
 
     .experience-details .time-location {
@@ -731,7 +754,7 @@
     }
 
     .experience-details .description {
-        font-size: 0.85em;
+        font-size: 0.8em;
         line-height: 1.5;
     }
 
@@ -744,8 +767,15 @@
         padding: 5px 10px;
     }
 
-    /* 优化移动端hover效果 - 使用点击代替hover */
-    .experience-item:active .panel-top {
+    /* 禁用移动端点击效果 - 只通过滚动自动展开 */
+    .experience-item {
+        pointer-events: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    /* 移除 active 状态样式，禁用点击交互 */
+    /* .experience-item:active .panel-top {
         transform: translateY(calc(-100% - var(--panel-offset, 0px)));
     }
 
@@ -755,5 +785,5 @@
 
     .experience-item:active .content-layer {
         opacity: 1;
-    }
+    } */
 }

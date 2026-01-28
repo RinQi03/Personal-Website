@@ -454,7 +454,6 @@
 
     .horizontal-scroll-wrapper {
         padding-top: 200px !important;
-
         flex-direction: column;
         align-items: stretch;
         padding: 20px 15px;
@@ -506,13 +505,13 @@
     }
 
     .project-details h3 {
-        font-size: 1.3em;
+        font-size: 1.5em;
         margin-bottom: 10px;
     }
 
     .project-details .company {
         font-size: 0.95em;
-        margin-bottom: 8px;
+        line-height: 1;
     }
 
     .project-details .time-location {
@@ -521,7 +520,7 @@
     }
 
     .project-details .description {
-        font-size: 0.9em;
+        font-size: 0.8em;
         line-height: 1.6;
     }
 
@@ -547,6 +546,29 @@
 
 /* 移动端：当元素在屏幕中间时自动展开 */
 @media (max-width: 768px) {
+
+    /* 禁用移动端的 hover 和点击交互 */
+    .project-item {
+        pointer-events: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    /* 禁用 hover 效果 */
+    .project-item:hover {
+        transform: none;
+    }
+
+    .project-item:hover .panel-top,
+    .project-item:hover .panel-bottom {
+        transform: translateY(0);
+    }
+
+    .project-item:hover .content-layer {
+        opacity: 0;
+    }
+
+    /* 只通过 is-centered 类自动展开 */
     .project-item.is-centered .panel-top {
         transform: translateY(calc(-1 * var(--panel-offset, 50%)));
     }
@@ -667,8 +689,15 @@
         padding: 5px 10px;
     }
 
-    /* 优化移动端hover效果 - 使用点击代替hover */
-    .project-item:active .panel-top {
+    /* 禁用移动端点击效果 - 只通过滚动自动展开 */
+    .project-item {
+        pointer-events: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    /* 移除 active 状态样式，禁用点击交互 */
+    /* .project-item:active .panel-top {
         transform: translateY(calc(-100% - var(--panel-offset, 0px)));
     }
 
@@ -678,5 +707,5 @@
 
     .project-item:active .content-layer {
         opacity: 1;
-    }
+    } */
 }
