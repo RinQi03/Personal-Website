@@ -162,8 +162,8 @@ const Experience = () => {
                     // 当元素到达屏幕中间时，自动展开面板
                     ScrollTrigger.create({
                         trigger: item,
-                        start: 'top 60%',  // 当元素顶部到达视口60%位置时开始
-                        end: 'bottom 40%',  // 当元素底部到达视口40%位置时结束
+                        start: 'top 70%',  // 当元素顶部到达视口70%位置时开始
+                        end: 'bottom 30%',  // 当元素底部到达视口40%位置时结束
                         onEnter: () => {
                             item.classList.add('is-centered');
                         },
