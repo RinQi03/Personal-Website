@@ -117,6 +117,15 @@
     flex-wrap: wrap;
     margin-top: min(20vh, 100px);
     margin-bottom: 2rem;
+    align-items: flex-end;
+}
+
+/* 按钮组容器 */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 /* 名字排版 */
@@ -178,13 +187,52 @@
     animation: bounce-back 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* 社交图标链接样式 */
+.social-icon-link {
+    /* background-color: rgba(246, 178, 83, 0.3); */
+    color: var(--color-day-accent);
+    padding: 5px;
+    border-radius: 4px;
+    /* border: 2px solid rgba(246, 178, 83, 0.6); */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: auto 0 5px;
+    z-index: 100;
+    position: relative;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    text-decoration: none;
+    /* transition: all 0.3s ease; */
+    /* width: 10; */
+    height: 100%;
+}
+
+.social-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    /* transition: transform 0.3s ease; */
+}
+
+.social-icon-link:hover {
+    background-color: rgba(246, 178, 83, 0.4);
+    border-color: rgba(246, 178, 83, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    animation: bounce-back 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.social-icon-link:hover .social-icon {
+    transform: scale(1.1);
+}
+
 @keyframes bounce-back {
     0% {
         transform: translateY(-0px);
     }
 
     15% {
-        transform: translateY(-15px);
+        transform: translateY(-7px);
     }
 
 
@@ -398,6 +446,8 @@
         /* flex-direction: column; */
         align-items: flex-start;
         gap: 15px;
+        /* vertical-align: baseline; */
+        align-items: baseline;
     }
 
     .about-name {
@@ -408,6 +458,21 @@
     .resume-download-tag {
         font-size: 0.85rem;
         padding: 6px 12px;
+    }
+
+    .header-buttons {
+        gap: 10px;
+    }
+
+    .social-icon-link {
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+    }
+
+    .social-icon {
+        width: 18px;
+        height: 18px;
     }
 
     .about-text {
@@ -478,6 +543,21 @@
         font-size: 0.75rem;
         padding: 3px 8px;
         gap: 6px;
+    }
+
+    .header-buttons {
+        gap: 8px;
+    }
+
+    .social-icon-link {
+        width: 28px;
+        height: 28px;
+        padding: 5px;
+    }
+
+    .social-icon {
+        width: 16px;
+        height: 16px;
     }
 
     .download-icon {

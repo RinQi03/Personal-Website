@@ -106,12 +106,12 @@ const RhsPanel = () => {
                         </div>
                         <img src={an_life} alt="Experience Icon" className="life-icon part-icon" />
                     </CustomNavLink>
-                    <CustomNavLink to="/contact" className="contact-container part-container">
+                    {/* <CustomNavLink to="/contact" className="contact-container part-container">
                         <div className="title-container">
                             <div className="title-line tw:font-geo tw:text-lg tw:font-light tw:tracking-tighter">Contact</div>
                             <div className="title-line tw:font-noto tw:text-xs tw:font-light" id="contact-chinese-title">联系方式</div>
                         </div>
-                    </CustomNavLink>
+                    </CustomNavLink> */}
                 </div>
             </div>
         </div>
