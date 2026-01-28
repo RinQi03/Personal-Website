@@ -250,7 +250,7 @@ const About = () => {
                             I am a <span className="highlight-text" data-text="product manager"> product manager </span> who aims to build technical products that solve real-world problems.
                         </p>
                     </div>
-                    <div className="about-text contact-section">
+                    <div className="about-text thank-you-section">
                         <p>
                             Thank you for taking the time to visit my website. I hope you enjoy your stay as much as I enjoyed building it. Please feel free to contact me if you have any questions.
                             My email is <a href="mailto:rinqi26@126.com" className="email-link"> rinqi26@126.com</a>.

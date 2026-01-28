@@ -295,7 +295,7 @@
     color: var(--color-day-accent);
 }
 
-.about-text.contact-section {
+.text-section .thank-you-section {
     /* margin-top: min(10vh, 10px); */
     margin-top: max(5vh, 100px);
 
@@ -487,7 +487,7 @@
         left: 0;
     }
 
-    .about-text.contact-section {
+    .text-section .thank-you-section {
         margin-top: 40px;
     }
 
@@ -579,7 +579,7 @@
         width: 100%;
     }
 
-    .about-text.contact-section {
+    .text-section .thank-you-section {
         margin-top: 30px;
     }
 
