@@ -60,6 +60,27 @@ const Life = () => {
 
                 const columnCount = getColumnCount();
                 const gap = 30; // 统一的间距（像素）- 用于上下和左右间距
+
+                // 单列布局：使用正常文档流排列
+                if (columnCount === 1) {
+                    items.forEach((item) => {
+                        // 清除所有定位样式，使用正常文档流
+                        item.style.position = 'static';
+                        item.style.left = 'auto';
+                        item.style.top = 'auto';
+                        item.style.width = '100%';
+                        item.style.margin = `0 0 ${gap}px 0`;
+                        // 清除 transform
+                        if (item.style.transform) {
+                            gsap.set(item, { clearProps: "transform" });
+                        }
+                    });
+                    // 容器高度自动适应内容
+                    grid.style.height = 'auto';
+                    return;
+                }
+
+                // 多列布局：使用瀑布流布局（绝对定位）
                 const columnHeights = new Array(columnCount).fill(0);
 
                 // 批量清除 transform（只在第一次布局时清除）

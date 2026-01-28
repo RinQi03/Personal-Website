@@ -264,7 +264,9 @@
     }
 
     .life-photo-item {
-        width: 100%;
+        width: 100% !important;
+        position: static !important;
+        margin-bottom: 30px !important;
     }
 }
 
