@@ -64,108 +64,122 @@ const About = () => {
 
         }, containerRef);
 
-        // 图片鼠标跟随效果
+        // 图片鼠标跟随效果（仅在桌面端启用）
         const profileImg = profileImgRef.current;
         if (profileImg) {
-            let targetX = 0;
-            let targetY = 0;
-            const maxMove = 50; // 最大移动距离（像素）
-            let rafId = null;
+            // 检测是否为移动端
+            const isMobile = window.innerWidth <= 768;
 
-            const handleMouseMove = (e) => {
-                const rect = profileImg.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
+            if (!isMobile) {
+                let targetX = 0;
+                let targetY = 0;
+                const maxMove = 50; // 最大移动距离（像素）
+                let rafId = null;
 
-                // 计算鼠标相对于图片中心的位置（-1 到 1）
-                const mouseX = (e.clientX - centerX) / (rect.width / 2);
-                const mouseY = (e.clientY - centerY) / (rect.height / 2);
+                const handleMouseMove = (e) => {
+                    const rect = profileImg.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
 
-                // 计算目标位置
-                targetX = mouseX * maxMove;
-                targetY = mouseY * maxMove;
+                    // 计算鼠标相对于图片中心的位置（-1 到 1）
+                    const mouseX = (e.clientX - centerX) / (rect.width / 2);
+                    const mouseY = (e.clientY - centerY) / (rect.height / 2);
 
-                // 使用 GSAP 平滑移动到目标位置
-                if (!rafId) {
-                    rafId = requestAnimationFrame(() => {
-                        // profile-img 立即跟随
-                        gsap.to(profileImg, {
-                            x: targetX,
-                            y: targetY,
-                            duration: 0.5,
+                    // 计算目标位置
+                    targetX = mouseX * maxMove;
+                    targetY = mouseY * maxMove;
+
+                    // 使用 GSAP 平滑移动到目标位置
+                    if (!rafId) {
+                        rafId = requestAnimationFrame(() => {
+                            // profile-img 立即跟随
+                            gsap.to(profileImg, {
+                                x: targetX,
+                                y: targetY,
+                                duration: 0.5,
+                                ease: "power2.out"
+                            });
+
+                            // bg-slash-img 延迟跟随（较小的移动距离）
+                            if (bgSlashImgRef.current) {
+                                gsap.to(bgSlashImgRef.current, {
+                                    x: targetX * 0.6,
+                                    y: targetY * 0.6,
+                                    duration: 0.7,
+                                    delay: 0.1,
+                                    ease: "power2.out"
+                                });
+                            }
+
+                            // bg-slash-img-bottom 延迟跟随（更小的移动距离，更多延迟）
+                            if (bgSlashImgBottomRef.current) {
+                                gsap.to(bgSlashImgBottomRef.current, {
+                                    x: targetX * 0.4,
+                                    y: targetY * 0.4,
+                                    duration: 0.8,
+                                    delay: 0.2,
+                                    ease: "power2.out"
+                                });
+                            }
+
+                            rafId = null;
+                        });
+                    }
+                };
+
+                const handleMouseLeave = () => {
+                    targetX = 0;
+                    targetY = 0;
+                    gsap.to(profileImg, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+
+                    // bg-slash-img 也回到原位置
+                    if (bgSlashImgRef.current) {
+                        gsap.to(bgSlashImgRef.current, {
+                            x: 0,
+                            y: 0,
+                            duration: 0.7,
+                            delay: 0.1,
                             ease: "power2.out"
                         });
+                    }
 
-                        // bg-slash-img 延迟跟随（较小的移动距离）
-                        if (bgSlashImgRef.current) {
-                            gsap.to(bgSlashImgRef.current, {
-                                x: targetX * 0.6,
-                                y: targetY * 0.6,
-                                duration: 0.7,
-                                delay: 0.1,
-                                ease: "power2.out"
-                            });
-                        }
+                    // bg-slash-img-bottom 也回到原位置
+                    if (bgSlashImgBottomRef.current) {
+                        gsap.to(bgSlashImgBottomRef.current, {
+                            x: 0,
+                            y: 0,
+                            duration: 0.8,
+                            delay: 0.2,
+                            ease: "power2.out"
+                        });
+                    }
+                };
 
-                        // bg-slash-img-bottom 延迟跟随（更小的移动距离，更多延迟）
-                        if (bgSlashImgBottomRef.current) {
-                            gsap.to(bgSlashImgBottomRef.current, {
-                                x: targetX * 0.4,
-                                y: targetY * 0.4,
-                                duration: 0.8,
-                                delay: 0.2,
-                                ease: "power2.out"
-                            });
-                        }
+                profileImg.addEventListener('mousemove', handleMouseMove);
+                profileImg.addEventListener('mouseleave', handleMouseLeave);
 
-                        rafId = null;
-                    });
-                }
-            };
-
-            const handleMouseLeave = () => {
-                targetX = 0;
-                targetY = 0;
-                gsap.to(profileImg, {
-                    x: 0,
-                    y: 0,
-                    duration: 0.5,
-                    ease: "power2.out"
-                });
-
-                // bg-slash-img 也回到原位置
+                return () => {
+                    profileImg.removeEventListener('mousemove', handleMouseMove);
+                    profileImg.removeEventListener('mouseleave', handleMouseLeave);
+                    if (rafId) {
+                        cancelAnimationFrame(rafId);
+                    }
+                };
+            } else {
+                // 移动端：重置所有 transform，确保图片在正确位置
+                gsap.set(profileImg, { x: 0, y: 0 });
                 if (bgSlashImgRef.current) {
-                    gsap.to(bgSlashImgRef.current, {
-                        x: 0,
-                        y: 0,
-                        duration: 0.7,
-                        delay: 0.1,
-                        ease: "power2.out"
-                    });
+                    gsap.set(bgSlashImgRef.current, { x: 0, y: 0 });
                 }
-
-                // bg-slash-img-bottom 也回到原位置
                 if (bgSlashImgBottomRef.current) {
-                    gsap.to(bgSlashImgBottomRef.current, {
-                        x: 0,
-                        y: 0,
-                        duration: 0.8,
-                        delay: 0.2,
-                        ease: "power2.out"
-                    });
+                    gsap.set(bgSlashImgBottomRef.current, { x: 0, y: 0 });
                 }
-            };
-
-            profileImg.addEventListener('mousemove', handleMouseMove);
-            profileImg.addEventListener('mouseleave', handleMouseLeave);
-
-            return () => {
-                profileImg.removeEventListener('mousemove', handleMouseMove);
-                profileImg.removeEventListener('mouseleave', handleMouseLeave);
-                if (rafId) {
-                    cancelAnimationFrame(rafId);
-                }
-            };
+            }
         }
 
         return () => ctx.revert(); // 清理动画
@@ -202,7 +216,8 @@ const About = () => {
                     <div className="about-text name-section">
                         <p>
                             Hi, I'm Rin Qi, <br />
-                            a senior majoring in <strong>Computer Science and Economics</strong>
+                            a senior majoring in <br/>
+                            <strong>Computer Science and Economics</strong>
                             <br /> at New York University.
                         </p>
                     </div>
