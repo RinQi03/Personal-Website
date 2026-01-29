@@ -369,17 +369,33 @@ const TypewriterLoader = forwardRef(({ onAnimationComplete }, ref) => {
           color: '#ffffff'
         }}
       >
-        <div style={{ position: 'relative' }}>
-          {displayText}
-          <span style={{
-            display: 'inline-block',
-            width: '2px',
-            height: '24px',
-            backgroundColor: '#ffffff',
-            marginLeft: '4px',
-            animation: 'blink 1s infinite',
-            verticalAlign: 'middle'
-          }}></span>
+        <div style={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '12px'
+        }}>
+          <div style={{ position: 'relative' }}>
+            {displayText}
+            <span style={{
+              display: 'inline-block',
+              width: '2px',
+              height: '24px',
+              backgroundColor: '#ffffff',
+              marginLeft: '4px',
+              animation: 'blink 1s infinite',
+              verticalAlign: 'middle'
+            }}></span>
+          </div>
+          <div style={{
+            fontSize: '14px',
+            color: '#888888',
+            fontFamily: 'monospace',
+            marginTop: '8px'
+          }}>
+            for best experience use laptop
+          </div>
         </div>
       </div>
       <style>{`
@@ -418,7 +434,7 @@ const App = () => {
       }
 
       const elapsedTime = Date.now() - startTime
-      const minLoadingTime = 2000 // 至少2秒
+      const minLoadingTime = 4000 // 至少2秒
 
       // 如果已经过了至少2秒，开始退出动画
       if (elapsedTime >= minLoadingTime) {
