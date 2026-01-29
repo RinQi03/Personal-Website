@@ -91,6 +91,11 @@
     letter-spacing: -2px;
 }
 
+.panel-top .title-line {
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
 /* 横向滚动内容的容器 */
 .horizontal-scroll-wrapper {
     display: flex;
