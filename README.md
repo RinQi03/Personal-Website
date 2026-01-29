@@ -1,12 +1,26 @@
-# React + Vite
+# Rin's Personal Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Rin Qi's Personal Website. I had fun building it. Hope you enjoy exploring it!
 
-Currently, two official plugins are available:
+**Note**: For best experience, use a laptop/desktop. Mobile devices have optimized layouts but some 3D features may be limited.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## Pages
+  - **Home**: 3D interactive experience with entrance animation
+  - **About**: Personal introduction with parallax image effects
+  - **Experience**: Horizontal scrolling timeline with expandable cards
+  - **Projects**: Showcase of projects with interactive panels
+  - **Life**: Masonry layout photo gallery with modal viewer
+  - **Contact**: Glassmorphism contact card with social links
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📄 License
+
+This project is private and personal.
+
+## 👤 Author
+
+**Rin Qi**
+- LinkedIn: [linkedin.com/in/rin-qi](https://www.linkedin.com/in/rin-qi)
+- GitHub: [@rinqi03](https://github.com/rinqi03)
+- Email: rinqi26@126.com
+
