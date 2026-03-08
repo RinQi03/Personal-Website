@@ -653,6 +653,10 @@
 
     .horizontal-scroll-wrapper {
         padding: 15px 10px;
+        margin: 20px 0px !important;
+        width: 93% !important;
+        justify-self: center !important;
+        align-self: center !important;
     }
 
     .project-item {

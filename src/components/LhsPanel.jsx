@@ -11,7 +11,7 @@ const LhsPanel = () => {
                 <h1 className="tw:font-geo tw:text-3xl tw:leading-none tw:tracking-tighter">Rin's Portfolio</h1>
             </div>
 
-            <div className="lhs-panel-container part-container">
+            <div className="lhs-panel-container">
                 <div className='info-container'>
                     <div className='photo-container'>
                         <img src={an_projects} alt="photo" className='photo-img' />
@@ -34,9 +34,9 @@ const LhsPanel = () => {
                         </div> */}
                     </div>
                 </div>
-                <div className='notice-container tw:py-1 tw:bg-red-800  tw:w-full tw:align-middle tw:justify-center tw:flex'>
+                {/* <div className='notice-container tw:py-1 tw:bg-red-800  tw:w-full tw:align-middle tw:justify-center tw:flex'>
                     <div className='tw:font-noto tw:text-sm tw:leading-none tw:tracking-tighter tw:text-white'>Can be easily captured with good food</div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

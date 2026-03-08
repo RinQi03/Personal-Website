@@ -4,6 +4,7 @@ import '../css/About.css';
 import about_profile_side_border_only from '../assets/about_profile_side_border_only.svg'
 import about_profile from '../assets/About_Profile.png'
 import download from '../assets/download.png'
+import RinQiResume from '../assets/Rin_Qi_Resume.pdf'
 
 const About = () => {
     const containerRef = useRef(null);
@@ -187,17 +188,6 @@ const About = () => {
 
     return (
         <div className="about-page" ref={containerRef}>
-            {/* <div className="test-container">
-                <div className="test-item">
-                    <div className="test-item-title">
-                        <h1>Test</h1>
-                    </div>
-                </div>
-            </div> */}
-
-
-
-
             <div className="about-info-container">
                 {/* 左侧文字区 */}
                 <div className="text-section">
@@ -205,8 +195,8 @@ const About = () => {
                         <h1 className="about-name">Rin Qi</h1>
                         <div className="header-buttons">
                             <a
-                                href="/Rin Qi AI PM Resume.pdf"
-                                download="Rin Qi AI PM Resume.pdf"
+                                href={RinQiResume}
+                                download="Rin_Qi_Resume.pdf"
                                 className="resume-download-tag"
                             >
                                 <img src={download} alt="Download" className="download-icon" />

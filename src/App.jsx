@@ -19,8 +19,8 @@ const AppContent = () => {
                 id="main-content"
             >
                 <Routes>
-                    <Route path="/" element={<Test />} />
-                    <Route path="/home" element={<Home />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/test" element={<Test />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/projects" element={<Projects />} />
                     <Route path="/contact" element={<Contact />} />
