@@ -2,11 +2,38 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import '../css/Projects.css'; // 引入样式
-import small_bg from '../assets/sm_bg.jpg'; // 导入背景图片
+import '../css/Projects.css';
+import small_bg from '../assets/sm_bg.jpg';
+import home_bg from '../assets/home_bg.png';
 
-// 注册 GSAP 插件
 gsap.registerPlugin(ScrollTrigger);
+
+const progressBar = [
+    {
+        id: 1,
+        title: 'AI Knowledge Organization',
+        dot: '●'
+    },
+
+    {
+        id: 2,
+        title: 'Musical Tickets Info Exchange Platform',
+        dot: '●'
+    },
+    
+    {
+        id: 3,
+        title: 'AI-powered Randomized Meal Generator',
+        dot: '●'
+    },
+    {
+        id: 4,
+        title: 'Financial News Crawler',
+        dot: '●'
+    }
+    
+    
+]
 
 const projects = [
     {
@@ -40,7 +67,7 @@ const projects = [
     {
         id: 5,
         year: '2024',
-        title: 'Randomized Meal Generator',
+        title: 'AI-powered Randomized Meal Generator',
         subTitle: 'Personal Project',
         time: '2024.11',
         location: 'New York, NY',
@@ -69,291 +96,203 @@ const projects = [
     }
 ];
 
+const SCROLL_SENSITIVITY = 0.0025;
+
 const Projects = () => {
     const sectionRef = useRef(null);
-    const triggerRef = useRef(null);
     const scrollWrapperRef = useRef(null);
+    const itemsTrackRef = useRef(null);
     const scrollHintRef = useRef(null);
+    const goToIndexRef = useRef(null);
+    const scrollPositionRef = useRef(0);
+    const activeIndexRef = useRef(0);
+    const currentTrackYRef = useRef(0);
+    const rafIdRef = useRef(null);
     const [showScrollHint, setShowScrollHint] = useState(true);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
-        // Scroll Me 提示文字的淡出动画
-        if (scrollHintRef.current && showScrollHint) {
-            // 如果页面不在顶部，不显示提示
-            if (window.scrollY > 50) {
-                setShowScrollHint(false);
-                return;
+        if (!scrollHintRef.current || !showScrollHint) return;
+        const hideHint = () => {
+            setShowScrollHint(false);
+            gsap.to(scrollHintRef.current, { opacity: 0, duration: 0.25 });
+        };
+        const opts = { passive: false };
+        const onWheel = (e) => {
+            if (showScrollHint) {
+                e.preventDefault();
+                hideHint();
             }
-
-            let hasScrolled = false;
-
-            const handleScroll = () => {
-                if (!hasScrolled && scrollHintRef.current) {
-                    hasScrolled = true;
-                    gsap.to(scrollHintRef.current, {
-                        opacity: 0,
-                        duration: 0.2,
-                        ease: "power2.out",
-                        onComplete: () => {
-                            setShowScrollHint(false);
-                        }
-                    });
-                }
-            };
-
-            // 监听滚动事件
-            window.addEventListener('scroll', handleScroll, { passive: true });
-            window.addEventListener('wheel', handleScroll, { passive: true });
-            window.addEventListener('touchmove', handleScroll, { passive: true });
-
-            // 确保元素存在后再设置动画
-            const initTimeout = setTimeout(() => {
-                if (scrollHintRef.current) {
-                    // 设置初始状态
-                    gsap.set(scrollHintRef.current, {
-                        opacity: 0,
-                        y: 20
-                    });
-
-                    // 延迟后执行淡入动画
-                    setTimeout(() => {
-                        if (scrollHintRef.current && showScrollHint) {
-                            gsap.to(scrollHintRef.current, {
-                                opacity: 1,
-                                y: 0,
-                                duration: 1,
-                                ease: "power2.out"
-                            });
-                        }
-                    }, 500);
-                }
-            }, 100);
-
-            return () => {
-                clearTimeout(initTimeout);
-                window.removeEventListener('scroll', handleScroll);
-                window.removeEventListener('wheel', handleScroll);
-                window.removeEventListener('touchmove', handleScroll);
-            };
-        }
+        };
+        window.addEventListener('wheel', onWheel, opts);
+        window.addEventListener('touchstart', hideHint, { once: true });
+        return () => window.removeEventListener('wheel', onWheel, opts);
     }, [showScrollHint]);
 
     useEffect(() => {
-        const pinSection = sectionRef.current;
-        const horizontalScroll = scrollWrapperRef.current;
+        const section = sectionRef.current;
+        const track = itemsTrackRef.current;
+        const contentArea = scrollWrapperRef.current;
 
-        if (!pinSection || !horizontalScroll) return;
+        if (!section || !track || !contentArea) return;
 
-        // 等待 DOM 完全渲染
-        const projectItems = gsap.utils.toArray('.project-item', pinSection);
+        const projectItems = gsap.utils.toArray('.project-item', track);
+        const maxIndex = projectItems.length - 1;
 
-        // 为每个 project-item 设置基于 content-layer 高度的展开距离
         const updatePanelOffsets = () => {
             projectItems.forEach((item) => {
                 const contentLayer = item.querySelector('.content-layer');
                 if (contentLayer) {
                     const contentHeight = contentLayer.offsetHeight;
-                    // 设置 CSS 变量，用于控制面板展开距离
                     item.style.setProperty('--content-height', `${contentHeight}px`);
-                    // 展开距离为内容高度的一半（因为上下各展开一半）
                     item.style.setProperty('--panel-offset', `${contentHeight / 2}px`);
                 }
             });
         };
+        updatePanelOffsets();
 
-        // 初始设置
-        if (projectItems.length > 0) {
-            updatePanelOffsets();
-        }
-
-        // 监听窗口大小变化，更新展开距离
         const resizeObserver = new ResizeObserver(() => {
             updatePanelOffsets();
+            const pos = scrollPositionRef.current;
+            const targetY = getYForPosition(pos);
+            currentTrackYRef.current = targetY;
+            gsap.set(track, { y: targetY });
         });
-
         projectItems.forEach((item) => {
             const contentLayer = item.querySelector('.content-layer');
-            if (contentLayer) {
-                resizeObserver.observe(contentLayer);
-            }
+            if (contentLayer) resizeObserver.observe(contentLayer);
         });
 
-        let ctx = gsap.context(() => {
-            if (projectItems.length === 0) return;
+        const contentHeight = () => contentArea.clientHeight;
 
-            // 检测是否为移动端（768px 以下）
-            const isMobile = window.innerWidth <= 768;
+        const getYForIndex = (index) => {
+            if (index < 0 || index >= projectItems.length) return 0;
+            const item = projectItems[index];
+            const top = item.offsetTop;
+            const halfItem = item.offsetHeight / 2;
+            const halfView = contentHeight() / 2;
+            return halfView - top - halfItem;
+        };
 
-            if (isMobile) {
-                // 移动端：使用垂直滚动，禁用横向滚动
-                // 重置横向滚动容器的 transform
-                gsap.set(horizontalScroll, { x: 0 });
+        const getYForPosition = (pos) => {
+            const i = Math.max(0, Math.min(maxIndex, pos));
+            const lo = Math.floor(i);
+            const hi = Math.min(maxIndex, Math.ceil(i));
+            if (lo === hi) return getYForIndex(lo);
+            const t = i - lo;
+            return getYForIndex(lo) * (1 - t) + getYForIndex(hi) * t;
+        };
 
-                // 为每个项目项添加简单的淡入动画和自动展开效果
-                projectItems.forEach((item, index) => {
-                    // 淡入动画
-                    gsap.fromTo(item,
-                        { opacity: 0, y: 30 },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            ease: "power2.out",
-                            duration: 0.6,
-                            delay: index * 0.1,
-                            scrollTrigger: {
-                                trigger: item,
-                                start: 'top 85%',
-                                end: 'top 50%',
-                                toggleActions: 'play none none reverse',
-                            }
-                        }
-                    );
+        const applyScrollPosition = (pos) => {
+            const clamped = Math.max(0, Math.min(maxIndex, pos));
+            scrollPositionRef.current = clamped;
+            const rounded = Math.round(clamped);
+            if (rounded !== activeIndexRef.current) {
+                activeIndexRef.current = rounded;
+                setActiveIndex(rounded);
+            }
+            projectItems.forEach((el, i) => {
+                el.classList.toggle('is-centered', i === rounded);
+            });
+        };
 
-                    // 当元素到达屏幕中间时，自动展开面板
-                    ScrollTrigger.create({
-                        trigger: item,
-                        start: 'top 60%',  // 当元素顶部到达视口60%位置时开始
-                        end: 'bottom 40%',  // 当元素底部到达视口40%位置时结束
-                        onEnter: () => {
-                            item.classList.add('is-centered');
-                        },
-                        onEnterBack: () => {
-                            item.classList.add('is-centered');
-                        },
-                        onLeave: () => {
-                            item.classList.remove('is-centered');
-                        },
-                        onLeaveBack: () => {
-                            item.classList.remove('is-centered');
-                        },
-                    });
-                });
-            } else {
-                // 桌面端：使用横向滚动
-                // 使用 scrollWidth 获取实际内容宽度（更准确）
-                const totalWidth = horizontalScroll.scrollWidth;
+        const updateTrackY = (y) => {
+            gsap.set(track, { y });
+        };
 
-                // 获取固定标题的宽度
-                const titleElement = pinSection.querySelector('.section-title-fixed');
-                const titleWidth = titleElement ? titleElement.offsetWidth : 250;
-
-                // 可用宽度 = 视口宽度 - 标题宽度
-                const availableWidth = window.innerWidth - titleWidth;
-
-                // 计算需要滚动的距离
-                const scrollDistance = Math.max(0, totalWidth - availableWidth);
-
-                // 设置 section 的高度，使其正好等于需要滚动的距离
-                // 这样横向滚动完成后，pin 释放，不会有额外的垂直滚动
-                // 但如果滚动距离太小（小于视口高度），至少设置为视口高度，确保 section 可见
-                const sectionHeight = Math.max(window.innerHeight, 0);
-                gsap.set(pinSection, { height: sectionHeight });
-
-                // 背景动画相关变量
-                let currentBgOffset = 0;
-                let targetBgOffset = 0;
-                let rafId = null;
-                const maxOffset = 200; // 总共移动的距离
-
-                // 使用 requestAnimationFrame 来平滑插值，让背景立即跟随滚动
-                const updateBackground = () => {
-                    // 使用线性插值（lerp）来平滑过渡，但仍然立即响应滚动
-                    const lerpFactor = 0.15; // 插值因子，值越小越平滑，值越大响应越快
-                    currentBgOffset += (targetBgOffset - currentBgOffset) * lerpFactor;
-
-                    // 如果差值很小，直接设置目标值
-                    if (Math.abs(targetBgOffset - currentBgOffset) < 0.1) {
-                        currentBgOffset = targetBgOffset;
-                    }
-
-                    pinSection.style.backgroundPositionX = `calc(40% - ${currentBgOffset}px)`;
-                    pinSection.style.setProperty('--bg-offset', `${currentBgOffset}px`);
-
-                    // 如果还没到达目标，继续动画
-                    if (Math.abs(targetBgOffset - currentBgOffset) > 0.1) {
-                        rafId = requestAnimationFrame(updateBackground);
-                    } else {
-                        rafId = null;
-                    }
-                };
-
-                // 创建横向滚动动画
-                const scrollTriggerConfig = {
-                    trigger: pinSection,
-                    pin: true,
-                    start: 'top top',
-                    end: () => `+=${scrollDistance}`,
-                    scrub: 1,
-                    anticipatePin: 1,
-                    pinSpacing: true,
-                    // markers: true, // 取消注释用于调试
-                    onUpdate: (self) => {
-                        const progress = self.progress;
-                        // 立即更新目标位置
-                        targetBgOffset = progress * maxOffset;
-
-                        // 如果动画还没运行，启动它
-                        if (!rafId) {
-                            rafId = requestAnimationFrame(updateBackground);
-                        }
-                    },
-                    onLeave: () => {
-                        // 当横向滚动完成，pin 释放后，将 section 高度设置为实际内容高度
-                        // 这样可以避免额外的垂直滚动
-                        const actualHeight = pinSection.scrollHeight;
-                        gsap.set(pinSection, { height: actualHeight });
-                    },
-                    onEnterBack: () => {
-                        // 当向上滚动回到 section 时，恢复高度以支持横向滚动
-                        gsap.set(pinSection, { height: sectionHeight });
-                    }
-                };
-
-                const horizontalScrollAnimation = gsap.to(horizontalScroll, {
-                    x: -scrollDistance,
-                    ease: 'none',
-                    scrollTrigger: scrollTriggerConfig
-                });
-
-                // 对每个项目项的动画
-                projectItems.forEach((item, index) => {
-                    gsap.fromTo(item,
-                        { opacity: 0, y: 50 },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            ease: "power2.out",
-                            duration: 0.8,
-                            scrollTrigger: {
-                                trigger: item,
-                                containerAnimation: horizontalScrollAnimation,
-                                start: 'left 90%',
-                                end: 'left 10%',
-                                toggleActions: 'play none none reverse',
-                                // markers: true, // 取消注释用于调试
-                            }
-                        }
-                    );
+        const tick = () => {
+            const targetY = getYForPosition(scrollPositionRef.current);
+            const current = currentTrackYRef.current;
+            const next = current + (targetY - current) * 0.14;
+            currentTrackYRef.current = next;
+            updateTrackY(next);
+            const rounded = Math.round(scrollPositionRef.current);
+            if (rounded !== activeIndexRef.current) {
+                activeIndexRef.current = rounded;
+                setActiveIndex(rounded);
+                projectItems.forEach((el, i) => {
+                    el.classList.toggle('is-centered', i === rounded);
                 });
             }
+            rafIdRef.current = requestAnimationFrame(tick);
+        };
 
-        }, sectionRef);
+        const goToIndex = (nextIndex) => {
+            if (nextIndex < 0 || nextIndex > maxIndex) return;
+            scrollPositionRef.current = nextIndex;
+            activeIndexRef.current = nextIndex;
+            setActiveIndex(nextIndex);
+            projectItems.forEach((el, i) => {
+                el.classList.toggle('is-centered', i === nextIndex);
+            });
+            const targetY = getYForIndex(nextIndex);
+            currentTrackYRef.current = targetY;
+            gsap.to(track, {
+                y: targetY,
+                duration: 0.55,
+                ease: 'power2.out',
+                overwrite: true,
+            });
+        };
+        goToIndexRef.current = goToIndex;
+
+        const isInitialMount = !track._projectsInitialized;
+        if (isInitialMount) {
+            track._projectsInitialized = true;
+            const y0 = getYForIndex(0);
+            currentTrackYRef.current = y0;
+            updateTrackY(y0);
+            applyScrollPosition(0);
+        }
+
+        rafIdRef.current = requestAnimationFrame(tick);
+
+        const opts = { passive: false };
+        const onWheel = (e) => {
+            e.preventDefault();
+            const next = scrollPositionRef.current + e.deltaY * SCROLL_SENSITIVITY;
+            scrollPositionRef.current = Math.max(0, Math.min(maxIndex, next));
+        };
+
+        let touchStartY = 0;
+        const onTouchStart = (e) => {
+            touchStartY = e.touches[0].clientY;
+        };
+        const onTouchMove = (e) => {
+            e.preventDefault();
+            const y = e.touches[0].clientY;
+            const dy = touchStartY - y;
+            touchStartY = y;
+            const next = scrollPositionRef.current - dy * SCROLL_SENSITIVITY * 2;
+            scrollPositionRef.current = Math.max(0, Math.min(maxIndex, next));
+        };
+
+        section.addEventListener('wheel', onWheel, opts);
+        contentArea.addEventListener('touchstart', onTouchStart, { passive: true });
+        contentArea.addEventListener('touchmove', onTouchMove, { passive: false });
 
         return () => {
-            ctx.revert();
+            if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+            goToIndexRef.current = null;
             resizeObserver.disconnect();
+            section.removeEventListener('wheel', onWheel, opts);
+            contentArea.removeEventListener('touchstart', onTouchStart);
+            contentArea.removeEventListener('touchmove', onTouchMove);
         };
     }, []);
 
     return (
         <>
-            {/* Scroll Me 提示文字 - 放在 section 外面确保不被遮挡 */}
             {showScrollHint && (
                 <div ref={scrollHintRef} className="scroll-hint">
                     Scroll Me ↓
                 </div>
             )}
-            <section ref={sectionRef} className="projects-section ak-style" style={{ '--small-bg-url': `url(${small_bg})` }}>
+            <section
+                ref={sectionRef}
+                className="projects-section ak-style"
+                style={{ '--small-bg-url': `url(${small_bg})`, '--home-bg-url': `url(${home_bg})` }}
+            >
                 <div className="section-title-fixed part-container">
                     <span className="section-number">// 03</span>
                     <h2><span className="tw:font-geo tw:text-5xl tw:text-day-accent title-line">Projects</span> <br />
@@ -361,44 +300,58 @@ const Projects = () => {
                     <p className="subtitle tw:font-geo tw:text-md tw:text-day-secondary">My creative and technical works</p>
                 </div>
 
-                <div ref={scrollWrapperRef} className="horizontal-scroll-wrapper">
-                    {projects.map(project => (
-                        <div key={project.id} className="project-item tw:font-mono">
-                            {/* 内容层 - 最底层 */}
-                            <div className="project-details content-layer">
-                                <div className="project-details-content">
-                                    {project.longDescription.map((point, i) => (
-                                        <p key={i} className="description">{point}</p>
-                                    ))}
-                                </div>
-                            </div>
+                <div className="projects-content-area">
+                    <div ref={scrollWrapperRef} className="horizontal-scroll-wrapper">
+                        <div ref={itemsTrackRef} className="projects-items-track">
+                            {projects.map((project) => (
+                                <div key={project.id} className="project-item tw:font-mono">
+                                    <div className="project-details content-layer">
+                                        <div className="project-details-content">
+                                            {project.longDescription.map((point, i) => (
+                                                <p key={i} className="description">{point}</p>
+                                            ))}
+                                        </div>
+                                    </div>
 
-                            {/* 上装饰面板 */}
-                            <div className="panel-top project-details">
-                                <div className="year-line">
-                                    <span className="year-dot"></span>
-                                    <span className="year-text tw:text-day-accent ">{project.year}</span>
-                                </div>
-                                <h3 className="title-line tw:leading-2">{project.title}</h3>
-                                <p className="company tw:flex tw:justify-between tw:align-bottom">{project.subTitle}</p>
-                                <p className="time-location">{project.time} | {project.location}</p>
+                                    <div className="panel-top project-details">
+                                        <div className="year-line">
+                                            <span className="year-dot"></span>
+                                            <span className="year-text tw:text-day-accent ">{project.year}</span>
+                                        </div>
+                                        <h3 className="title-line tw:leading-2">{project.title}</h3>
+                                        <p className="company tw:flex tw:justify-between tw:align-bottom">{project.subTitle}</p>
+                                        <p className="time-location">{project.time} | {project.location}</p>
+                                    </div>
 
-                            </div>
-
-                            {/* 下装饰面板 */}
-                            <div className="panel-bottom">
-                                <p className="description">{project.shortDescription}</p>
-                                <div className="tech-tags">
-                                    {project.tech.map((t, i) => (
-                                        <span key={i} className="tech-tag">{t}</span>
-                                    ))}
+                                    <div className="panel-bottom">
+                                        <p className="description">{project.shortDescription}</p>
+                                        <div className="tech-tags">
+                                            {project.tech.map((t, i) => (
+                                                <span key={i} className="tech-tag">{t}</span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                    ))}
-                    {/* 添加一个占位符，确保滚动结束时最后一个元素能完全显示 */}
-                    <div className="end-spacer"></div>
+                    </div>
                 </div>
+
+                <nav className="projects-progress-bar" aria-label="Project sections">
+                    {projects.map((project, index) => (
+                        <button
+                            key={index}
+                            type="button"
+                            className={`projects-progress-segment ${index === activeIndex ? 'is-active' : ''}`}
+                            onClick={() => goToIndexRef.current?.(index)}
+                            aria-label={`Go to ${project.title}`}
+                            aria-current={index === activeIndex ? 'true' : undefined}
+                        >
+                            <span className="projects-progress-title">{progressBar[index].title}</span>
+                            <span className="projects-progress-dot" aria-hidden />
+                        </button>
+                    ))}
+                </nav>
             </section>
         </>
     );

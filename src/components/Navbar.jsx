@@ -171,7 +171,7 @@ const Navbar = () => {
                 >
                     <NavLink
                         to="/experience"
-                        className="tw:font-bold tw:text-orange-600 tw:text-2xl"
+                        className="tw:font-bold tw:font-geo tw:text-orange-600 tw:text-2xl"
                         style={{ textDecoration: 'none', width: '100%', textAlign: 'center', padding: '1rem' }}
                         onClick={closeMenu}
                     >
@@ -179,7 +179,7 @@ const Navbar = () => {
                     </NavLink>
                     <NavLink
                         to="/projects"
-                        className="tw:font-bold tw:text-orange-600 tw:text-2xl"
+                        className="tw:font-bold tw:font-geo tw:text-orange-600 tw:text-2xl"
                         style={{ textDecoration: 'none', width: '100%', textAlign: 'center', padding: '1rem' }}
                         onClick={closeMenu}
                     >
@@ -187,7 +187,7 @@ const Navbar = () => {
                     </NavLink>
                     <NavLink
                         to="/about"
-                        className="tw:font-bold tw:text-orange-600 tw:text-2xl"
+                        className="tw:font-bold tw:font-geo tw:text-orange-600 tw:text-2xl"
                         style={{ textDecoration: 'none', width: '100%', textAlign: 'center', padding: '1rem' }}
                         onClick={closeMenu}
                     >
@@ -195,7 +195,7 @@ const Navbar = () => {
                     </NavLink>
                     <NavLink
                         to="/life"
-                        className="tw:font-bold tw:text-orange-600 tw:text-2xl"
+                        className="tw:font-bold tw:font-geo tw:text-orange-600 tw:text-2xl"
                         style={{ textDecoration: 'none', width: '100%', textAlign: 'center', padding: '1rem' }}
                         onClick={closeMenu}
                     >
@@ -203,7 +203,7 @@ const Navbar = () => {
                     </NavLink>
                     <NavLink
                         to="/contact"
-                        className="tw:font-bold tw:text-orange-600 tw:text-2xl"
+                        className="tw:font-bold tw:font-geo tw:text-orange-600 tw:text-2xl"
                         style={{ textDecoration: 'none', width: '100%', textAlign: 'center', padding: '1rem' }}
                         onClick={closeMenu}
                     >
