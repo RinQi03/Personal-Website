@@ -1,10 +1,10 @@
 import React from 'react'
 import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 import '../css/RhsPanel.css'
-import an_sanity from '../assets/an_sanity.png'
-import an_projects from '../assets/an_projects.png'
-import an_about from '../assets/an_about.png'
-import an_life from '../assets/an_life.png'
+import iconExperience from '../assets/icon_experience.png'
+import iconProjects from '../assets/icon_projects.png'
+import iconAbout from '../assets/icon_about.png'
+import iconLife from '../assets/icon_life.png'
 // Custom NavLink that forces a hard refresh and clears cache
 const CustomNavLink = ({ to, className, children }) => {
     const currentHash = window.location.hash.replace('#', '') || '/'
@@ -36,7 +36,7 @@ const CustomNavLink = ({ to, className, children }) => {
                     // Modern browsers: use location.reload() which respects cache headers
                     // But we'll add cache-busting query param to force reload
                     window.location.reload()
-                } catch (e) {
+                } catch {
                     // Fallback: direct navigation with cache-busting
                     window.location.href = `${baseUrl}?t=${Date.now()}#${to}`
                 }
@@ -70,13 +70,13 @@ const RhsPanel = () => {
                             <div className="title-line english-title tw:font-geo tw:text-5xl" id="experience-english-title">Experience</div>
                             <div className="title-line tw:font-noto tw:text-xl">实习经历</div>
                             <div className="title-line tw:font-geo tw:text-base tw:m-3 tw:pt-3 tw:flex tw:flex-row tw:gap-1">
-                                <span className='info-line-title tw:font-light tw:font-mono tw:text-sm tw:leading-none tw:tracking-tighter'>Current: NYU Senior</span>
+                                <span className='info-line-title tw:font-light tw:font-mono tw:text-sm tw:leading-none tw:tracking-tighter'>Current: AI Product Manager Intern</span>
 
                                 {/* <span className="tw:font-geo tw:text-lg tw:leading-4 tw:bg-day-accent tw:font-normal tw:px-1.5 tw:py-1 tw:rounded-xs tw:tracking-tighter">Current</span> */}
                                 {/* <span className="tw:font-mono tw:text-base tw:leading-4 tw:px-1.5 tw:py-1 tw:font-light tw:tracking-tighter">Current NYU Senior</span> */}
                             </div>
                         </div>
-                        <img src={an_sanity} alt="Experience Icon" className="experience-icon part-icon" />
+                        <img src={iconExperience} alt="Delivery pipeline emblem for Experience" className="experience-icon part-icon" />
                     </CustomNavLink>
 
 
@@ -90,14 +90,14 @@ const RhsPanel = () => {
                             <div className="title-line english-title tw:font-geo tw:text-3xl" id="projects-english-title">Projects</div>
                             <div className="title-line tw:font-noto tw:text-base" id="projects-chinese-title">项目经历</div>
                         </div>
-                        <img src={an_projects} alt="Experience Icon" className="projects-icon part-icon" />
+                        <img src={iconProjects} alt="Interlocking system modules for Projects" className="projects-icon part-icon" />
                     </CustomNavLink>
                     <CustomNavLink to="/about" className="about-container part-container">
                         <div className="title-container">
                             <div className="title-line english-title tw:font-geo tw:text-2xl" id="about-english-title">About</div>
                             <div className="title-line tw:font-noto tw:text-sm" id="about-chinese-title">关于我</div>
                         </div>
-                        <img src={an_about} alt="Experience Icon" className="about-icon part-icon" />
+                        <img src={iconAbout} alt="Data-scanned profile emblem for About" className="about-icon part-icon" />
                     </CustomNavLink>
                 </div>
                 <div className="line-container" id="life-contact-container">
@@ -106,7 +106,7 @@ const RhsPanel = () => {
                             <div className="title-line english-title tw:font-geo tw:text-3xl" id="life-english-title">Life</div>
                             <div className="title-line tw:font-noto tw:text-base" id="life-chinese-title">生活日常</div>
                         </div>
-                        <img src={an_life} alt="Experience Icon" className="life-icon part-icon" />
+                        <img src={iconLife} alt="Digital viewfinder emblem for Life" className="life-icon part-icon" />
                     </CustomNavLink>
                     <CustomNavLink to="/contact" className="contact-container part-container">
                         <div className="title-container">
@@ -130,4 +130,4 @@ export const createRhsPanelDomAsync = async () => {
     return await reactToDomWithStyles(RhsPanel)
 }
 
-export default RhsPanel 
+export default RhsPanel

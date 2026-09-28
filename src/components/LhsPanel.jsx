@@ -1,7 +1,7 @@
 import React from 'react'
 import { reactToDom, reactToDomWithStyles } from '../utils/reactToDom'
 import '../css/LhsPanel.css'
-import an_projects from '../assets/an_projects.png'
+import iconIdentity from '../assets/icon_identity.png'
 
 const LhsPanel = () => {
     return (
@@ -14,19 +14,16 @@ const LhsPanel = () => {
             <div className="lhs-panel-container">
                 <div className='info-container'>
                     <div className='photo-container'>
-                        <img src={an_projects} alt="photo" className='photo-img' />
+                        <img src={iconIdentity} alt="Deployment network emblem for Rin" className='photo-img' />
                     </div>
                     <div className='inner-info-container'>
                         <div className='inner-basic-info-container tw:flex-auto tw:justify-between'>
                             <div className='inner-basic-info-title-container'>
                                 <div className='title tw:font-geo tw:text-3xl tw:leading-none tw:tracking-tighter'>Rin</div>
-                                <div className='subtitle tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>47283</div>
                             </div>
 
                             <div className='info-line tw:mt-auto'>
-                                <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Product Manager</div>
-                                <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Software Developer</div>
-                                <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>- Entrepreneur Enthusiast</div>
+                                <div className='info-line-title tw:font-mono tw:text-xs tw:leading-none tw:tracking-tighter'>Forward Deployed Engineer</div>
                             </div>
                         </div>
                         {/* <div className='inner-detail-info-container tw:mt-5'>
@@ -52,4 +49,4 @@ export const createLhsPanelDomAsync = async () => {
     return await reactToDomWithStyles(LhsPanel)
 }
 
-export default LhsPanel 
+export default LhsPanel

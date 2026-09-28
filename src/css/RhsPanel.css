@@ -147,10 +147,18 @@
 }
 
 .part-icon {
-  filter: brightness(0) invert(0.7);
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.16));
+  opacity: 0.68;
   height: 75%;
   position: relative;
   top: 20%;
+  object-fit: contain;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.part-container:hover .part-icon {
+  opacity: 0.92;
+  transform: scale(1.03);
 }
 
 .experience-icon {

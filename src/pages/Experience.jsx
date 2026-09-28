@@ -25,20 +25,36 @@ gsap.registerPlugin(ScrollTrigger);
 const experiences = [
     {
         id: 1,
+        year: '2026',
+        title: 'AI Product Manager Intern',
+        company: 'Lingxi Games, Alibaba Group',
+        time: '2026.06 - Present',
+        location: 'Guangzhou, China',
+        description: 'Designing enterprise AI agents for 200+ marketing users across content creation, competitive intelligence, and knowledge management',
+        detailedDescriptions: [
+            'Built a structured RAG-enabled marketing knowledge base using Google OKF-inspired schemas and an LLM Wiki framework, integrating source validation, daily content linting, MCP-based document management, and golden-question evaluation across 500+ documents and 2,500+ knowledge chunks',
+            'Developed 20+ domain-specific AI agent skills and an automated Bilibili advertising monitoring system, cutting manual competitive analysis from 3 hours to 30 minutes (83% reduction)',
+            'Partnered with engineers and marketing stakeholders to define requirements, prioritize features, establish evaluation and acceptance criteria, and iterate from user feedback',
+            'Conducted user research and usability testing to identify workflow bottlenecks and improve adoption of AI-powered digital employees'
+        ],
+        tech: ['AI Product Management', 'AI Agents', 'RAG', 'MCP', 'User Research']
+    },
+    {
+        id: 2,
         year: '2025',
-        title: 'CS & Math Tutor',
+        title: 'CS, Math & Accounting Tutor',
         company: 'University Learning Center, New York University',
         time: '2024.09 - 2025.12',
         location: 'New York, NY',
         description: 'Conducted in-person one-on-one sessions helping students learn data structures and accounting',
         detailedDescriptions: [
-            'Facilitated weekly structured study sessions, helping ~110 students in time management and effective study;',
-            'Explained key concepts, problem-solving strategies, and coding exercises to reinforce students\' understanding; Improved their understanding by 30% +'
+            'Facilitated weekly structured study sessions for ~110 students, helping them strengthen time management and study habits',
+            'Led CS workshops and pre-exam review sessions, explaining key concepts, problem-solving strategies, and coding exercises; improved students\' understanding by 30%+'
         ],
-        tech: ['Communication', 'Time Management', 'Active Adaption']
+        tech: ['Teaching', 'Communication', 'Workshop Facilitation']
     },
     {
-        id: 2,
+        id: 3,
         year: '2025',
         title: 'Marketing Intern',
         company: 'Lingxi Games, Alibaba Group',
@@ -53,7 +69,7 @@ const experiences = [
         tech: ['AIGC Video Platforms', 'Data Analysis', 'KOL Campaign Review']
     },
     {
-        id: 3,
+        id: 4,
         year: '2024',
         title: 'Research Intern',
         company: 'Ascent Partners Foundation',
@@ -61,13 +77,14 @@ const experiences = [
         location: 'Remote',
         description: 'Conducted literature reviews on climate change effects and investigated Doughnut Economics as a framework for the Tropical Belt Initiative.',
         detailedDescriptions: [
+            'Produced 30+ concise literature analyses on quantifying climate change effects across countries in the tropical belt, creating a reference base for incoming researchers',
             'Investigated Doughnut Economics; produced an analysis of the possibilities of using Doughnut Economics as the final framework for the research done by Tropical Belt Initiative, which advocates for greater recognition and financial support',
             'Assisted on the International Union for Conservation of Nature (IUCN) visit to Hong Kong and Sri Lanka’s representative’s visit to Beijing, China; managed detailed note taking, translating, and travel logistics'
         ],
         tech: ['Literature Review', 'Doughnut Economics', 'Translation', 'Logistics']
     },
     {
-        id: 4,
+        id: 5,
         year: '2023',
         title: 'Summer Analyst',
         company: 'Cypress Capital International Ltd.',
@@ -255,8 +272,6 @@ const Experience = () => {
             const next = scrollPositionRef.current - dy * SCROLL_SENSITIVITY * 2;
             scrollPositionRef.current = Math.max(0, Math.min(maxIndex, next));
         };
-        const onTouchEnd = () => {};
-
         section.addEventListener('wheel', onWheel, opts);
         contentArea.addEventListener('touchstart', onTouchStart, { passive: true });
         contentArea.addEventListener('touchmove', onTouchMove, { passive: false });
@@ -295,7 +310,7 @@ const Experience = () => {
                 <div className="experience-content-area">
                     <div ref={scrollWrapperRef} className="horizontal-scroll-wrapper">
                         <div ref={itemsTrackRef} className="experience-items-track">
-                    {experiences.map((exp, index) => (
+                    {experiences.map((exp) => (
                         <div key={exp.id} className="experience-item">
                             {/* 内容层 - 最底层 */}
                             <div className="experience-details content-layer">

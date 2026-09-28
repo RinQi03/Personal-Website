@@ -17,7 +17,7 @@ const progressBar = [
 
     {
         id: 2,
-        title: 'Musical Tickets Info Exchange Platform',
+        title: 'Musical Theatre Ticket Resale Platform',
         dot: '●'
     },
     
@@ -46,20 +46,20 @@ const projects = [
         shortDescription: 'Explored the feasibility of using AI to organize knowledge in a knowledge-heavy team',
         longDescription: [
             'Framed an internal product problem around information overload in knowledge-heavy teams, where critical context is fragmented across tools and quickly lost',
-            'Authored a PRD defining system-level responsibilities for centralized knowledge capture, automated structuring, and proactive resurfacing, with clear scope boundaries and assumptions'
+            'Defined system-level requirements for centralized knowledge capture, automated structuring, and proactive resurfacing, with clear scope boundaries and assumptions'
         ],
-        tech: ['Product Management', 'PRD', 'Information Organization']
+        tech: ['Product Management', 'Information Organization']
     },
     {
         id: 2,
         year: '2025',
-        title: 'Information Exchange Platform for Used Musical Tickets in China',
+        title: 'Musical Theatre Ticket Resale Platform in China',
         subTitle: 'Group Project',
-        time: '2025.01 - Present',
+        time: '2025.01 - 2025.05',
         location: 'Remote',
-        shortDescription: 'Developed a web application for buying and selling used musical tickets in China',
+        shortDescription: 'Developed a platform for exchanging musical theatre ticket resale information in China',
         longDescription: [
-            'Developing a WeChat app for potential clients who sell musical used tickets in China to publish information',
+            'Developed a WeChat app that enabled users to publish and discover musical theatre ticket resale listings in China',
             'Built a Notion-based project management resource site as the programming group project manager'
         ],
         tech: ['WeChat App', 'Notion', 'Project Management', 'JavaScript']
@@ -88,7 +88,7 @@ const projects = [
         location: 'Remote',
         shortDescription: 'A tool that crawls, parses, and outputs the information on FinSMEs in a uniform format',
         longDescription: [
-            'Developed a tool that crawls, parses, and outputs the information on FinSMEs (a financial news website focused on small and medium enterprises) in a uniform format; Used by employees in LXL Capital to collect news of a list of companies efficiently',
+            'Designed and implemented a Python tool that crawls, parses, and standardizes information from FinSMEs; adopted by 50+ employees at LXL Capital and increased news-writing efficiency by 50%',
             'Self-taught the implementation and application of Selenium (an automation tool), BeautifulSoup (a Python library for pulling data out of HTML and XML files), and docx (MSFT Word format) library to open Chrome browser as search engine, scrape and parse web data, and write in MSFT Word respectively',
             'Located the target information leveraging developer mode in Chrome'
         ],

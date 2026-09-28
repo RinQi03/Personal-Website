@@ -33,6 +33,18 @@
     width: 30%;
     height: 100%;
     border: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.photo-img {
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+    opacity: 0.78;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.18));
 }
 
 

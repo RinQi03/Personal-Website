@@ -230,14 +230,14 @@ const About = () => {
                     <div className="about-text name-section">
                         <p>
                             Hi, I'm Rin Qi, <br />
-                            a senior majoring in <br />
-                            <strong>Computer Science and Economics</strong>
-                            <br /> at New York University.
+                            a recent graduate of <br />
+                            <strong>New York University</strong>
+                            <br /> with a B.A. in Computer Science and Economics.
                         </p>
                     </div>
                     <div className="about-text career-section">
                         <p>
-                            I am a <span className="highlight-text" data-text="product manager"> product manager </span> who aims to build technical products that solve real-world problems.
+                            I am an <span className="highlight-text" data-text="AI Product Manager Intern"> AI Product Manager Intern </span> at Lingxi Games, Alibaba Group, building agentic tools and knowledge systems for marketing teams. I am also completing Stanford Online's Artificial Intelligence: Principles and Techniques certificate.
                         </p>
                     </div>
                     <div className="about-text thank-you-section">
