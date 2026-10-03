@@ -5,5 +5,7 @@ import Contact from "./Contact";
 import Test from "./Test";
 import Experience from "./Experience";
 import Life from "./Life";
+import Portfolio from "./Portfolio";
+import WorkDetail from "./WorkDetail";
 
-export { Home, About, Projects, Contact, Test, Experience, Life };
+export { Portfolio, WorkDetail, Home, About, Projects, Contact, Test, Experience, Life };

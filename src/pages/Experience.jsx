@@ -30,12 +30,13 @@ const experiences = [
         company: 'Lingxi Games, Alibaba Group',
         time: '2026.06 - Present',
         location: 'Guangzhou, China',
-        description: 'Designing enterprise AI agents for 200+ marketing users across content creation, competitive intelligence, and knowledge management',
+        description: 'Designing internal AI workflows for content creation, competitive intelligence, and knowledge management',
         detailedDescriptions: [
-            'Built a structured RAG-enabled marketing knowledge base using Google OKF-inspired schemas and an LLM Wiki framework, integrating source validation, daily content linting, MCP-based document management, and golden-question evaluation across 500+ documents and 2,500+ knowledge chunks',
-            'Developed 20+ domain-specific AI agent skills and an automated Bilibili advertising monitoring system, cutting manual competitive analysis from 3 hours to 30 minutes (83% reduction)',
+            'Built reusable AI workflows that package expert methods, business context, and company tools for recurring marketing work',
+            'Built supporting knowledge systems with source validation, daily content linting, and document-management workflows',
+            'Developed domain-specific AI agent skills and automated workflows for advertising monitoring, copywriting, and game-trend research',
             'Partnered with engineers and marketing stakeholders to define requirements, prioritize features, establish evaluation and acceptance criteria, and iterate from user feedback',
-            'Conducted user research and usability testing to identify workflow bottlenecks and improve adoption of AI-powered digital employees'
+            'Conducted user research and usability testing to identify workflow bottlenecks and improve adoption'
         ],
         tech: ['AI Product Management', 'AI Agents', 'RAG', 'MCP', 'User Research']
     },
